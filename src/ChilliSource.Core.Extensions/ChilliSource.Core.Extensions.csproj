@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net45</TargetFrameworks>
+    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
+    <AssemblyName>ChilliSource.Core.Extensions</AssemblyName>
+    <RootNamespace>ChilliSource.Core.Extensions</RootNamespace>
+    <Description>Core extensions library for ChilliSource</Description>
+    <Company>BlueChilli Technology Pty Ltd</Company>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <FileVersion>1.0.0</FileVersion>
+    <RepositoryUrl>https://github.com/BlueChilli/ChilliSource.Core.Extensions</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/BlueChilli/ChilliSource.Core.Extensions/blob/master/LICENSE</PackageLicenseUrl>
+    <DebugType>pdbonly</DebugType>
+    <Authors>BlueChilli Technology</Authors>
+    <SourceLinkUrl>https://github.com/BlueChilli/ChilliSource.Core.Extensions/</SourceLinkUrl>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+    <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
+    <GenerateAssemblyCopyRightAttribute>false</GenerateAssemblyCopyRightAttribute>
+    <NoWarn></NoWarn>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <RuntimeIdentifiers>osx.10.11-x64</RuntimeIdentifiers>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard1.6\ChilliSource.Core.xml</DocumentationFile>
+    <NoWarn></NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs" Link="Properties\CommonAssemblyInfo.cs" />   
+    <Compile Include="ByteArrayExtensions.cs" />
+    <Compile Include="CollectionExtensions.cs" />
+    <Compile Include="DateTimeExtensions.cs" />
+    <Compile Include="EnumExtensions.cs" />
+    <Compile Include="GeometryExtensions.cs" />
+    <Compile Include="StreamExtensions.cs" />
+    <Compile Include="StringBuilderExtensions.cs" />
+    <Compile Include="StringExtensions.cs" />
+    <Compile Include="TaskExtensions.cs" />   
+  </ItemGroup>
+  <ItemGroup>
+    <DotNetCliToolReference Include="dotnet-sourcelink" Version="2.0.2" />
+    <DotNetCliToolReference Include="dotnet-sourcelink-git" Version="2.0.2" />
+    <PackageReference Include="SourceLink.Create.GitHub" Version="2.0.2" PrivateAssets="all" />
+  </ItemGroup>
+
+</Project>
