@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace ChilliSource.Core
+namespace ChilliSource.Core.Extensions
 {
 	public static class CollectionExtensions
 	{

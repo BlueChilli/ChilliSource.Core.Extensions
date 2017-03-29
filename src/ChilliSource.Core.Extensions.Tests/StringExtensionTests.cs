@@ -11,7 +11,7 @@ See the LICENSE file in the project root for more information.
 using System;
 using Xunit;
 
-using ChilliSource.Core;
+using ChilliSource.Core.Extensions;
 using System.IO;
 
 namespace Tests

@@ -11,7 +11,7 @@ See the LICENSE file in the project root for more information.
 using System;
 using System.Linq;
 
-namespace ChilliSource.Core
+namespace ChilliSource.Core.Extensions
 {
 	public static class ByteArrayExtensions
 	{

@@ -12,7 +12,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ChilliSource.Core
+namespace ChilliSource.Core.Extensions
 {
     public static class TaskExtensions
     {

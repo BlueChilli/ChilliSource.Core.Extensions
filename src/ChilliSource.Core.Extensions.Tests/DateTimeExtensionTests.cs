@@ -9,7 +9,7 @@ See the LICENSE file in the project root for more information.
 #endregion
 
 using System;
-using ChilliSource.Core;
+using ChilliSource.Core.Extensions;
 using Xunit;
 
 namespace Tests

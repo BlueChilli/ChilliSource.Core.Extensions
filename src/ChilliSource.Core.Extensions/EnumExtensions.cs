@@ -14,7 +14,7 @@ using System.Linq;
 using System.Reflection;
 
 
-namespace ChilliSource.Core
+namespace ChilliSource.Core.Extensions
 {
 	public static class EnumExtensions
 	{
