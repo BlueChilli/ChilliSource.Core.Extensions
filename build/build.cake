@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 
 #addin "Cake.FileHelpers"
 #addin "Cake.Incubator"
+#addin nuget:?package=Newtonsoft.Json
 //////////////////////////////////////////////////////////////////////
 // TOOLS
 //////////////////////////////////////////////////////////////////////
@@ -15,8 +16,9 @@ using System.Text.RegularExpressions;
 #tool "GitVersion.CommandLine"
 #tool "GitLink"
 using Cake.Common.Build.TeamCity;
-
-
+using System.IO;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
 //////////////////////////////////////////////////////////////////////
@@ -47,7 +49,31 @@ Func<string, int> GetEnvironmentInteger = name => {
 	return 0;
 
 };
+
+// Load json Configuartion
+var configFilePath = "./config.json";
+JObject config;
+
+if(!FileExists(configFilePath)) {
+	
+	throw new Exception(string.Format("config.json can not be found at {0}", configFilePath));
+}
+
+var configFile = File(configFilePath);
+
+using(var stream = new StreamReader(System.IO.File.OpenRead(configFile.Path.FullPath))) {
+	var json = stream.ReadToEnd();
+	config = JObject.Parse(json);
+};
+
+if(config == null) {
+	throw new Exception(string.Format("config.json can not be found at {0}", configFilePath));
+}
+
+
 // Build configuration
+var productName = config.Value<string>("productName");
+var project = config.Value<string>("projectName");
 var local = BuildSystem.IsLocalBuild;
 var isTeamCity = BuildSystem.TeamCity.IsRunningOnTeamCity;
 var isRunningOnUnix = IsRunningOnUnix();
@@ -56,14 +82,14 @@ var teamCity = BuildSystem.TeamCity;
 var branch = EnvironmentVariable("Git_Branch");
 var isPullRequest = !String.IsNullOrEmpty(branch) && branch.ToUpper().Contains("PULL-REQUEST"); //teamCity.Environment.PullRequest.IsPullRequest;
 var projectName =  EnvironmentVariable("TEAMCITY_PROJECT_NAME"); //  teamCity.Environment.Project.Name;
-var isRepository = StringComparer.OrdinalIgnoreCase.Equals("chillisource core", projectName);
+var isRepository = StringComparer.OrdinalIgnoreCase.Equals(productName, projectName);
 var isTagged = !String.IsNullOrEmpty(branch) && branch.ToUpper().Contains("TAGS");
 var buildConfName = EnvironmentVariable("TEAMCITY_BUILDCONF_NAME"); //teamCity.Environment.Build.BuildConfName
 var buildNumber = GetEnvironmentInteger("BUILD_NUMBER");
 var isReleaseBranch = StringComparer.OrdinalIgnoreCase.Equals("master", buildConfName);
 
-var githubOwner = "BlueChilli";
-var githubRepository = "ChilliSource.Core";
+var githubOwner = config.Value<string>("githubOwner");
+var githubRepository = config.Value<string>("githubRepository");
 var githubUrl = string.Format("https://github.com/{0}/{1}", githubOwner, githubRepository);
 var licenceUrl = string.Format("{0}/blob/master/LICENSE", githubUrl);
 
@@ -74,14 +100,16 @@ var semVersion = gitVersion.SemVer;
 var informationalVersion = gitVersion.InformationalVersion;
 var nugetVersion = gitVersion.NuGetVersion;
 var buildVersion = gitVersion.FullBuildMetaData;
+var copyright = config.Value<string>("copyright");
+var authors = config.Value<JArray>("authors").Values<string>().ToList();
+var iconUrl = config.Value<string>("iconUrl");
+var tags = config.Value<JArray>("tags").Values<string>().ToList();
 
 // Artifacts
 var artifactDirectory = "./artifacts/";
-var packageWhitelist = new[] { "ChilliSource.Core" };
+var packageWhitelist = config.Value<JArray>("packageWhiteList").Values<string>();
 
-var buildSolution = "./ChilliSource.Core.sln";
-
-var productName = "ChilliSource Core";
+var buildSolution = config.Value<string>("solutionFile");
 var configuration = "Release";
 // Macros
 Func<string> GetMSBuildLoggerArguments = () => {
@@ -105,17 +133,16 @@ Action<string, string> Package = (nuspec, basePath) =>
     Information("Packaging {0} using {1} as the BasePath.", nuspec, basePath);
 
     NuGetPack(nuspec, new NuGetPackSettings {
-        Authors                  = new [] { "Blue Chilli Technology Pty Ltd" },
-        Owners                   = new [] { "Blue Chilli Technology Pty Ltd" },
-
+        Authors                  = authors,
+        Owners                   = authors,
         ProjectUrl               = new Uri(githubUrl),
-        IconUrl                  = new Uri("https://avatars0.githubusercontent.com/u/5924219?v=3&s=200"),
+        IconUrl                  = new Uri(iconUrl),
         LicenseUrl               = new Uri(licenceUrl),
-        Copyright                = "Copyright Blue Chilli Technology Pty Ltd 2017",
+        Copyright                = copyright,
         RequireLicenseAcceptance = false,
 
         Version                  = nugetVersion,
-        Tags                     = new [] {  "ChilliSource", "ChilliSource Core"},
+        Tags                     = tags,
         ReleaseNotes             = new [] { string.Format("{0}/releases", githubUrl) },
 
         Symbols                  = false,
@@ -213,7 +240,7 @@ Action<string> build = (solution) =>
 ///////////////////////////////////////////////////////////////////////////////
 Setup((context) =>
 {
-    Information("Building version {0} of ChilliSource.Core. (isTagged: {1})", informationalVersion, isTagged);
+    Information("Building version {0} of {1}. (isTagged: {2})", informationalVersion, project, isTagged);
 
 		if (isTeamCity)
 		{
@@ -261,7 +288,7 @@ Task("Build")
 Task("UpdateAssemblyInfo")
     .Does (() =>
 {
-    var file = "./CommonAssemblyInfo.cs";
+    var file = "../src/CommonAssemblyInfo.cs";
 
 	using(BuildBlock("UpdateAssemblyInfo")) 
 	{
@@ -270,7 +297,7 @@ Task("UpdateAssemblyInfo")
 			Version = majorMinorPatch,
 			FileVersion = majorMinorPatch,
 			InformationalVersion = informationalVersion,
-			Copyright = "Copyright (c) BlueChilli Technology PTY LTD"
+			Copyright = copyright
 		});
 	};
    
@@ -293,7 +320,7 @@ Task("RestorePackages")
 });
 
 
-
+var testProject = config.Value<string>("testProjectPath");
 Task("RunUnitTests")
     .IsDependentOn("RestorePackages")
     .IsDependentOn("Build")
@@ -307,13 +334,14 @@ Task("RunUnitTests")
 			Configuration = configuration
 		};
 
-		DotNetCoreTest(settings, "./src/ChilliSource.Core.Tests/ChilliSource.Core.Tests.csproj",  new XUnit2Settings {
+		DotNetCoreTest(settings, testProject,  new XUnit2Settings {
 			OutputDirectory = artifactDirectory,
             XmlReportV1 = false
 		});
 	};
 });
 
+var nuspecPath = config.Value<string>("nuspecRootPath");
 
 Task("Package")
     .IsDependentOn("Build")
@@ -325,10 +353,10 @@ Task("Package")
 		foreach(var package in packageWhitelist)
 		{
 			// only push the package which was created during this build run.
-			var packagePath = string.Format("./{0}.nuspec", package);
+			var packagePath = string.Format("../src/{0}.nuspec", package);
 
 			// Push the package.
-			Package(packagePath, "./");
+			Package(packagePath, nuspecPath);
 		}
 	};
 

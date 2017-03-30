@@ -1,7 +1,7 @@
 #!/bin/sh
 if [[ $# -gt 0 ]] 
 then
-	cd scripts && sh license-header.sh add
+	cd sh license-header.sh add
 	exitCode=$?
 
 	cd ..

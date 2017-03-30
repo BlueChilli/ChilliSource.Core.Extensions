@@ -16,7 +16,7 @@ function deleteHeader
 }
 
 count=0
-for i in $(find ../ -name '*.cs' ! -name 'CommonAssemblyInfo.cs' ! -name 'Resource.designer.cs') 
+for i in $(find ../src/ -name '*.cs' ! -name 'CommonAssemblyInfo.cs' ! -name 'Resource.designer.cs') 
 do
   if [ "$1" == "add" ]
   then

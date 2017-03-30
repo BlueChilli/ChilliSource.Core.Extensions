@@ -1,7 +1,7 @@
 #!/bin/sh
 if [[ $# -gt 0 ]] 
 then
-	cd scripts && sh license-header.sh add
+	sh license-header.sh add
 	exitCode=$?
 
 	cd ..
@@ -13,10 +13,10 @@ then
 	fi
 fi	
 
-rm -rf artifacts/*.*
-rm -rf **/bin
-rm -rf **/obj
-rm -rf src/*.tmp.*
+rm -rf ./artifacts/*.*
+rm -rf ../src/**/bin
+rm -rf ../src/**/obj
+rm -rf ../src/*.tmp.*
 mkdir tools
 mkdir tools/nuget
 curl -o ./tools/nuget/nuget.exe -k https://dist.nuget.org/win-x86-commandline/latest/nuget.exe

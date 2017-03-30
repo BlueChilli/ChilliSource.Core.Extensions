@@ -1,0 +1,14 @@
+{
+	"productName" : "ChilliSource Core Extensions",
+	"projectName" : "ChilliSource.Core.Extensions",
+	"githubOwner": "BlueChilli",
+	"githubRepository": "ChilliSource.Core.Extensions",
+	"packageWhiteList": ["ChilliSource.Core.Extensions"],
+	"solutionFile" : "../src/ChilliSource.Core.Extensions.sln",
+	"tags": [ "ChilliSource", "ChilliSource Core Extensions"],
+	"authors" : ["Blue Chilli Technology Pty Ltd"],
+	"copyright" : "Copyright Blue Chilli Technology Pty Ltd 2017",
+	"iconUrl": "https://avatars0.githubusercontent.com/u/5924219?v=3&s=200",
+	"testProjectPath": "../src/ChilliSource.Core.Extensions.Tests/ChilliSource.Core.Extensions.Tests.csproj",
+	"nuspecRootPath" : "../"
+}
