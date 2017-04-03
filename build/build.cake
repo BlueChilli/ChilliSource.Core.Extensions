@@ -16,6 +16,7 @@ using System.Text.RegularExpressions;
 #tool "GitVersion.CommandLine"
 #tool "GitLink"
 using Cake.Common.Build.TeamCity;
+using Cake.Core.IO;
 using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -87,6 +88,10 @@ var isTagged = !String.IsNullOrEmpty(branch) && branch.ToUpper().Contains("TAGS"
 var buildConfName = EnvironmentVariable("TEAMCITY_BUILDCONF_NAME"); //teamCity.Environment.Build.BuildConfName
 var buildNumber = GetEnvironmentInteger("BUILD_NUMBER");
 var isReleaseBranch = StringComparer.OrdinalIgnoreCase.Equals("master", buildConfName);
+var shouldAddLicenseHeader = false;
+if(!string.IsNullOrEmpty(EnvironmentVariable("ShouldAddLicenseHeader"))) {
+	shouldAddLicenseHeader = bool.Parse(EnvironmentVariable("ShouldAddLicenseHeader"));
+}
 
 var githubOwner = config.Value<string>("githubOwner");
 var githubRepository = config.Value<string>("githubRepository");
@@ -125,6 +130,13 @@ Action<string> RestorePackages = (solution) =>
     DotNetCoreRestore(solution);
 };
 
+Action<DirectoryPathCollection> PrintDirectories = (directories) => 
+{
+	foreach(var directory in directories)
+	{
+		Information("{0}\n", directory);
+	}
+};
 
 Action<string, string> Package = (nuspec, basePath) =>
 {
@@ -259,9 +271,14 @@ Setup((context) =>
         else
         {
              Information("Not running on TeamCity");
-        }
+        }		
 
-         CleanDirectories(artifactDirectory);
+		DeleteFiles("../src/**/*.tmp");
+		DeleteFiles("../src/**/*.tmp.*");
+
+		CleanDirectories(GetDirectories("../src/**/obj"));
+		CleanDirectories(GetDirectories("../src/**/bin"));		
+		CleanDirectory(Directory(artifactDirectory));		
 });
 
 Teardown((context) =>
@@ -274,6 +291,7 @@ Teardown((context) =>
 //////////////////////////////////////////////////////////////////////
 
 Task("Build")
+	.IsDependentOn("AddLicense")
     .IsDependentOn("RestorePackages")
     .IsDependentOn("UpdateAssemblyInfo")
     .Does (() =>
@@ -284,6 +302,21 @@ Task("Build")
 	WriteErrorLog("Build failed", "Build", exception);
 });
 
+Task("AddLicense")
+	.WithCriteria(() => shouldAddLicenseHeader)
+	.Does(() =>{
+		var command = isRunningOnWindows ? "sh" : "./license-header-cmd.sh";
+		var settings = isRunningOnWindows ? new ProcessSettings { Arguments = "-c \"./license-header-cmd.sh\"", RedirectStandardError = true, RedirectStandardOutput = true } : new ProcessSettings { RedirectStandardError = true, RedirectStandardOutput = true };
+		var process  = StartAndReturnProcess(command, settings);		
+		process.WaitForExit();
+
+		if (process.GetExitCode() != 0){
+			throw new Exception("Adding license failed.");
+		}
+	})
+	.ReportError(exception =>{
+		Information("Make sure the bash (sh) directory is set in your environment path.");
+	});
 
 Task("UpdateAssemblyInfo")
     .Does (() =>
@@ -529,6 +562,11 @@ Task("Default")
 
 });
 
+// Used to test Setup / Teardown
+Task("None")
+	.Does(() => {
+
+	});
 
 //////////////////////////////////////////////////////////////////////
 // EXECUTION
