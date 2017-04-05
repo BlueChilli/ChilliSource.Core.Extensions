@@ -15,12 +15,12 @@
     <tags>$tags$</tags>
   </metadata>
   <files>
-    <file src="src/ChilliSource.Core/bin/Release/netstandard1.6/ChilliSource.Core.Extensions.dll" target="lib\netstandard1.6" /> 
-    <file src="src/ChilliSource.Core/bin/Release/netstandard1.6/ChilliSource.Core.Extensions.xml" target="lib\netstandard1.6" />   
-    <file src="src/ChilliSource.Core/bin/Release/netstandard1.6/ChilliSource.Core.Extensions.pdb" target="lib\netstandard1.6" />   
-    <file src="src/ChilliSource.Core/bin/Release/netstandard1.6/ChilliSource.Core.Extensions.deps.json" target="lib\netstandard1.6" />   
-    <file src="src/ChilliSource.Core/bin/Release/net45/ChilliSource.Core.Extensions.dll" target="lib\net45" /> 
-    <file src="src/ChilliSource.Core/bin/Release/net45/ChilliSource.Core.Extensions.xml" target="lib\net45" />   
-    <file src="src/ChilliSource.Core/bin/Release/net45/ChilliSource.Core.Extensions.pdb" target="lib\net45" />   
+    <file src="bin/Release/netstandard1.6/ChilliSource.Core.Extensions.dll" target="lib\netstandard1.6" /> 
+    <file src="bin/Release/netstandard1.6/ChilliSource.Core.Extensions.xml" target="lib\netstandard1.6" />   
+    <file src="bin/Release/netstandard1.6/ChilliSource.Core.Extensions.pdb" target="lib\netstandard1.6" />   
+    <file src="bin/Release/netstandard1.6/ChilliSource.Core.Extensions.deps.json" target="lib\netstandard1.6" />   
+    <file src="bin/Release/net45/ChilliSource.Core.Extensions.dll" target="lib\net45" /> 
+    <file src="bin/Release/net45/ChilliSource.Core.Extensions.xml" target="lib\net45" />   
+    <file src="bin/Release/net45/ChilliSource.Core.Extensions.pdb" target="lib\net45" />   
   </files>
 </package>
