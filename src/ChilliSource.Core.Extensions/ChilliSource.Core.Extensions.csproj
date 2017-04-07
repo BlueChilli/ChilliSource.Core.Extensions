@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>netstandard1.6;net45;</TargetFrameworks>
@@ -29,7 +29,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\CommonAssemblyInfo.cs" Link="Properties\CommonAssemblyInfo.cs" />   
+    <Compile Include="..\CommonAssemblyInfo.cs" Link="Properties\CommonAssemblyInfo.cs" />
+    <Compile Include="ArrayExtensions.cs" />
+    <Compile Include="BoolExtensions.cs" />
+    <Compile Include="PhoneNumberExtensions.cs" />
+    <Compile Include="LinqExtensions.cs" />
+    <Compile Include="IntExtensions.cs" />
+    <Compile Include="Infrastructure\DataAttribute.cs" />   
     <Compile Include="ByteArrayExtensions.cs" />
     <Compile Include="CollectionExtensions.cs" />
     <Compile Include="DateTimeExtensions.cs" />
