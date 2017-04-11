@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 
 /*
 Licensed to Blue Chilli Technology Pty Ltd and the contributors under the MIT License (the "License").
@@ -282,8 +282,8 @@ namespace ChilliSource.Core.Extensions
         /// <returns>A string value replaced by property values from object.</returns>
         public static string TransformWith(this string s, object transformWith)
         {
-            Type t = transformWith.GetType();
-            foreach (PropertyInfo property in t.GetProperties())
+            Type type = transformWith.GetType();
+            foreach (PropertyInfo property in type.GetTypeInfo().GetProperties())
             {
                 var value = property.GetValue(transformWith, null);
                 if (value == null) value = "";

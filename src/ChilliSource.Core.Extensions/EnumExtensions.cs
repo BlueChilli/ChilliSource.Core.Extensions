@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 
 /*
 Licensed to Blue Chilli Technology Pty Ltd and the contributors under the MIT License (the "License").
@@ -138,7 +138,7 @@ namespace ChilliSource.Core.Extensions
         /// <returns>Data value stored in the DataAttribute</returns>
         public static object GetEnumData<TEnum>(TEnum value, string name)
         {
-            var fi = value.GetType().GetField(value.ToString());
+			var fi = value.GetType().GetTypeInfo().GetDeclaredField(value.ToString());
 
             DataAttribute[] attributes = (DataAttribute[])fi.GetCustomAttributes(typeof(DataAttribute), false);
 
@@ -164,7 +164,7 @@ namespace ChilliSource.Core.Extensions
 
             foreach (var value in values)
             {
-                var fi = value.GetType().GetField(value.ToString());
+                var fi = value.GetType().GetTypeInfo().GetDeclaredField(value.ToString());
                 var attributes = (AliasAttribute[])fi.GetCustomAttributes(typeof(AliasAttribute), false);
 
                 if (attributes.Length > 0)
@@ -197,7 +197,7 @@ namespace ChilliSource.Core.Extensions
         /// <returns>The alias name</returns>
         public static string GetEnumAlias<TEnum>(TEnum value)
         {
-            var fi = value.GetType().GetField(value.ToString());
+            var fi = value.GetType().GetTypeInfo().GetDeclaredField(value.ToString());
 
             AliasAttribute[] attributes = (AliasAttribute[])fi.GetCustomAttributes(typeof(AliasAttribute), false);
 
@@ -241,7 +241,7 @@ namespace ChilliSource.Core.Extensions
             {
                 var values = new Dictionary<TEnum, int>();
 
-                var fields = typeof(TEnum).GetFields(BindingFlags.Static | BindingFlags.Public);
+                var fields = typeof(TEnum).GetTypeInfo().GetFields(BindingFlags.Static | BindingFlags.Public);
 
                 int unordered = int.MaxValue - 1;
 

@@ -20,5 +20,4 @@
   <ItemGroup>
     <ProjectReference Include="..\ChilliSource.Core.Extensions\ChilliSource.Core.Extensions.csproj" />
   </ItemGroup>
-
 </Project>
