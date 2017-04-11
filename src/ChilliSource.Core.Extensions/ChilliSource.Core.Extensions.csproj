@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net45;net45;</TargetFrameworks>
+    <TargetFrameworks>netstandard1.6;net45;</TargetFrameworks>
     <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
     <AssemblyName>ChilliSource.Core.Extensions</AssemblyName>
     <RootNamespace>ChilliSource.Core.Extensions</RootNamespace>

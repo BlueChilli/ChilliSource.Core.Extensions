@@ -5,3 +5,4 @@ src/ChilliSource.Core.Extensions/obj
 build/tools
 build/artifacts
 **/*.userprefs
+src/packages/
