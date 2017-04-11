@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 
 /*
 Licensed to Blue Chilli Technology Pty Ltd and the contributors under the MIT License (the "License").
@@ -9,86 +9,86 @@ See the LICENSE file in the project root for more information.
 #endregion
 
 using System;
-using Xunit;
-
+using NUnit.Framework;
 using ChilliSource.Core.Extensions;
 using System.IO;
 
 namespace Tests
 {
+	[TestFixture]
 	public class StringExtensionTests
 	{
-		[Fact]
+		[Test]
 		public void ValueOrEmpty_ShouldReturnValue_WhenValueIsNotEmpty()
 		{
 			var result = "test".ValueOrEmpty();
-			Assert.Equal("test", result);
+			Assert.AreEqual("test", result);
 		}
 
-		[Fact]
+		[Test]
 		public void ValueOrEmpty_ShouldReturnEmptyString_WhenValueIsEmpty()
 		{
 			var result = "".ValueOrEmpty();
-			Assert.Equal(string.Empty, result);
+			Assert.AreEqual(string.Empty, result);
 		}
 
-		[Fact]
+		[Test]
 		public void ValueOrReplacement_ShouldReturnValue_WhenValueIsNotEmpty()
 		{
 			var result = "test".ValueOrReplacement();
-			Assert.Equal("test", result);
+			Assert.AreEqual("test", result);
 		}
 
-		[Fact]
+		[Test]
 		public void ValueOrReplacement_ShouldReturnReplacementValue_WhenValueIsEmpty()
 		{
 			var result = "".ValueOrReplacement("replacement");
-			Assert.Equal("replacement", result);
+			Assert.AreEqual("replacement", result);
 		}
 
-		[Fact]
+		[Test]
 		public void RemoveSpaces_ShouldRemoveSpaces_WhenGivenStringWithSpaces()
 		{
 			var result = "test1 test2 test3".RemoveSpaces();
-			Assert.Equal("test1test2test3", result);
+			Assert.AreEqual("test1test2test3", result);
 		}
 
-		[Fact]
+		[Test]
 		public void RemoveSpaces_ShouldReturnEmptyString_WhenGivenNull()
 		{
 			string input = null;
 			var result = input.RemoveSpaces();
-			Assert.Equal("", result);
+			Assert.AreEqual("", result);
 		}
 
-		[Fact]
+		[Test]
 		public void ToByteArray_ShouldReturnByteArray_WhenHexStringIsValid()
 		{
 			var result = "68656C6C6F2068657820776F726C64".ToByteArray();
-			Assert.Equal("68656C6C6F2068657820776F726C64", result.ToHexString());
+			Assert.AreEqual("68656C6C6F2068657820776F726C64", result.ToHexString());
 		}
 
-		[Fact]
+		[Test]
 		public void ToByteArray_ShouldThrowException_WhenHexStringIsNotValid()
 		{
 			Assert.Throws(typeof(FormatException), () => "invalid hex string".ToByteArray());
 		}
 
-		[Fact]
+		[Test]
 		public void ToByteArray_ShouldReturnNull_WhenHexStringIsNullOrEmpty()
 		{
 			string input = null;
 			var result = input.ToByteArray();
-			Assert.Null(result);
+			Assert.IsNull(result);
 		}
 
-		[Fact]
+		[Test]
 		public void ToStream_ShouldReturnStream()
 		{
 			var result = "test string".ToStream();
 			var reader = new StreamReader(result);
 
-			Assert.Equal("test string", reader.ReadToEnd());
+			Assert.AreEqual("test string", reader.ReadToEnd());
 		}
 	}
 }

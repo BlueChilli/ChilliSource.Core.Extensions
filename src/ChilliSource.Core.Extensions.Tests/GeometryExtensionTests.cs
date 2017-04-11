@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 
 /*
 Licensed to Blue Chilli Technology Pty Ltd and the contributors under the MIT License (the "License").
@@ -9,32 +9,31 @@ See the LICENSE file in the project root for more information.
 #endregion
 
 using System;
-using Xunit;
-
 using ChilliSource.Core.Extensions;
+using NUnit.Framework;
 
 namespace Tests
 {
-    
+    [TestFixture]
     public class GeometryExtensionTests
     {
 
-        [Fact]
+        [Test]
         public void ToDegrees_ShouldReturnDegrees()
         {
             float radiants = 10.5f;
             var degrees = radiants.ToDegrees();
 
-            Assert.Equal(601, Math.Truncate(degrees));
+            Assert.AreEqual(601, Math.Truncate(degrees));
         }
 
-        [Fact]
+        [Test]
         public void ToRadiants_ShouldReturnRadiants()
         {
             float degrees = 600.5f;
             var radiants = degrees.ToRadiants();
 
-            Assert.Equal(10, Math.Truncate(radiants));
+            Assert.AreEqual(10, Math.Truncate(radiants));
         }
     }
 }

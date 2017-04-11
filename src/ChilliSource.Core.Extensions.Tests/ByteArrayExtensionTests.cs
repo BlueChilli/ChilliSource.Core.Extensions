@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 
 /*
 Licensed to Blue Chilli Technology Pty Ltd and the contributors under the MIT License (the "License").
@@ -10,22 +10,23 @@ See the LICENSE file in the project root for more information.
 
 using System;
 using ChilliSource.Core.Extensions;
-using Xunit;
+using NUnit.Framework;
 
 namespace Tests
 {
+	[TestFixture]
 	public class ByteArrayExtensionTests
 	{
 
-		[Fact]
+		[Test]
 		public void ToHexString_ShouldReturnHexString_WhenByteArrayIsNotNull()
 		{
 			byte[] input = "68656C6C6F2068657820776F726C64".ToByteArray();
 			var result = input.ToHexString();
-            Assert.Equal("68656C6C6F2068657820776F726C64", result);
+            Assert.AreEqual("68656C6C6F2068657820776F726C64", result);
 		}
 
-		[Fact]
+		[Test]
 		public void ToHexString_ShouldReturnNull_WhenByteArrayIsNull()
 		{
 			byte[] input = null;

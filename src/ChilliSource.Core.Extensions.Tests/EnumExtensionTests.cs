@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 
 /*
 Licensed to Blue Chilli Technology Pty Ltd and the contributors under the MIT License (the "License").
@@ -9,12 +9,13 @@ See the LICENSE file in the project root for more information.
 #endregion
 
 using System;
-using Xunit;
 using ChilliSource.Core.Extensions;
 using System.Linq;
+using NUnit.Framework;
 
 namespace Tests
 {
+	[TestFixture]
 	public class EnumExtensionsTests
 	{
 		enum TestEnum
@@ -25,24 +26,24 @@ namespace Tests
 			Test2
 		}
 
-		[Fact]
+		[Test]
 		public void GetAttributeOfType_ShouldReturnAttribute_IfTypeExists()
 		{
 			var result = TestEnum.Test1.GetAttributeOfType<System.ComponentModel.DescriptionAttribute>();
 
 			Assert.NotNull(result);
-			Assert.Equal(typeof(System.ComponentModel.DescriptionAttribute), result.GetType());
-			Assert.Equal("Test1 Description", result.Description);
+			Assert.AreEqual(typeof(System.ComponentModel.DescriptionAttribute), result.GetType());
+			Assert.AreEqual("Test1 Description", result.Description);
 
 		}
 
-		[Fact]
+		[Test]
 		public void GetValues_ShouldReturnListOfValuesForEnumType()
 		{
 			var result = EnumExtensions.GetValues<TestEnum>();
 			Assert.NotNull(result);
 			Assert.True(result.Count() > 0);
-			Assert.Equal(TestEnum.Test1, result.First());
+			Assert.AreEqual(TestEnum.Test1, result.First());
 
 		}
 
