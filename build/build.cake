@@ -128,6 +128,7 @@ Action NonMacOSAbort = () => { throw new Exception("Running on platforms other m
 Action<string> RestorePackages = (solution) =>
 {
     DotNetCoreRestore(solution);
+	
 };
 
 Action<DirectoryPathCollection> PrintDirectories = (directories) => 

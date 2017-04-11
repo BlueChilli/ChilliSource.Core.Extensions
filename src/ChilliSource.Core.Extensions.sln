@@ -4,7 +4,7 @@ VisualStudioVersion = 15.0.26403.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChilliSource.Core.Extensions", "ChilliSource.Core.Extensions\ChilliSource.Core.Extensions.csproj", "{264CE12F-9B47-45D2-95F6-E69589363728}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChilliSource.Core.Extensions.Tests", "ChilliSource.Core.Extensions.Tests\ChilliSource.Core.Extensions.Tests.csproj", "{EE91A89F-7BB9-45C6-A229-399FC55ED028}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChilliSource.Core.Extensions.Tests", "ChilliSource.Core.Extensions.Tests\ChilliSource.Core.Extensions.Tests.csproj", "{7E955956-254C-477C-8F45-487CD7329279}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -16,10 +16,10 @@ Global
 		{264CE12F-9B47-45D2-95F6-E69589363728}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{264CE12F-9B47-45D2-95F6-E69589363728}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{264CE12F-9B47-45D2-95F6-E69589363728}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EE91A89F-7BB9-45C6-A229-399FC55ED028}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EE91A89F-7BB9-45C6-A229-399FC55ED028}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EE91A89F-7BB9-45C6-A229-399FC55ED028}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EE91A89F-7BB9-45C6-A229-399FC55ED028}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E955956-254C-477C-8F45-487CD7329279}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E955956-254C-477C-8F45-487CD7329279}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E955956-254C-477C-8F45-487CD7329279}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E955956-254C-477C-8F45-487CD7329279}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

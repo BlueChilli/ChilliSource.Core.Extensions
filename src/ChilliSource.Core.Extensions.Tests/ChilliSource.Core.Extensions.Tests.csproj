@@ -1,51 +1,24 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EE91A89F-7BB9-45C6-A229-399FC55ED028}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>ChilliSource.Core.Extensions.Tests</RootNamespace>
-    <AssemblyName>ChilliSource.Core.Extensions.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>    
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="nunit.framework">
-      <HintPath>..\packages\NUnit.3.6.1\lib\net45\nunit.framework.dll</HintPath>
-    </Reference>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
+    <PackageReference Include="NUnit" Version="3.6.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.7.0" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DateTimeExtensionTests.cs" />
-    <Compile Include="EnumExtensionTests.cs" />
-    <Compile Include="GeometryExtensionTests.cs" />
-    <Compile Include="StreamExtensionTests.cs" />
-    <Compile Include="StringExtensionTests.cs" />
-    <Compile Include="ByteArrayExtensionTests.cs" />
+    <Folder Include="Properties\" />
+    <Compile Include="*.cs" />
   </ItemGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\ChilliSource.Core.Extensions\ChilliSource.Core.Extensions.csproj">
-      <Project>{264CE12F-9B47-45D2-95F6-E69589363728}</Project>
-      <Name>ChilliSource.Core.Extensions</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\ChilliSource.Core.Extensions\ChilliSource.Core.Extensions.csproj" />
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+
 </Project>
