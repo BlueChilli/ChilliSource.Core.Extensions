@@ -10,27 +10,26 @@ See the LICENSE file in the project root for more information.
 
 using System;
 using ChilliSource.Core.Extensions;
-using NUnit.Framework;
+using Xunit;
 
 namespace Tests
-{
-	[TestFixture]
+{	
 	public class DateTimeExtensionTests
 	{
-		[Test]
+		[Fact]
 		public void ChangeTime_ShouldReturnDateTimeWithNewTimeComponents()
 		{
 			var result = DateTime.Now.ChangeTime(22, 3, 5);
-			Assert.AreEqual(22, result.Hour);
-			Assert.AreEqual(3, result.Minute);
-			Assert.AreEqual(5, result.Second);
+			Assert.Equal(22, result.Hour);
+			Assert.Equal(3, result.Minute);
+			Assert.Equal(5, result.Second);
 		}
 
-		[Test]
+		[Fact]
 		public void RemoveTimeZone_ShouldReturnUTCDate()
 		{
 			var result = DateTime.Now.RemoveTimeZone();
-			Assert.AreEqual(DateTimeKind.Unspecified, result.Kind);
+			Assert.Equal(DateTimeKind.Unspecified, result.Kind);
 		}
 
 	}

@@ -10,16 +10,15 @@ See the LICENSE file in the project root for more information.
 
 using System;
 using System.IO;
-using NUnit.Framework;
+using Xunit;
 
 using ChilliSource.Core.Extensions;
 
 namespace Tests
-{
-	[TestFixture]
+{	
 	public class StreamExtensionTests
 	{
-		[Test]
+		[Fact]
 		public void ToByteArray_ShouldReturnByteArray_WhenStreamIsNotNull()
 		{
 			Stream input = "test string".ToStream();
@@ -28,10 +27,10 @@ namespace Tests
 			var resultStream = new MemoryStream(resultBytes);
 			var reader = new StreamReader(resultStream);
 
-			Assert.AreEqual("test string", reader.ReadToEnd());
+			Assert.Equal("test string", reader.ReadToEnd());
 		}
 
-		[Test]
+		[Fact]
 		public void ToByteArray_ShouldReturnNull_WhenStreamIsNull()
 		{
 			Stream input = null;

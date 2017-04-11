@@ -10,30 +10,29 @@ See the LICENSE file in the project root for more information.
 
 using System;
 using ChilliSource.Core.Extensions;
-using NUnit.Framework;
+using Xunit;
 
 namespace Tests
-{
-    [TestFixture]
+{    
     public class GeometryExtensionTests
     {
 
-        [Test]
+        [Fact]
         public void ToDegrees_ShouldReturnDegrees()
         {
             float radiants = 10.5f;
             var degrees = radiants.ToDegrees();
 
-            Assert.AreEqual(601, Math.Truncate(degrees));
+            Assert.Equal(601, Math.Truncate(degrees));
         }
 
-        [Test]
+        [Fact]
         public void ToRadiants_ShouldReturnRadiants()
         {
             float degrees = 600.5f;
             var radiants = degrees.ToRadiants();
 
-            Assert.AreEqual(10, Math.Truncate(radiants));
+            Assert.Equal(10, Math.Truncate(radiants));
         }
     }
 }
