@@ -206,44 +206,23 @@ Action<string> build = (solution) =>
     Information("Building {0}", solution);
 	using(BuildBlock("Build")) 
 	{			
-		var settings = new DotNetCoreBuildSettings
-		{
-			Configuration = configuration
-		};
+		MSBuild(solution, settings => {
+				settings
+				.SetConfiguration(configuration)
+				.WithProperty("NoWarn", "1591") // ignore missing XML doc warnings
+				.WithProperty("TreatWarningsAsErrors", treatWarningsAsErrors.ToString())
+				.SetVerbosity(Verbosity.Minimal)
+				.SetNodeReuse(false);
 
-		if(isTeamCity) {
-
-			var msBuildLogger = GetMSBuildLoggerArguments();
-	
-			settings.ArgumentCustomization = arguments => {
-				 arguments.Clear();
-				
-				 arguments.Append("build");
-
-				 // Specific path?
-	            if (solution != null)
-	            {
-	                arguments.AppendQuoted(solution);
-	            }
-
-				 arguments.Append(string.Format("/p:ci={0}", true));
-
-				// Configuration
-	            if (!string.IsNullOrEmpty(settings.Configuration))
-	            {
-	                arguments.Append(string.Format("/p:Configuration={0}", settings.Configuration));
-	            }
-
-
-				 if(!string.IsNullOrEmpty(msBuildLogger)) {
+				var msBuildLogger = GetMSBuildLoggerArguments();
+			
+				if(!string.IsNullOrEmpty(msBuildLogger)) 
+				{
+					Information("Using custom MSBuild logger: {0}", msBuildLogger);
+					settings.ArgumentCustomization = arguments =>
 					arguments.Append(string.Format("/logger:{0}", msBuildLogger));
-				 }
-				
-				return arguments;
-			};
-		}
-		
-		DotNetCoreBuild(solution, settings);
+				}
+			});
     };		
 
 };
