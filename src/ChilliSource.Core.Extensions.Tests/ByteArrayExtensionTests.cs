@@ -13,7 +13,7 @@ using ChilliSource.Core.Extensions;
 using Xunit;
 
 namespace Tests
-{	
+{
 	public class ByteArrayExtensionTests
 	{
 
@@ -22,7 +22,7 @@ namespace Tests
 		{
 			byte[] input = "68656C6C6F2068657820776F726C64".ToByteArray();
 			var result = input.ToHexString();
-            		Assert.Equal("68656C6C6F2068657820776F726C64", result);
+			Assert.Equal("68656C6C6F2068657820776F726C64", result);
 		}
 
 		[Fact]
@@ -30,7 +30,7 @@ namespace Tests
 		{
 			byte[] input = null;
 			var result = input.ToHexString();
-            		Assert.Null(result);
+			Assert.Null(result);
 		}
 	}
 }

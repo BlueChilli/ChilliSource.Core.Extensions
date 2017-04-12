@@ -13,7 +13,7 @@ using ChilliSource.Core.Extensions;
 using Xunit;
 
 namespace Tests
-{	
+{
 	public class DateTimeExtensionTests
 	{
 		[Fact]

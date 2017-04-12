@@ -14,7 +14,7 @@ using System.Linq;
 using Xunit;
 
 namespace Tests
-{	
+{
 	public class EnumExtensionsTests
 	{
 		enum TestEnum

@@ -13,26 +13,26 @@ using ChilliSource.Core.Extensions;
 using Xunit;
 
 namespace Tests
-{    
-    public class GeometryExtensionTests
-    {
+{
+	public class GeometryExtensionTests
+	{
 
-        [Fact]
-        public void ToDegrees_ShouldReturnDegrees()
-        {
-            float radiants = 10.5f;
-            var degrees = radiants.ToDegrees();
+		[Fact]
+		public void ToDegrees_ShouldReturnDegrees()
+		{
+			float radiants = 10.5f;
+			var degrees = radiants.ToDegrees();
 
-            Assert.Equal(601, Math.Truncate(degrees));
-        }
+			Assert.Equal(601, Math.Truncate(degrees));
+		}
 
-        [Fact]
-        public void ToRadiants_ShouldReturnRadiants()
-        {
-            float degrees = 600.5f;
-            var radiants = degrees.ToRadiants();
+		[Fact]
+		public void ToRadiants_ShouldReturnRadiants()
+		{
+			float degrees = 600.5f;
+			var radiants = degrees.ToRadiants();
 
-            Assert.Equal(10, Math.Truncate(radiants));
-        }
-    }
+			Assert.Equal(10, Math.Truncate(radiants));
+		}
+	}
 }

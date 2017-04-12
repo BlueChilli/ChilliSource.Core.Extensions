@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 
 /*
 Licensed to Blue Chilli Technology Pty Ltd and the contributors under the MIT License (the "License").
@@ -14,31 +14,43 @@ using System.Text.RegularExpressions;
 
 namespace ChilliSource.Core.Extensions
 {
-    public static class PhoneNumberExtensions
-    {
-        public static bool IsValidAustralianMobileNumber(this string number)
-        {
-            var regEx = new Regex(@"^(?:\+?61|0)4\)?(?:[ -]?[0-9]){7}[0-9]$");
+	/// <summary>
+	/// Phone number extensions.
+	/// </summary>
+	public static class PhoneNumberExtensions
+	{
+		/// <summary>
+		/// Determines if the provided phone number is a valid Australian mobile number.
+		/// </summary>
+		/// <returns><c>true</c>, if valid australian mobile number was ised, <c>false</c> otherwise.</returns>
+		/// <param name="number">Number.</param>
+		public static bool IsValidAustralianMobileNumber(this string number)
+		{
+			var regEx = new Regex(@"^(?:\+?61|0)4\)?(?:[ -]?[0-9]){7}[0-9]$");
 
-            return regEx.IsMatch(number);
-        }
+			return regEx.IsMatch(number);
+		}
+		/// <summary>
+		/// Returns the specified mobile number formatted as an international number
+		/// </summary>
+		/// <returns>The international mobile format.</returns>
+		/// <param name="mobile">Mobile.</param>
+		public static string FormatAsInternationalMobileFormat(this string mobile)
+		{
 
-        public static string GetInternationalMobileFormat(this string mobile)
-        {
+			if (!String.IsNullOrWhiteSpace(mobile) && !mobile.StartsWith("+"))
+			{
+				return String.Format("+{0}", mobile);
+			}
 
-            if (!String.IsNullOrWhiteSpace(mobile) && !mobile.StartsWith("+"))
-            {
-                return String.Format("+{0}", mobile);
-            }
+			return mobile;
+		}
 
-            return mobile;
-        }
-
-        private static string RemoveSpaces(this string input)
-        {
-            return String.IsNullOrWhiteSpace(input) ? input : Regex.Replace(input, @"[^0-9]+", string.Empty);
-        }
+		private static string RemoveSpaces(this string input)
+		{
+			return String.IsNullOrWhiteSpace(input) ? input : Regex.Replace(input, @"[^0-9]+", string.Empty);
+		}
 
 
-    }
+	}
 }

@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 
 /*
 Licensed to Blue Chilli Technology Pty Ltd and the contributors under the MIT License (the "License").
@@ -13,8 +13,16 @@ using System.IO;
 
 namespace ChilliSource.Core.Extensions
 {
+	/// <summary>
+	/// Stream extensions.
+	/// </summary>
 	public static class StreamExtensions
 	{
+		/// <summary>
+		/// Converts the stram to a byte array
+		/// </summary>
+		/// <returns>The byte array.</returns>
+		/// <param name="stream">Stream.</param>
 		public static byte[] ToByteArray(this Stream stream)
 		{
 			if (stream == null)

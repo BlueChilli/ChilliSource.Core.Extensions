@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 
 /*
 Licensed to Blue Chilli Technology Pty Ltd and the contributors under the MIT License (the "License").
@@ -13,6 +13,9 @@ using System.Linq;
 
 namespace ChilliSource.Core.Extensions
 {
+	/// <summary>
+	/// Byte array extensions.
+	/// </summary>
 	public static class ByteArrayExtensions
 	{
 		/// <summary>

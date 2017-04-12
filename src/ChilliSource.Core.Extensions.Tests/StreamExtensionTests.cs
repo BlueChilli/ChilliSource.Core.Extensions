@@ -15,7 +15,7 @@ using Xunit;
 using ChilliSource.Core.Extensions;
 
 namespace Tests
-{	
+{
 	public class StreamExtensionTests
 	{
 		[Fact]

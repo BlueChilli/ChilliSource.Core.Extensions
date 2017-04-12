@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 
 /*
 Licensed to Blue Chilli Technology Pty Ltd and the contributors under the MIT License (the "License").
@@ -13,13 +13,21 @@ using System.Linq;
 
 namespace ChilliSource.Core.Extensions
 {
-    public static class ArrayExtensions
-    {
-        public static T[] EmptyArray<T>() { return EmptyArrayHolder<T>.Value; }
-    }
+	/// <summary>
+	/// Array extensions.
+	/// </summary>
+	public static class ArrayExtensions
+	{
+		/// <summary>
+		/// returns a new array of type T
+		/// </summary>
+		/// <returns>The new array.</returns>
+		/// <typeparam name="T">The type of the array to return.</typeparam>
+		public static T[] EmptyArray<T>() { return EmptyArrayHolder<T>.Value; }
+	}
 
-    internal static class EmptyArrayHolder<T>
-    {
-        public static readonly T[] Value = new T[0] { };
-    }
+	internal static class EmptyArrayHolder<T>
+	{
+		public static readonly T[] Value = new T[0] { };
+	}
 }
