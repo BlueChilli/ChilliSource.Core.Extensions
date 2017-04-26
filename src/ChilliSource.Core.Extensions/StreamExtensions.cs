@@ -19,7 +19,7 @@ namespace ChilliSource.Core.Extensions
 	public static class StreamExtensions
 	{
 		/// <summary>
-		/// Converts the stram to a byte array
+		/// Converts the stream to a byte array
 		/// </summary>
 		/// <returns>The byte array.</returns>
 		/// <param name="stream">Stream.</param>

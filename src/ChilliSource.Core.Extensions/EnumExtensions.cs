@@ -156,58 +156,6 @@ namespace ChilliSource.Core.Extensions
 		}
 
 		/// <summary>
-		/// Gets an Enum value from an Alias name.
-		/// </summary>
-		/// <typeparam name="TEnum">Enum type</typeparam>
-		/// <param name="name">Alias name</param>
-		/// <returns>An Enum value.</returns>
-		public static TEnum GetFromAlias<TEnum>(string name)
-		{
-			var values = Enum.GetValues(typeof(TEnum));
-
-			foreach (var value in values)
-			{
-				var fi = value.GetType().GetTypeInfo().GetDeclaredField(value.ToString());
-				var attributes = (AliasAttribute[])fi.GetCustomAttributes(typeof(AliasAttribute), false);
-
-				if (attributes.Length > 0)
-				{
-					foreach (var a in attributes)
-					{
-						if (a.Name == name) return (TEnum)value;
-					}
-				}
-			}
-
-			throw new Exception("Alias {0} not found for type {1}".FormatWith(name, typeof(TEnum).Name));
-		}
-
-		/// <summary>
-		/// Gets the Alias set by AliasAttribute in an Enum value.
-		/// </summary>
-		/// <param name="e">Enum value</param>
-		/// <returns>The alias name</returns>
-		public static string GetAlias(this Enum e)
-		{
-			return GetEnumAlias(e);
-		}
-
-		/// <summary>
-		/// Gets the Alias set by AliasAttribute in an Enum value.
-		/// </summary>
-		/// <typeparam name="TEnum">Enum type</typeparam>
-		/// <param name="value">Enum value</param>
-		/// <returns>The alias name</returns>
-		public static string GetEnumAlias<TEnum>(TEnum value)
-		{
-			var fi = value.GetType().GetTypeInfo().GetDeclaredField(value.ToString());
-
-			AliasAttribute[] attributes = (AliasAttribute[])fi.GetCustomAttributes(typeof(AliasAttribute), false);
-
-			return attributes.Length > 0 ? attributes[0].Name : "";
-		}
-
-		/// <summary>
 		/// Sort list elements using a custom order attribute in Enum propery
 		/// e.g : set Order on Enum values like: 
 		/// public enum ResponseToEvent
