@@ -12,7 +12,7 @@ using System;
 using System.Linq;
 
 namespace ChilliSource.Core.Extensions
-{
+{ 
 	/// <summary>
 	/// Array extensions.
 	/// </summary>
