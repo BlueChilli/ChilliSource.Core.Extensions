@@ -6,8 +6,8 @@
 using System.Reflection;
 
 [assembly: AssemblyProduct("ChilliSource Core Extensions")]
-[assembly: AssemblyVersion("1.0.1")]
-[assembly: AssemblyFileVersion("1.0.1")]
-[assembly: AssemblyInformationalVersion("1.0.1-alpha.20+Branch.develop.Sha.3c924723472f719fd180ab0b395d60c24a00f1ce")]
+[assembly: AssemblyVersion("1.0.2")]
+[assembly: AssemblyFileVersion("1.0.2")]
+[assembly: AssemblyInformationalVersion("1.0.2+Branch.master.Sha.bb6c04bdf1b8af2be98c5556db35eff71f697f06")]
 [assembly: AssemblyCopyright("Copyright Blue Chilli Technology Pty Ltd 2017")]
 
