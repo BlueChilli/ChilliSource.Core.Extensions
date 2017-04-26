@@ -1,17 +1,32 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.6</TargetFramework>
+    <TargetFrameworks>netstandard1.6;net461;net462</TargetFrameworks>
+    <DebugType>pdbonly</DebugType>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+    <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
+    <GenerateAssemblyCopyRightAttribute>false</GenerateAssemblyCopyRightAttribute>
+    <AssemblyName>ChilliSource.Core.Extensions</AssemblyName>
+    <RootNamespace>ChilliSource.Core.Extensions</RootNamespace>
+    <Description>Core Extensions library for ChilliSource</Description>
+    <Company>BlueChilli Technology Pty Ltd</Company>
+    <SourceLinkUrl>https://github.com/BlueChilli/ChilliSource.Core.Extensions/</SourceLinkUrl>
+    <RepositoryUrl>https://github.com/BlueChilli/ChilliSource.Core.Extensions</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/BlueChilli/ChilliSource.Core.Extensions/blob/master/LICENSE</PackageLicenseUrl>
+    <Authors>BlueChilli Technology</Authors>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DocumentationFile>bin\Debug\netstandard1.6\ChilliSource.Core.Extensions.xml</DocumentationFile>
-    <DebugType>portable</DebugType>
-    <DebugSymbols>True</DebugSymbols>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>portable</DebugType>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.6|AnyCPU'">
     <DocumentationFile>bin\Release\netstandard1.6\ChilliSource.Core.Extensions.xml</DocumentationFile>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net461|AnyCPU'">
+    <DocumentationFile>bin\Release\net461\ChilliSource.Core.Extensions.xml</DocumentationFile>
+  </PropertyGroup>  
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net462|AnyCPU'">
+    <DocumentationFile>bin\Release\net462\ChilliSource.Core.Extensions.xml</DocumentationFile>
   </PropertyGroup>
 </Project>
