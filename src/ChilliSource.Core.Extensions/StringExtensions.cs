@@ -480,9 +480,9 @@ namespace ChilliSource.Core.Extensions
 		/// </summary>
 		/// <param name="s">The specified string value.</param>
 		/// <returns>A byte array.</returns>
-		public static byte[] ByteArray(this string s)
+		public static byte[] ToByteArray(this string s, Encoding encoding = null)
 		{
-			var encoding = new UTF8Encoding();
+			encoding = encoding ?? new UTF8Encoding();
 			return encoding.GetBytes(s);
 		}
 
@@ -491,7 +491,7 @@ namespace ChilliSource.Core.Extensions
 		/// </summary>
 		/// <returns>The byte array.</returns>
 		/// <param name="hexString">Hex string.</param>
-		public static byte[] ToByteArray(this string hexString)
+		public static byte[] ToByteArrayFromHex(this string hexString)
 		{
 			if (string.IsNullOrEmpty(hexString))
 			{

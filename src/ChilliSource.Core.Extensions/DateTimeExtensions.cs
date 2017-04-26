@@ -155,13 +155,6 @@ namespace ChilliSource.Core.Extensions
 		/// <summary>
 		/// Returns the minimum date of SQL server.
 		/// </summary>
-		/// <param name="notUsed">The specified date (not used).</param>
-		/// <returns>The minimum date of SQL server (1 January 1753).</returns>
-		public static DateTime MinDateForSqlServer(this DateTime notUsed) { return MinDateForSqlServer(); }
-
-		/// <summary>
-		/// Returns the minimum date of SQL server.
-		/// </summary>
 		/// <returns>The minimum date of SQL server (1 January 1753).</returns>
 		public static DateTime MinDateForSqlServer() { return new DateTime(1753, 1, 1); }
 
