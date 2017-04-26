@@ -6,3 +6,5 @@ build/tools
 build/artifacts
 **/*.userprefs
 src/packages/
+
+src/*.suo

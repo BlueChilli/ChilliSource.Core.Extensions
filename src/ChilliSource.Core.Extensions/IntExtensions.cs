@@ -102,7 +102,7 @@ namespace ChilliSource.Core.Extensions
 				}
 			}
 
-			return words;
+			return words.Trim();
 		}
 	}
 }
