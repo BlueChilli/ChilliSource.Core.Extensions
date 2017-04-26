@@ -20,7 +20,7 @@ namespace Tests
 		[Fact]
 		public void ToHexString_ShouldReturnHexString_WhenByteArrayIsNotNull()
 		{
-			byte[] input = "68656C6C6F2068657820776F726C64".ToByteArray();
+			byte[] input = "68656C6C6F2068657820776F726C64".ToByteArrayFromHex();
 			var result = input.ToHexString();
 			Assert.Equal("68656C6C6F2068657820776F726C64", result);
 		}

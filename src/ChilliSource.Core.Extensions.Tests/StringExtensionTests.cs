@@ -63,21 +63,21 @@ namespace Tests
 		[Fact]
 		public void ToByteArray_ShouldReturnByteArray_WhenHexStringIsValid()
 		{
-			var result = "68656C6C6F2068657820776F726C64".ToByteArray();
+			var result = "68656C6C6F2068657820776F726C64".ToByteArrayFromHex();
 			Assert.Equal("68656C6C6F2068657820776F726C64", result.ToHexString());
 		}
 
 		[Fact]
 		public void ToByteArray_ShouldThrowException_WhenHexStringIsNotValid()
 		{
-			Assert.Throws(typeof(FormatException), () => "invalid hex string".ToByteArray());
+			Assert.Throws(typeof(FormatException), () => "invalid hex string".ToByteArrayFromHex());
 		}
 
 		[Fact]
 		public void ToByteArray_ShouldReturnNull_WhenHexStringIsNullOrEmpty()
 		{
 			string input = null;
-			var result = input.ToByteArray();
+			var result = input.ToByteArrayFromHex();
 			Assert.Null(result);
 		}
 
