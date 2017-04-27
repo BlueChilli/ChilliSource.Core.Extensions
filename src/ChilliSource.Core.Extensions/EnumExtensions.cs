@@ -21,33 +21,14 @@ namespace ChilliSource.Core.Extensions
 	/// </summary>
 	public static class EnumExtensions
 	{
-		/// <summary>
-		/// Returns the Enum attribute with type T of the provided Enum item <paramref name="value"/>
-		/// </summary>
-		/// <returns>The attribute.</returns>
-		/// <param name="value">Enum item</param>
-		/// <typeparam name="T">The type of the attribute to return</typeparam>
-		public static T GetAttributeOfType<T>(this Enum value) where T : Attribute
-		{
-			var typeInfo = value.GetType().GetTypeInfo();
-			var memberInfo = typeInfo.DeclaredMembers.FirstOrDefault(x => x.Name == value.ToString());
-
-			if (memberInfo != null)
-			{
-				return memberInfo.GetCustomAttribute<T>();
-			}
-
-			return null;
-		}
-
+	
 		/// <summary>
 		/// Loops through all values of an enum and returns them as an IEnumerable
 		/// Usage: var values = GetValues&lt;MyEnumType&gt;();
 		/// </summary>
 		/// <returns>The values.</returns>
 		/// <typeparam name="T">The 1st type parameter.</typeparam>
-		public static IEnumerable<T> GetValues<T>() => Enum.GetValues(typeof(T)).Cast<T>();
-
+		public static IEnumerable<T> GetValues<T>() where T : struct, IConvertible, IFormattable => Enum.GetValues(typeof(T)).Cast<T>();
 
 		/// <summary>
 		/// Converts the value of the specified enumeration to a 32-bit signed integral string.
@@ -59,51 +40,13 @@ namespace ChilliSource.Core.Extensions
 			return Convert.ToInt32(e).ToString();
 		}
 
-		/// <summary>
-		/// Appends flag value to the specified enumeration value.
-		/// </summary>
-		/// <typeparam name="T">Type of object to append flag value.</typeparam>
-		/// <param name="type">The specified enumeration value.</param>
-		/// <param name="enumFlag">Enumeration flag to append.</param>
-		/// <returns>The object with flag value appended.</returns>
-		public static T AddFlag<T>(this Enum type, T enumFlag)
-		{
-			try
-			{
-				return (T)(object)((int)(object)type | (int)(object)enumFlag);
-			}
-			catch (Exception ex)
-			{
-				throw new ArgumentException(string.Format("Could not append flag value {0} to enum {1}", enumFlag, typeof(T).Name), ex);
-			}
-		}
-
-		/// <summary>
-		/// Removes flag value form the specified enumeration value.
-		/// </summary>
-		/// <typeparam name="T">Type of object to remove flag value.</typeparam>
-		/// <param name="type">The specified enumeration value.</param>
-		/// <param name="enumFlag">Enumeration flag to remove.</param>
-		/// <returns>The object with flag value removed.</returns>
-		public static T RemoveFlag<T>(this Enum type, T enumFlag)
-		{
-			try
-			{
-				return (T)(object)((int)(object)type & ~(int)(object)enumFlag);
-			}
-			catch (Exception ex)
-			{
-				throw new ArgumentException(string.Format("Could not remove flag value {0} from enum {1}", enumFlag, typeof(T).Name), ex);
-			}
-		}
-
-		/// <summary>
-		/// Checks whether the specified enumeration value is same as the string value.
-		/// </summary>
-		/// <param name="e">The specified enumeration value.</param>
-		/// <param name="value">The string value to match.</param>
-		/// <returns>True when the specified enumeration value is same as the string value, otherwise false.</returns>
-		public static bool Match(this Enum e, string value)
+        /// <summary>
+        /// Checks whether the specified enumeration value is same as the string value.
+        /// </summary>
+        /// <param name="e">The specified enumeration value.</param>
+        /// <param name="value">The string value to match.</param>
+        /// <returns>True when the specified enumeration value is same as the string value, otherwise false.</returns>
+        public static bool Match(this Enum e, string value)
 		{
 			return (Enum.Parse(e.GetType(), value) == e);
 		}
@@ -120,40 +63,124 @@ namespace ChilliSource.Core.Extensions
 			return (T)Enum.Parse(typeof(T), value);
 		}
 
-		/// <summary>
-		/// Gets additional data set by DataAttribute in an Enum value
-		/// </summary>
-		/// <typeparam name="T">Value type</typeparam>
-		/// <param name="e">Enum value</param>
-		/// <param name="name">meta-data name</param>
-		/// <returns>Data value stored in the DataAttribute</returns>
-		public static T GetData<T>(this Enum e, string name)
+        #region Flag helpers
+        /// <summary>
+        /// Appends flag value to the specified enumeration value.
+        /// </summary>
+        /// <typeparam name="T">Type of object to append flag value.</typeparam>
+        /// <param name="type">The specified enumeration value.</param>
+        /// <param name="enumFlag">Enumeration flag to append.</param>
+        /// <returns>The object with flag value appended.</returns>
+        public static T AddFlag<T>(this Enum type, T enumFlag) where T : struct, IConvertible, IFormattable
+        {
+            try
+            {
+                return (T)(object)((int)(object)type | (int)(object)enumFlag);
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(string.Format("Could not append flag value {0} to enum {1}", enumFlag, typeof(T).Name), ex);
+            }
+        }
+
+        /// <summary>
+        /// Removes flag value form the specified enumeration value.
+        /// </summary>
+        /// <typeparam name="T">Type of object to remove flag value.</typeparam>
+        /// <param name="type">The specified enumeration value.</param>
+        /// <param name="enumFlag">Enumeration flag to remove.</param>
+        /// <returns>The object with flag value removed.</returns>
+        public static T RemoveFlag<T>(this Enum type, T enumFlag) where T : struct, IConvertible, IFormattable
+        {
+            try
+            {
+                return (T)(object)((int)(object)type & ~(int)(object)enumFlag);
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(string.Format("Could not remove flag value {0} from enum {1}", enumFlag, typeof(T).Name), ex);
+            }
+        }
+
+        /// <summary>
+        /// Converts enumeration type with Flags attribute to System.Collections.Generic.List&lt;T&gt;.
+        /// </summary>
+        /// <typeparam name="T">Type of the object converted.</typeparam>
+        /// <param name="e">>The specified enumeration type.</param>
+        /// <returns>A System.Collections.Generic.List&lt;T&gt;.</returns>
+        public static List<T> ToFlagsList<T>(this T e) where T : struct, IConvertible, IFormattable //The compiler doesnt allow [where T: System.Enum]
+        {
+            var enumValue = e as Enum;
+            return GetValues<T>().Where(flag => enumValue.HasFlag(flag as Enum)).ToList();
+        }
+
+        public static T ToFlags<T>(this List<T> flagsList) where T : struct, IConvertible, IFormattable
+        {
+            T obj1 = default(T);
+            foreach (T obj2 in flagsList)
+                obj1 = (T)(ValueType)((int)(ValueType)obj1 | (int)(ValueType)obj2);
+            return obj1;
+        }
+
+
+        #endregion
+
+        #region Attributes helpers
+        /// <summary>
+        /// Returns the Enum attribute with type T of the provided Enum item <paramref name="value"/>
+        /// </summary>
+        /// <returns>The attribute.</returns>
+        /// <param name="value">Enum item</param>
+        /// <typeparam name="T">The type of the attribute to return</typeparam>
+        public static T GetAttribute<T>(this Enum value) where T : Attribute
+        {
+            var memberInfo = value.GetType().GetTypeInfo().GetDeclaredField(value.ToString());
+
+            if (memberInfo != null)
+            {
+                return memberInfo.GetCustomAttribute<T>();
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Returns the Enum attributes with type T of the provided Enum item <paramref name="value"/>
+        /// </summary>
+        /// <returns>The attribute.</returns>
+        /// <param name="value">Enum item</param>
+        /// <typeparam name="T">The type of the attribute to return</typeparam>
+        public static IEnumerable<T> GetAttributes<T>(this Enum value) where T : Attribute
+        {
+            var memberInfo = value.GetType().GetTypeInfo().GetDeclaredField(value.ToString());
+
+            if (memberInfo != null)
+            {
+                return memberInfo.GetCustomAttributes<T>();
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Gets additional data set by DataAttribute in an Enum value
+        /// </summary>
+        /// <typeparam name="T">Value type</typeparam>
+        /// <param name="e">Enum value</param>
+        /// <param name="name">meta-data name</param>
+        /// <returns>Data value stored in the DataAttribute</returns>
+        public static T GetData<T>(this Enum e, string name)
 		{
-			return (T)GetEnumData(e, name);
-		}
-
-		/// <summary>
-		/// Gets additional data set by DataAttribute in an Enum value
-		/// </summary>
-		/// <typeparam name="TEnum"></typeparam>
-		/// <param name="value">Enum value</param>
-		/// <param name="name">>meta-data name</param>
-		/// <returns>Data value stored in the DataAttribute</returns>
-		public static object GetEnumData<TEnum>(TEnum value, string name)
-		{
-			var fi = value.GetType().GetTypeInfo().GetDeclaredField(value.ToString());
-
-			DataAttribute[] attributes = (DataAttribute[])fi.GetCustomAttributes(typeof(DataAttribute), false);
-
-			if (attributes.Length > 0)
-			{
-				foreach (var a in attributes)
-				{
-					if (a.Name == name) return a.Value;
-				}
-			}
-			return null;
-		}
+            var attributes = e.GetAttributes<DataAttribute>();
+            if (attributes.Count() > 0)
+            {
+                foreach (var a in attributes)
+                {
+                    if (a.Name == name) return (T)a.Value;
+                }
+            }
+            return default(T);
+        }
 
 		/// <summary>
 		/// Sort list elements using a custom order attribute in Enum propery
@@ -172,8 +199,8 @@ namespace ChilliSource.Core.Extensions
 		/// <typeparam name="TEnum"></typeparam>
 		/// <param name="value"></param>
 		/// <returns></returns>
-		public static int GetOrder<TEnum>(TEnum value) where TEnum : struct
-		{
+		public static int GetOrder<TEnum>(TEnum value) where TEnum : struct, IConvertible, IFormattable
+        {
 			int order;
 
 			if (!GetWithOrder<TEnum>.Values.TryGetValue(value, out order))
@@ -220,6 +247,7 @@ namespace ChilliSource.Core.Extensions
 				Values = values;
 			}
 		}
-	}
+        #endregion
+    }
 
 }

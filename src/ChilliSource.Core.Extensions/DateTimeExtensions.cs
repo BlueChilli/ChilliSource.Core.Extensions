@@ -19,7 +19,7 @@ namespace ChilliSource.Core.Extensions
 	{
 	
 	
-        #region Date Manipulation
+        #region Date manipulation
         /// <summary>
         /// Returns date which set the day to the first of the month for the specified date.
         /// </summary>
@@ -144,7 +144,7 @@ namespace ChilliSource.Core.Extensions
 
         #endregion
 
-        #region Standards Date formatting
+        #region Standards date formatting
         /// <summary>
         /// Converts the value of the specified date to its equivalent string representation using the ISO format with date only (yyyy-MM-dd).
         /// </summary>
@@ -192,7 +192,5 @@ namespace ChilliSource.Core.Extensions
 			return new TimeSpan(date.Ticks - 621355968000000000);
 		}
         #endregion
-
-
     }
 }
