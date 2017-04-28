@@ -17,7 +17,67 @@ namespace Tests
 {
 	public class StringExtensionTests
 	{
-		[Fact]
+        [Fact]
+        public void ToFilename_ShouldReturnValidFilename()
+        {
+            var result = "myfile.txt".ToFilename();
+            Assert.Equal("myfile.txt", result);
+
+            var result2 = "|my file\r\n.txt.docx".ToFilename();
+            Assert.Equal("my_filetxt.docx", result2);
+        }
+
+        [Fact]
+        public void ToCssClass_ShouldReturnValidCssClass()
+        {
+            var result = "dark123".ToCssClass();
+            Assert.Equal("dark123", result);
+
+            var result2 = "9DARK 1_2_3&*()#%$".ToCssClass();
+            Assert.Equal("_9dark-1-2-3", result2);
+        }
+
+        [Fact]
+        public void ToSeoUrl_ShouldReturnValidUrlParameter()
+        {
+            var result = "dark123".ToSeoUrl();
+            Assert.Equal("dark123", result);
+
+            var result2 = "DARK & stormy 1*2(3".ToSeoUrl();
+            Assert.Equal("dark-and-stormy-123", result2);
+        }
+
+        [Fact]
+        public void ToAlphaNumeric_ShouldReturnValidAlphaNumeric()
+        {
+            var result = "dark123".ToAlphaNumeric();
+            Assert.Equal("dark123", result);
+
+            var result2 = "DARK & stormy 1*2(3".ToAlphaNumeric();
+            Assert.Equal("DARKstormy123", result2);
+        }
+
+        [Fact]
+        public void ToAlpha_ShouldReturnValidAlpha()
+        {
+            var result = "dark".ToAlpha();
+            Assert.Equal("dark", result);
+
+            var result2 = "DARK & stormy 1*2(3".ToAlpha();
+            Assert.Equal("DARKstormy", result2);
+        }
+
+        [Fact]
+        public void ToNumeric_ShouldReturnValidNumeric()
+        {
+            var result = "123".ToNumeric();
+            Assert.Equal("123", result);
+
+            var result2 = "DARK & stormy 1*2(3".ToNumeric();
+            Assert.Equal("123", result2);
+        }
+
+        [Fact]
 		public void ValueOrEmpty_ShouldReturnValue_WhenValueIsNotEmpty()
 		{
 			var result = "test".ValueOrEmpty();

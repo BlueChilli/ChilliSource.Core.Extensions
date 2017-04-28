@@ -30,7 +30,7 @@ namespace ChilliSource.Core.Extensions
 		/// </summary>
 		/// <param name="s">The specified string value.</param>
 		/// <returns>A valid file path name.</returns>
-		public static string ToFileName(this string s)
+		public static string ToFilename(this string s)
 		{
 			var invalidChars = Path.GetInvalidFileNameChars();
 			foreach (var c in invalidChars) s = s.Replace(c.ToString(), "");
@@ -61,7 +61,7 @@ namespace ChilliSource.Core.Extensions
 		/// </summary>
 		/// <param name="url">The original url string</param>
 		/// <param name="stripDashes">MVC 4 doesn't support dashes in the route. Set this to true if the value is to be part of the route.</param>
-		/// <returns>A valid url can be used for SEO (Search Engine optimization).</returns>
+		/// <returns>A valid url parameter which can be used for SEO (Search Engine optimization).</returns>
 		public static string ToSeoUrl(this string url, bool stripDashes = false)
 		{
 			url = url.Trim().ToLower();
@@ -108,63 +108,15 @@ namespace ChilliSource.Core.Extensions
 			var numbers = validCharacters.Replace(stringValue, "");
 			return numbers;
 		}
-
-		/// <summary>
-		/// Removes punctuation characters from the specified string.
-		/// </summary>
-		/// <param name="stringValue">The specified string value.</param>
-		/// <returns>A string value without punctuation characters.</returns>
-		public static string ExcludePunctuations(this string stringValue)
-		{
-			if (String.IsNullOrWhiteSpace(stringValue))
-				return stringValue;
-
-			var r = Regex.Replace(stringValue, @"[\p{P}\p{S}]", " ");
-
-			return r.RemoveSpaces();
-		}
 		#endregion
 
-		#region Truncate / Trim
+		#region Trim
+	
 		/// <summary>
-		/// Truncates the specified string to maximum number of characters.
+		/// Removes excess (double) white space characters from the specified string.
 		/// </summary>
 		/// <param name="stringValue">The specified string value.</param>
-		/// <param name="maxlength">Maximum number of characters.</param>
-		/// <returns>A string value truncated.</returns>
-		public static string Truncate(this string stringValue, int maxlength)
-		{
-			if (String.IsNullOrEmpty(stringValue))
-			{
-				return stringValue;
-			}
-			if (stringValue.Length > maxlength)
-			{
-				return stringValue.Substring(0, maxlength);
-			}
-			return stringValue;
-		}
-
-		/// <summary>
-		/// Truncates the specified string to maximum number of characters, and appends the second string.
-		/// </summary>
-		/// <param name="s">The specified string value.</param>
-		/// <param name="maxlength">Maximum number of characters.</param>
-		/// <param name="s2">The second string to append.</param>
-		/// <param name="buffer">Additional number of characters.</param>
-		/// <returns>A string value truncated and appended with the second string.</returns>
-		public static string TruncateWith(this string s, int maxlength, string s2, int buffer = 0)
-		{
-			if (String.IsNullOrEmpty(s)) { return s; }
-			if (s.Length > maxlength + buffer) { s = s.Substring(0, maxlength) + s2; }
-			return s;
-		}
-
-		/// <summary>
-		/// Removes all white space characters from the specified string.
-		/// </summary>
-		/// <param name="stringValue">The specified string value.</param>
-		/// <returns>A string value without white space character.</returns>
+		/// <returns>A string value without excess white space character.</returns>
 		public static string TrimExcessWhiteSpaces(this string stringValue)
 		{
 
