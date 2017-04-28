@@ -23,14 +23,84 @@ namespace Tests
 			[System.ComponentModel.Description("Test1 Description")]
             [Data("Number", 1)]
             [Data("String", "ABC")]
-            Test1,
+            Test1 = 1,
 			[System.ComponentModel.Description("Test2 Description")]
             [Data("Number", 2)]
             [Data("String", "XYZ")]
-            Test2
+            Test2,
+            [Obsolete]
+            Test3
         }
 
-		[Fact]
+        [Fact]
+        public void ToValueString_ReturnsEnumValueAsString()
+        {
+            var result = TestEnum.Test1.ToValueString();
+            Assert.Equal("1", result);
+
+            result = TestEnum.Test2.ToValueString();
+            Assert.NotEqual("1", result);
+        }
+
+        [Fact]
+        public void GetValues_ShouldReturnListOfValuesForEnumType()
+        {
+            var result = EnumExtensions.GetValues<TestEnum>();
+            Assert.NotNull(result);
+            Assert.True(result.Count() == 2);
+            Assert.Equal(TestEnum.Test1, result.First());
+        }
+
+        [Fact]
+        public void Parse_ReturnsEnumIfFound()
+        {
+            var result = TestEnum.Test1.Parse<TestEnum>("Test1");
+            Assert.Equal(TestEnum.Test1, result);
+
+            var result2 = TestEnum.Test1.Parse<TestEnum>("Rabbit");
+            Assert.NotEqual(TestEnum.Test1, result2);
+
+            var result3 = TestEnum.Test1.Parse<TestEnum>("1");
+            Assert.Equal(TestEnum.Test1, result3);
+        }
+
+        [Fact]
+        public void Contains_ReturnsTrue_WhenEnumVariableContainsValue()
+        {
+            var test1 = TestEnum.Test2;
+            Assert.True(test1.Contains(TestEnum.Test1, TestEnum.Test2));
+
+            var test2 = TestEnum.Test1;
+            Assert.False(test2.Contains(TestEnum.Test2, TestEnum.Test3));
+
+            var test3 = FlagsEnum.Dog | FlagsEnum.Owner;
+            Assert.True(test3.Contains(FlagsEnum.Fleas, FlagsEnum.Owner));
+        }
+
+        [Fact]
+        public void Next_ReturnsNextEnumInSequence()
+        {
+            var test1 = TestEnum.Test1;
+            var result = test1.Next();
+            Assert.Equal(TestEnum.Test2, result);
+
+            result = result.Next();
+            Assert.Equal(TestEnum.Test1, result);
+        }
+
+        [Fact]
+        public void Previous_ReturnsPreviousEnumInSequence()
+        {
+            var test2 = TestEnum.Test2;
+            var result = test2.Previous();
+            Assert.Equal(TestEnum.Test1, result);
+
+            result = result.Previous();
+            Assert.Equal(TestEnum.Test2, result);
+        }
+
+        #region Attributes
+        [Fact]
 		public void GetAttribute_ShouldReturnAttribute_IfTypeExists()
 		{
 			var result = TestEnum.Test1.GetAttribute<System.ComponentModel.DescriptionAttribute>();
@@ -70,16 +140,9 @@ namespace Tests
             var result3 = TestEnum.Test1.GetData<decimal>("X");
             Assert.Equal(0M, result3);
         }
+        #endregion
 
-        [Fact]
-		public void GetValues_ShouldReturnListOfValuesForEnumType()
-		{
-			var result = EnumExtensions.GetValues<TestEnum>();
-			Assert.NotNull(result);
-			Assert.True(result.Count() > 0);
-			Assert.Equal(TestEnum.Test1, result.First());
-		}
-
+        #region Flags
         [Flags]
         enum FlagsEnum
         {
@@ -145,5 +208,7 @@ namespace Tests
             Assert.True(result.HasFlag(FlagsEnum.Stray));
             Assert.False(result.HasFlag(FlagsEnum.Fleas));
         }
+        #endregion
+
     }
 }

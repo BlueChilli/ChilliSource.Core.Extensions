@@ -506,16 +506,33 @@ namespace ChilliSource.Core.Extensions
 			}
 			return bytes;
 		}
-		#endregion
 
-		#region String based helper functions
-		/// <summary>
-		/// Concatenates the members of a string array, using the specified separator between each member.
-		/// </summary>
-		/// <param name="seperator">The string to use as a separator. separator is included in the returned string only if values has more than one element.</param>
-		/// <param name="strings">A string array that contains the strings to concatenate.></param>
-		/// <returns>A string that consists of the members of values delimited by the separator string. If values has no members, the method returns System.String.Empty.</returns>
-		public static string JoinIfNotNull(string seperator, params string[] strings)
+        /// <summary>
+        /// Converts a string to System.Collections.Generic.IEnumerable&lt;T&gt by the specified delimiter, with each string in the list applying the defined converter function.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements of the generic enumerable list.</typeparam>
+        /// <param name="source">A string value to convert.</param>
+        /// <param name="delimiter">The delimiter to use.</param>
+        /// <returns>A System.Collections.Generic.IEnumerable&lt;T&gt.</returns>
+        public static IEnumerable<T> ToEnumerable<T>(this string source, string delimiter = ",") where T : IConvertible
+        {
+            if (String.IsNullOrWhiteSpace(source))
+                return new List<T>();
+
+            var list = source.Split(new[] { delimiter }, StringSplitOptions.None);
+            return list.Select(x => (T)Convert.ChangeType(x, typeof(T)));
+        }
+
+        #endregion
+
+        #region String based helper functions
+        /// <summary>
+        /// Concatenates the members of a string array, using the specified separator between each member.
+        /// </summary>
+        /// <param name="seperator">The string to use as a separator. separator is included in the returned string only if values has more than one element.</param>
+        /// <param name="strings">A string array that contains the strings to concatenate.></param>
+        /// <returns>A string that consists of the members of values delimited by the separator string. If values has no members, the method returns System.String.Empty.</returns>
+        public static string JoinIfNotNull(string seperator, params string[] strings)
 		{
 			var result = "";
 			foreach (var item in strings)

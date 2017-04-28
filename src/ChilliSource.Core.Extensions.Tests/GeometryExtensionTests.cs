@@ -24,7 +24,13 @@ namespace Tests
 			var degrees = radiants.ToDegrees();
 
 			Assert.Equal(601, Math.Truncate(degrees));
-		}
+
+            double radiants2 = 10.5;
+            var degrees2 = radiants2.ToDegrees();
+
+            Assert.Equal(601, Math.Truncate(degrees2));
+
+        }
 
 		[Fact]
 		public void ToRadiants_ShouldReturnRadiants()
@@ -33,6 +39,11 @@ namespace Tests
 			var radiants = degrees.ToRadiants();
 
 			Assert.Equal(10, Math.Truncate(radiants));
-		}
+
+            double degrees2 = 600.5;
+            var radiants2 = degrees2.ToRadiants();
+
+            Assert.Equal(10, Math.Truncate(radiants2));
+        }
 	}
 }
