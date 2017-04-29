@@ -24,7 +24,7 @@ namespace ChilliSource.Core.Extensions
 	/// </summary>
 	public static class StringExtensions
 	{
-		#region Sanitise
+		#region Sanitise / Remove / Replace
 		/// <summary>
 		/// Converts a string value to valid file path name.
 		/// </summary>
@@ -108,33 +108,82 @@ namespace ChilliSource.Core.Extensions
 			var numbers = validCharacters.Replace(stringValue, "");
 			return numbers;
 		}
-		#endregion
 
-		#region Trim
-	
-		/// <summary>
-		/// Removes excess (double) white space characters from the specified string.
-		/// </summary>
-		/// <param name="stringValue">The specified string value.</param>
-		/// <returns>A string value without excess white space character.</returns>
-		public static string TrimExcessWhiteSpaces(this string stringValue)
-		{
+        /// <summary>
+        /// Removes all the spaces in the string.
+        /// </summary>
+        /// <returns>A new string with the spaces removed.</returns>
+        /// <param name="stringValue">Value.</param>
+        public static string RemoveSpaces(this string stringValue)
+        {
+            return !string.IsNullOrEmpty(stringValue) ? stringValue.Replace(" ", string.Empty) : string.Empty;
+        }
 
-			if (String.IsNullOrWhiteSpace(stringValue))
-			{
-				return stringValue;
-			}
+        /// <summary>
+        /// Removes excess (double) white space characters from the specified string.
+        /// </summary>
+        /// <param name="stringValue">The specified string value.</param>
+        /// <returns>A string value without excess white space character.</returns>
+        public static string RemoveExcessWhiteSpaces(this string stringValue)
+        {
 
-			return Regex.Replace(stringValue, @"\s+", " ").Trim();
-		}
+            if (String.IsNullOrWhiteSpace(stringValue))
+            {
+                return stringValue;
+            }
 
-		/// <summary>
-		/// Removes leading string from the specified string.
-		/// </summary>
-		/// <param name="target">The specified string value.</param>
-		/// <param name="trimString">Leading string to remove.</param>
-		/// <returns>The string that remains after leading string removed from the specified string.</returns>
-		public static string TrimStart(this string target, string trimString)
+            return Regex.Replace(stringValue, @"\s+", " ").Trim();
+        }
+        /// <summary>
+        /// Returns a new string in which all occurrences of a specified string in the current instance are replaced with another specified string.
+        /// </summary>
+        /// <param name="str">The specified string value.</param>
+        /// <param name="oldValue">The string to be replaced.</param>
+        /// <param name="newValue">The string to replace all occurrences of oldValue.</param>
+        /// <param name="comparison">Specifies the culture, case, and sort rules to be used by string matching.</param>
+        /// <returns>A string that is equivalent to the current string except that all instances of oldValue are replaced with newValue. If oldValue is not found in the current instance, the method returns the current instance unchanged.</returns>
+        public static string Replace(this string str, string oldValue, string newValue, StringComparison comparison)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            int previousIndex = 0;
+            int index = str.IndexOf(oldValue, comparison);
+            while (index != -1)
+            {
+                sb.Append(str.Substring(previousIndex, index - previousIndex));
+                sb.Append(newValue);
+                index += oldValue.Length;
+
+                previousIndex = index;
+                index = str.IndexOf(oldValue, index, comparison);
+            }
+            sb.Append(str.Substring(previousIndex));
+
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Returns a new string in which all occurrences of specified characters in the current instance are each replaced with another specified string.
+        /// </summary>
+        /// <param name="s">The specified string value.</param>
+        /// <param name="charString">List of characters to replace</param>
+        /// <param name="replace">Replace each character found with this string. Defaults as empty string to remove each character found</param>
+        public static string ReplaceAny(this string s, string charString, string replace = "")
+        {
+            return Regex.Replace(s, "[{0}]".FormatWith(charString), replace);
+        }
+
+        #endregion
+
+        #region Trim 
+
+        /// <summary>
+        /// Removes leading string from the specified string.
+        /// </summary>
+        /// <param name="target">The specified string value.</param>
+        /// <param name="trimString">Leading string to remove.</param>
+        /// <returns>The string that remains after leading string removed from the specified string.</returns>
+        public static string TrimStart(this string target, string trimString)
 		{
 			string result = target;
 			while (!String.IsNullOrEmpty(trimString) && result.StartsWith(trimString))
@@ -175,7 +224,7 @@ namespace ChilliSource.Core.Extensions
 			while (true)
 			{
 				var startPos = result.IndexOf(start);
-				var endPos = result.IndexOf(end);
+				var endPos = result.IndexOf(end, startPos > 0 && startPos + 2 < s.Length ? startPos + 1 : 0);
 				if (startPos > -1 && endPos > -1 && endPos > startPos)
 				{
 					result = result.Remove(startPos, 1 + endPos - startPos);
@@ -186,18 +235,9 @@ namespace ChilliSource.Core.Extensions
 			return result;
 		}
 
-		/// <summary>
-		/// Removes all the spaces in the string.
-		/// </summary>
-		/// <returns>A new string with the spaces removed.</returns>
-		/// <param name="stringValue">Value.</param>
-		public static string RemoveSpaces(this string stringValue)
-		{
-			return !string.IsNullOrEmpty(stringValue) ? stringValue.Replace(" ", string.Empty) : string.Empty;
-		}
 		#endregion
 
-		#region Format / Transform / Replace etc
+		#region Format / Transform
 		/// <summary>
 		/// Replaces the format item in a specified string with the string representation of a corresponding object in a specified array.
 		/// </summary>
@@ -266,45 +306,6 @@ namespace ChilliSource.Core.Extensions
 		}
 
 		/// <summary>
-		/// Returns a new string in which all occurrences of a specified string in the current instance are replaced with another specified string.
-		/// </summary>
-		/// <param name="str">The specified string value.</param>
-		/// <param name="oldValue">The string to be replaced.</param>
-		/// <param name="newValue">The string to replace all occurrences of oldValue.</param>
-		/// <param name="comparison">Specifies the culture, case, and sort rules to be used by string matching.</param>
-		/// <returns>A string that is equivalent to the current string except that all instances of oldValue are replaced with newValue. If oldValue is not found in the current instance, the method returns the current instance unchanged.</returns>
-		public static string Replace(this string str, string oldValue, string newValue, StringComparison comparison)
-		{
-			StringBuilder sb = new StringBuilder();
-
-			int previousIndex = 0;
-			int index = str.IndexOf(oldValue, comparison);
-			while (index != -1)
-			{
-				sb.Append(str.Substring(previousIndex, index - previousIndex));
-				sb.Append(newValue);
-				index += oldValue.Length;
-
-				previousIndex = index;
-				index = str.IndexOf(oldValue, index, comparison);
-			}
-			sb.Append(str.Substring(previousIndex));
-
-			return sb.ToString();
-		}
-
-		/// <summary>
-		/// Returns a new string in which all occurrences of specified characters in the current instance are each replaced with another specified string.
-		/// </summary>
-		/// <param name="s">The specified string value.</param>
-		/// <param name="charString">List of characters to replace</param>
-		/// <param name="replace">Replace each character found with this string. Defaults as empty string to remove each character found</param>
-		public static string ReplaceAny(this string s, string charString, string replace = "")
-		{
-			return Regex.Replace(s, "[{0}]".FormatWith(charString), replace);
-		}
-
-		/// <summary>
 		/// Inverts the order of each word in the specified string.
 		/// </summary>
 		/// <param name="source">The specified string value.</param>
@@ -314,7 +315,7 @@ namespace ChilliSource.Core.Extensions
 			if (String.IsNullOrWhiteSpace(source))
 				return source;
 
-			var words = Regex.Split(source.TrimExcessWhiteSpaces(), @"\s+");
+			var words = Regex.Split(source.RemoveExcessWhiteSpaces(), @"\s+");
 
 			var reversedWords = words.Reverse();
 
