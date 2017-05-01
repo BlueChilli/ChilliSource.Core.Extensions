@@ -235,21 +235,33 @@ namespace ChilliSource.Core.Extensions
 			return result;
 		}
 
-		#endregion
+        #endregion
 
-		#region Format / Transform
-		/// <summary>
-		/// Replaces one or more format items in a specified string with the string representation of a specified object.
-		/// </summary>
-		/// <typeparam name="T">The type of the object.</typeparam>
-		/// <param name="format">The specified string to format.</param>
-		/// <param name="source">The object to format.</param>
-		/// <returns>A copy of format in which any format items are replaced by the string representation of arg0 when source object is not null, otherwise empty string.</returns>
-		public static string FormatIfNotNull<T>(this string format, T? source) where T : struct
+        #region Format / Transform
+        /// <summary>
+        /// Replaces one or more format items in a specified string with the string representation of a specified object.
+        /// </summary>
+        /// <typeparam name="T">The type of the object.</typeparam>
+        /// <param name="format">The format string.</param>
+        /// <param name="source">The object to format.</param>
+        /// <returns>A copy of format in which any format items are replaced by the string representation of arg0 when source object is not null, otherwise empty string.</returns>
+        public static string FormatIfNotNull<T>(this string format, T? source) where T : struct
 		{
 			if (source.HasValue) return String.Format(format, source.Value);
 			return "";
 		}
+
+        /// <summary>
+        /// Replaces one or more format items in a specified string with the string representation of a specified object.
+        /// </summary>
+        /// <param name="format">The format string.</param>
+        /// <param name="source">The string to format.</param>
+        /// <returns>A copy of format in which any format items are replaced by the string representation of arg0 when source object is not null, otherwise empty string.</returns>
+        public static string FormatIfNotNull(this string format, string source)
+        {
+            if (!String.IsNullOrEmpty(source)) return String.Format(format, source);
+            return "";
+        }
 
         /// <summary>
         /// Formats the string with a custom mask format string, where one * may be used as a wildcard

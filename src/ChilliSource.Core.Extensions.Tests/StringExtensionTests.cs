@@ -179,6 +179,13 @@ namespace Tests
             param = 2;
             result = "A{0}C".FormatIfNotNull(param);
             Assert.Equal("A2C", result);
+
+            string param2 = null;
+            result = "A{0}C".FormatIfNotNull(param2);
+            Assert.Equal("", result);
+            param2 = "B";
+            result = "A{0}C".FormatIfNotNull(param2);
+            Assert.Equal("ABC", result);
         }
 
         [Fact]
