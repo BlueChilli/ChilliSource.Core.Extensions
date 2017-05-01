@@ -418,75 +418,27 @@ namespace ChilliSource.Core.Extensions
                 return new List<T>();
 
             var list = source.Split(new[] { delimiter }, StringSplitOptions.None);
-            return list.Select(x => (T)Convert.ChangeType(x, typeof(T)));
+            return list.Select(x => String.IsNullOrEmpty(x) ? default(T) : (T)Convert.ChangeType(x, typeof(T)));
         }
 
         #endregion
 
-        #region String based helper functions
+        #region Helpers
+
         /// <summary>
-        /// Concatenates the members of a string array, using the specified separator between each member.
+        /// Returns a value indicating whether the specified System.String object occurs within this string.
         /// </summary>
-        /// <param name="seperator">The string to use as a separator. separator is included in the returned string only if values has more than one element.</param>
-        /// <param name="strings">A string array that contains the strings to concatenate.></param>
-        /// <returns>A string that consists of the members of values delimited by the separator string. If values has no members, the method returns System.String.Empty.</returns>
-        public static string JoinIfNotNull(string seperator, params string[] strings)
-		{
-			var result = "";
-			foreach (var item in strings)
-			{
-				if (!String.IsNullOrEmpty(item))
-					result += seperator + item;
-			}
-			return result.TrimStart(seperator.ToCharArray());
-		}
+        /// <param name="source">The specified string value.</param>
+        /// <param name="value">The string to seek.</param>
+        /// <param name="comp">One of the enumeration values that specifies the rules for the search.</param>
+        /// <returns>True if the value parameter occurs within this string, or if value is the empty string (""); otherwise, false.</returns>
+        public static bool Contains(this string source, string value, StringComparison comp)
+        {
+            if (source == null) return false;
+            return source.IndexOf(value, comp) >= 0;
+        }
 
-		/// <summary>
-		/// Checks whether all elements in the specified string array are null or empty.
-		/// </summary>
-		/// <param name="sources">The specified string array to check.</param>
-		/// <returns>True if all elements in the specified string array are null or empty, otherwise false.</returns>
-		public static bool IsAllNullOrEmpty(params string[] sources)
-		{
-			foreach (string s in sources) if (!String.IsNullOrEmpty(s)) return false;
-			return true;
-		}
+        #endregion
 
-		/// <summary>
-		/// Returns the string representing the object which is not null.
-		/// </summary>
-		/// <param name="source">The source object to check.</param>
-		/// <param name="nullDefault">The default string when source object is null.</param>
-		/// <returns>The default string when source object is null, otherwise the string representing the source object.</returns>
-		public static string DefaultTo(object source, string nullDefault)
-		{
-			return (source == null) ? nullDefault : DefaultTo(source.ToString(), nullDefault);
-		}
-
-		/// <summary>
-		/// Replaces format item in a specified string.
-		/// </summary>
-		/// <param name="format">A composite format string.</param>
-		/// <param name="source">The specified string to format.</param>
-		/// <returns>A copy of format in which the format item replaced.</returns>
-		public static string FormatIfNotNull(string format, string source)
-		{
-			if (String.IsNullOrEmpty(source)) return "";
-			return String.Format(format, source);
-		}
-
-		/// <summary>
-		/// Returns a value indicating whether the specified System.String object occurs within this string.
-		/// </summary>
-		/// <param name="source">The specified string value.</param>
-		/// <param name="toCheck">The string to seek.</param>
-		/// <param name="comp">One of the enumeration values that specifies the rules for the search.</param>
-		/// <returns>True if the value parameter occurs within this string, or if value is the empty string (""); otherwise, false.</returns>
-		public static bool Contains(this string source, string toCheck, StringComparison comp)
-		{
-			if (source == null) return false;
-			return source.IndexOf(toCheck, comp) >= 0;
-		}
-		#endregion
-	}
+    }
 }

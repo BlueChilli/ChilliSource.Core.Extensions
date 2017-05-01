@@ -13,6 +13,8 @@ using Xunit;
 using ChilliSource.Core.Extensions;
 using System.IO;
 using System.Collections.Generic;
+using System.Text;
+using System.Linq;
 
 namespace Tests
 {
@@ -286,6 +288,41 @@ namespace Tests
 
 			Assert.Equal("test string", reader.ReadToEnd());
 		}
+
+        [Fact]
+        public void ToByteArray_ToString_ShouldReturnOriginalValue()
+        {
+            var result = "test string".ToByteArray().ToString(new UTF8Encoding());
+            Assert.Equal("test string", result);
+        }
+
+        [Fact]
+        public void ToEnumerable_GivenDelimitedListOfValues_ReturnListOfValues()
+        {
+            var result = "1,2,3,4,5,6,7,8,9".ToEnumerable<int>();
+            Assert.Contains(5, result);
+            Assert.Equal(9, result.Count());
+
+            var result2 = "1.0|2.5|3.6|".ToEnumerable<decimal>("|");
+            Assert.Contains(2.5M, result2);
+            Assert.Contains(0.0M, result2);
+            Assert.Equal(4, result2.Count());
+        }
+
+
+        #endregion
+
+        #region Helpers
+
+        [Fact]
+        public void Contains_ReturnsWhenValueContainsX_WhenStringComparisonIsPassed()
+        {
+            var value = "JIM, james, JoHn";
+            Assert.True(value.Contains("james", StringComparison.Ordinal));
+            Assert.False(value.Contains("jim", StringComparison.Ordinal));
+            Assert.True(value.Contains("JIM", StringComparison.Ordinal));
+            Assert.False(value.Contains("jim", StringComparison.OrdinalIgnoreCase));
+        }
 
         #endregion
     }
