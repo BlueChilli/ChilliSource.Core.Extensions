@@ -170,7 +170,7 @@ namespace ChilliSource.Core.Extensions
         /// <param name="replace">Replace each character found with this string. Defaults as empty string to remove each character found</param>
         public static string ReplaceAny(this string s, string charString, string replace = "")
         {
-            return Regex.Replace(s, "[{0}]".FormatWith(charString), replace);
+            return Regex.Replace(s, $"[{charString}]", replace);
         }
 
         #endregion
@@ -239,23 +239,6 @@ namespace ChilliSource.Core.Extensions
 
 		#region Format / Transform
 		/// <summary>
-		/// Replaces the format item in a specified string with the string representation of a corresponding object in a specified array.
-		/// </summary>
-		/// <param name="format">The specified string to format.</param>
-		/// <param name="source">An object array that contains zero or more objects to format.</param>
-		/// <returns>A copy of format in which the format items have been replaced by the string representation of the corresponding objects in args.</returns>
-		public static string FormatWith(this string format, params object[] source)
-		{
-			//handle placeholders encoded in urls
-			var matches = Regex.Matches(format, "%7B\\d+%7D", RegexOptions.IgnoreCase);
-			foreach (Match match in matches)
-			{
-				format = format.Replace(match.Value, match.Value.Replace("%7B", "{", StringComparison.OrdinalIgnoreCase).Replace("%7D", "}", StringComparison.OrdinalIgnoreCase));
-			}
-			return String.Format(format, source);
-		}
-
-		/// <summary>
 		/// Replaces one or more format items in a specified string with the string representation of a specified object.
 		/// </summary>
 		/// <typeparam name="T">The type of the object.</typeparam>
@@ -267,6 +250,32 @@ namespace ChilliSource.Core.Extensions
 			if (source.HasValue) return String.Format(format, source.Value);
 			return "";
 		}
+
+        /// <summary>
+        /// Formats the string with a custom mask format string, where one * may be used as a wildcard
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="mask">eg XXXX* or *XXXX or XXX*XXX or XXXX or X</param>
+        /// <returns></returns>
+        public static string FormatWithMask(this string s, string mask)
+        {
+            if (String.IsNullOrEmpty(mask)) return "";
+            var wildcard = mask.IndexOf('*');
+            if (wildcard >= 0)
+            {
+                var @static = mask.Split('*').ToList();
+                return String.Concat
+                    (
+                        @static[0],
+                        String.Concat(s.Skip(@static[0].Length).Take(s.Length - @static[0].Length - @static[1].Length)),
+                        @static[1]
+                    );
+            }
+            else
+            {
+                return mask.Length > 1 ? mask : mask.Repeat(s.Length);
+            }
+        }
 
 		/// <summary>
 		/// Replaces {Placeholder} text in string with values from dictionary by matching place holder text to keys in dictionary.
@@ -291,57 +300,9 @@ namespace ChilliSource.Core.Extensions
 		/// <param name="s">The specified string value.</param>
 		/// <param name="transformWith">Properties in this object will be used to replace placeholders.</param>
 		/// <returns>A string value replaced by property values from object.</returns>
-		public static string TransformWith(this string s, object transformWith)
+		public static string TransformWith(this string s, object transformWith, bool removeUnused = false)
 		{
-			Type type = transformWith.GetType();
-			foreach (PropertyInfo property in type.GetTypeInfo().GetProperties())
-			{
-				var value = property.GetValue(transformWith, null);
-				if (value == null) value = "";
-				s = s.Replace("{" + property.Name + "}", value.ToString());
-				s = s.Replace("%7B" + property.Name + "%7D", value.ToString());
-			}
-
-			return s;
-		}
-
-		/// <summary>
-		/// Inverts the order of each word in the specified string.
-		/// </summary>
-		/// <param name="source">The specified string value.</param>
-		/// <returns>A string value with each word inverted.</returns>
-		public static string ReverseWord(this string source)
-		{
-			if (String.IsNullOrWhiteSpace(source))
-				return source;
-
-			var words = Regex.Split(source.RemoveExcessWhiteSpaces(), @"\s+");
-
-			var reversedWords = words.Reverse();
-
-			return String.Join(" ", reversedWords).Trim();
-		}
-
-		/// <summary>
-		/// Replaces characters between start index to end index in the specified string with mask character.
-		/// </summary>
-		/// <param name="s">The specified string value.</param>
-		/// <param name="mask">Mask character.</param>
-		/// <param name="startFrom">The start index.</param>
-		/// <param name="endFrom">The end index.</param>
-		/// <returns>A string value masked with the mask character.</returns>
-		public static string Mask(this string s, char mask = 'X', int startFrom = 0, int endFrom = 4)
-		{
-			if (String.IsNullOrEmpty(s)) return s;
-
-			var c = s.ToCharArray();
-			endFrom = c.Length - endFrom - 1;
-			for (var i = 0; i < c.Length; i++)
-			{
-				if (i < startFrom || i > endFrom) continue;
-				c[i] = mask;
-			}
-			return new String(c);
+            return TransformWith(s, transformWith.ToDictionary(), removeUnused);
 		}
 
 		/// <summary>
@@ -363,22 +324,6 @@ namespace ChilliSource.Core.Extensions
 		#endregion
 
 		#region Convert To and From
-
-		/// <summary>
-		/// Formats the specified string to sentence case.
-		/// </summary>
-		/// <param name="s">The specified string to format.</param>
-		/// <param name="splitByUppercase">True to add space before upper case character, otherwise not.</param>
-		/// <returns>A string value formatted to sentence case.</returns>
-		public static string ToSentenceCase(this string s, bool splitByUppercase = false)
-		{
-			string input = splitByUppercase ? s.SplitByUppercase() : s;
-
-			if (input.Length == 0)
-				return input;
-
-			return input.Substring(0, 1) + input.Substring(1).ToLower();
-		}
 
 		/// <summary>
 		/// Returns a MemoryStream with the bytes representing the <paramref name="inputString"/> encoded as <paramref name="encoding"/>
@@ -528,60 +473,6 @@ namespace ChilliSource.Core.Extensions
 		{
 			if (String.IsNullOrEmpty(source)) return "";
 			return String.Format(format, source);
-		}
-
-		/// <summary>
-		/// Returns either an empty string or the original string value if it is not empty
-		/// </summary>
-		/// <returns>string value.</returns>
-		/// <param name="value">Value.</param>
-		public static string ValueOrEmpty(this string value)
-		{
-			return !string.IsNullOrEmpty(value) ? value : "";
-		}
-
-		/// <summary>
-		/// Returns either the replacement string or the original string value if it is not empty
-		/// </summary>
-		/// <returns>string value.</returns>
-		/// <param name="value">Value.</param>
-		/// <param name="replacementValue">Replacement value.</param>
-		public static string ValueOrReplacement(this string value, string replacementValue = "")
-		{
-			return !string.IsNullOrEmpty(value) ? value : replacementValue;
-		}
-
-		/// <summary>
-		/// Adds space before upper case character in the specified string.
-		/// </summary>
-		/// <param name="s">The specified string to process.</param>
-		/// <returns>A string value with space before upper case character.</returns>
-		public static string SplitByUppercase(this string s)
-		{
-			MatchCollection mc = Regex.Matches(s, @"(\p{Nd}+)|(\P{Lu}+)|(\p{Lu}+\p{Ll}*)");
-			string result = "";
-			foreach (Match m in mc)
-			{
-				result += m.ToString() + " ";
-			}
-			return result.TrimEnd(' ');
-		}
-
-		/// <summary>
-		/// Capitalises the specified string. 
-		/// </summary>
-		/// <param name="s">The specified string.</param>
-		/// <param name="allWords">True to capitalise all word in the string, false to capitalise the first word only.</param>
-		/// <returns>A capitalised string value.</returns>
-		public static string Capitalise(this string s, bool allWords = false)
-		{
-			if (String.IsNullOrEmpty(s)) return s;
-
-			if (allWords)
-			{
-				return String.Join(" ", s.Split(' ').Select(x => x.Substring(0, 1).ToUpper() + x.Substring(1)));
-			}
-			return s.Substring(0, 1).ToUpper() + s.Substring(1);
 		}
 
 		/// <summary>

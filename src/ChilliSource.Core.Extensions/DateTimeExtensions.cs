@@ -166,11 +166,11 @@ namespace ChilliSource.Core.Extensions
 		{
 			if (outputSeconds)
 			{
-				return dt.ToString("yyyy-MM-dd{0}HH:mm:ss".FormatWith(isISO8601 ? "T" : " "));
+				return dt.ToString($"yyyy-MM-dd{(isISO8601 ? "T" : " ")}HH:mm:ss");
 			}
 			else
 			{
-				return dt.ToString("yyyy-MM-dd{0}HH:mm".FormatWith(isISO8601 ? "T" : " "));
+				return dt.ToString($"yyyy-MM-dd{(isISO8601 ? "T" : " ")}HH:mm");
 			}
 		}
 
@@ -181,7 +181,7 @@ namespace ChilliSource.Core.Extensions
 		/// <returns>A string that represents the value of this instance in equivalent JavaScript Date object representation.</returns>
 		public static string ToJavaScript(this DateTime dt)
 		{
-			return "new Date({0},{1},{2},{3},{4},{5})".FormatWith(dt.Year, dt.Month, dt.Day, dt.Minute, dt.Second, dt.Millisecond);
+			return $"new Date({dt.Year},{dt.Month},{dt.Day},{dt.Minute},{dt.Second},{dt.Millisecond})";
 		}
 
 		/// <summary>

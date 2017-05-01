@@ -12,6 +12,7 @@ using System;
 using Xunit;
 using ChilliSource.Core.Extensions;
 using System.IO;
+using System.Collections.Generic;
 
 namespace Tests
 {
@@ -168,56 +169,109 @@ namespace Tests
 
         #region Format /Transform
         [Fact]
-        public void FormatWith_ShouldFormatString()
+        public void FormatIfNotNull_ShouldFormatStringWhenParamHasValue()
         {
-            var result = "test{0} test{1} test{2}".FormatWith(1, "A", 2.3);
-            Assert.Equal("test1 testA test2.3", result);
+            int? param = null;
+            var result = "A{0}C".FormatIfNotNull(param);
+            Assert.Equal("", result);
+            param = 2;
+            result = "A{0}C".FormatIfNotNull(param);
+            Assert.Equal("A2C", result);
         }
-        #endregion
 
         [Fact]
-		public void ValueOrEmpty_ShouldReturnValue_WhenValueIsNotEmpty()
+        public void FormatWithMask_ShouldWork()
+        {
+            var value = "12345678";
+            Assert.Equal("XXXX5678", value.FormatWithMask("XXXX*"));
+            Assert.Equal("1234XXXX", value.FormatWithMask("*XXXX"));
+            Assert.Equal("XXX45XXX", value.FormatWithMask("XXX*XXX"));
+            Assert.Equal("XXXX", value.FormatWithMask("XXXX"));
+            Assert.Equal("XXXXXXXX", value.FormatWithMask("X"));
+
+            var smallValue = "12";
+            Assert.Equal("XXXX", smallValue.FormatWithMask("XXXX*"));
+            Assert.Equal("XXXX", smallValue.FormatWithMask("*XXXX"));
+            Assert.Equal("XXXXXX", smallValue.FormatWithMask("XXX*XXX"));
+            Assert.Equal("XXXX", smallValue.FormatWithMask("XXXX"));
+            Assert.Equal("XX", smallValue.FormatWithMask("X"));
+        }
+
+        [Fact]
+        public void TransformWith_Dictionary_ShouldTransformStringPlaceholders_ByKey()
+        {
+            var dictionary = new Dictionary<string, object> { { "Id", 4 }, { "Name", "Sam" }, { "Age", 21 } };
+            var result = "{Name} is {Age}".TransformWith(dictionary);
+            Assert.Equal("Sam is 21", result);
+
+            var result2 = "{NotPresent}{Name} is {Age}".TransformWith(dictionary, removeUnused: true);
+            Assert.Equal("Sam is 21", result2);
+
+            var result3 = "{Name} is {Age}".TransformWith(new { Name = "Bob", Age = 21 });
+            Assert.Equal("Bob is 21", result3);
+        }
+
+        [Fact]
+        public void Repeat_ReturnsXRepeatedYTimes()
+        {
+            Assert.Equal("XXX", "X".Repeat(3));
+            Assert.Equal("", "X".Repeat(0));
+            Assert.Equal("", "".Repeat(10));
+            Assert.Equal("1212121212", "12".Repeat(5));
+        }
+
+        #endregion
+
+        #region Convert To and From
+
+        [Fact]
+		public void DefaultTo_ShouldReturnDefault_WhenValueIsNullOrEmpty()
 		{
-			var result = "test".ValueOrEmpty();
+			var result = "test".DefaultTo("");
 			Assert.Equal("test", result);
-		}
+            var result2 = "".DefaultTo("");
+            Assert.Equal(string.Empty, result2);
+            var result3 = "".DefaultTo("replacement");
+            Assert.Equal("replacement", result3);
+            var result4 = "".DefaultTo(null, "", "not null", "also not null");
+            Assert.Equal("not null", result4);
+        }
 
-		[Fact]
-		public void ValueOrEmpty_ShouldReturnEmptyString_WhenValueIsEmpty()
-		{
-			var result = "".ValueOrEmpty();
-			Assert.Equal(string.Empty, result);
-		}
+        [Fact]
+        public void GetIndependentHashCode_ShouldHashcode_ForValue()
+        {
+            string nullString = null;
+            string emptyString = String.Empty;
+            string s = "1234567890";
+            string longstring = "yikes".Repeat(10000);
 
-		[Fact]
-		public void ValueOrReplacement_ShouldReturnValue_WhenValueIsNotEmpty()
-		{
-			var result = "test".ValueOrReplacement();
-			Assert.Equal("test", result);
-		}
+            var result = nullString.GetIndependentHashCode();
+            Assert.Equal(null, result);
+            var result2 = emptyString.GetIndependentHashCode();
+            Assert.Equal(23, result2);
+            var result3 = s.GetIndependentHashCode();
+            Assert.Equal(-434371086, result3);
+            var result4 = longstring.GetIndependentHashCode();
+            Assert.Equal(-2116544745, result4);
+        }
 
-		[Fact]
-		public void ValueOrReplacement_ShouldReturnReplacementValue_WhenValueIsEmpty()
-		{
-			var result = "".ValueOrReplacement("replacement");
-			Assert.Equal("replacement", result);
-		}
 
-		[Fact]
-		public void ToByteArray_ShouldReturnByteArray_WhenHexStringIsValid()
-		{
+        [Fact]
+		public void ToByteArrayFromHex_ShouldReturnByteArray_WhenHexStringIsValid()
+        { 
+		
 			var result = "68656C6C6F2068657820776F726C64".ToByteArrayFromHex();
 			Assert.Equal("68656C6C6F2068657820776F726C64", result.ToHexString());
 		}
 
 		[Fact]
-		public void ToByteArray_ShouldThrowException_WhenHexStringIsNotValid()
+		public void ToByteArrayFromHex_ShouldThrowException_WhenHexStringIsNotValid()
 		{
 			Assert.Throws(typeof(FormatException), () => "invalid hex string".ToByteArrayFromHex());
 		}
 
 		[Fact]
-		public void ToByteArray_ShouldReturnNull_WhenHexStringIsNullOrEmpty()
+		public void ToByteArrayFromHex_ShouldReturnNull_WhenHexStringIsNullOrEmpty()
 		{
 			string input = null;
 			var result = input.ToByteArrayFromHex();
@@ -232,5 +286,7 @@ namespace Tests
 
 			Assert.Equal("test string", reader.ReadToEnd());
 		}
-	}
+
+        #endregion
+    }
 }
