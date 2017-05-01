@@ -321,7 +321,7 @@ namespace Tests
             Assert.True(value.Contains("james", StringComparison.Ordinal));
             Assert.False(value.Contains("jim", StringComparison.Ordinal));
             Assert.True(value.Contains("JIM", StringComparison.Ordinal));
-            Assert.False(value.Contains("jim", StringComparison.OrdinalIgnoreCase));
+            Assert.True(value.Contains("jim", StringComparison.OrdinalIgnoreCase));
         }
 
         #endregion
