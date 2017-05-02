@@ -28,5 +28,9 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net462|AnyCPU'">
     <DocumentationFile>bin\Release\net462\ChilliSource.Core.Extensions.xml</DocumentationFile>
-  </PropertyGroup>
+  </PropertyGroup>  
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
+  </ItemGroup>
 </Project>

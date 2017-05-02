@@ -18,7 +18,7 @@ namespace Tests
 {
 	public class EnumExtensionsTests
 	{
-		enum TestEnum
+		public enum TestEnum
 		{
 			[System.ComponentModel.Description("Test1 Description")]
             [Data("Number", 1)]

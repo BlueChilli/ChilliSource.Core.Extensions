@@ -8,6 +8,9 @@ See the LICENSE file in the project root for more information.
 
 #endregion
 
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +23,39 @@ namespace ChilliSource.Core.Extensions
 	/// </summary>
 	public static class ObjectExtensions
 	{
+
+        /// <summary>
+        /// Converts object to JSON string.
+        /// By default Json is not formatted, uses camel casing and converts enum as strings.
+        /// </summary>
+        /// <param name="data">Object to convert.</param>
+        /// <returns>JSON string representing the object.</returns>
+        public static string ToJson(this object data, Formatting format = Formatting.None, IContractResolver resolver = null)
+        {
+            if (resolver == null) resolver = new CamelCasePropertyNamesContractResolver();
+
+            var settings = new JsonSerializerSettings()
+            {
+                ContractResolver = resolver,
+                Formatting = format
+            };
+
+            settings.Converters.Add(new StringEnumConverter());
+
+            return ToJson(data, settings);
+        }
+
+        /// <summary>
+        /// Converts object to JSON string.
+        /// </summary>
+        /// <param name="data">Object to convert.</param>
+        /// <param name="settings">The custom serializer settings.</param>
+        /// <returns>JSON string representing the object.</returns>
+        public static string ToJson(this object data, JsonSerializerSettings settings)
+        {
+            return JsonConvert.SerializeObject(data, settings);
+        }
+
         /// <summary>
         /// Converts object to a dictionary of objects, keyed by property name
         /// </summary>

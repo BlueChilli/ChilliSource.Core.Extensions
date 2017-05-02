@@ -16,6 +16,9 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.ComponentModel;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json.Converters;
 
 namespace ChilliSource.Core.Extensions
 {
@@ -333,17 +336,52 @@ namespace ChilliSource.Core.Extensions
 			}
 			return new string(dest);
 		}
-		#endregion
+        #endregion
 
-		#region Convert To and From
+        #region Convert To and From
 
-		/// <summary>
-		/// Returns a MemoryStream with the bytes representing the <paramref name="inputString"/> encoded as <paramref name="encoding"/>
-		/// </summary>
-		/// <returns>The stream.</returns>
-		/// <param name="inputString">Input string.</param>
-		/// <param name="encoding">Encoding. Default is UTF8</param>
-		public static Stream ToStream(this string inputString, Encoding encoding = null)
+        /// <summary>
+        /// Converts JSON string to object.
+        /// By default Json is not formatted, uses camel casing and converts enum as strings.
+        /// </summary>
+        /// <typeparam name="T">The type of the object to convert.</typeparam>
+        /// <param name="s">The JSON string.</param>
+        /// <returns>A reference to the newly created object representing JSON string.</returns>
+        public static T FromJson<T>(this string source, Formatting format = Formatting.None, IContractResolver resolver = null)
+        {
+            if (resolver == null) resolver = new CamelCasePropertyNamesContractResolver();
+
+            var settings = new JsonSerializerSettings()
+            {
+                ContractResolver = resolver,
+                Formatting = format
+            };
+            settings.Converters.Add(new StringEnumConverter());
+
+            return FromJson<T>(source, settings);
+        }
+
+        /// <summary>
+        /// Converts JSON string to object using custom settings.
+        /// </summary>
+        /// <typeparam name="T">The type of the object to convert.</typeparam>
+        /// <param name="source">The JSON string.</param>
+        /// <param name="settings">The custom serializer settings.</param>
+        /// <returns>A reference to the newly created object representing JSON string.</returns>
+        public static T FromJson<T>(this string source, JsonSerializerSettings settings)
+        {
+            if (source == null) return default(T);
+
+            return JsonConvert.DeserializeObject<T>(source, settings);
+        }
+
+        /// <summary>
+        /// Returns a MemoryStream with the bytes representing the <paramref name="inputString"/> encoded as <paramref name="encoding"/>
+        /// </summary>
+        /// <returns>The stream.</returns>
+        /// <param name="inputString">Input string.</param>
+        /// <param name="encoding">Encoding. Default is UTF8</param>
+        public static Stream ToStream(this string inputString, Encoding encoding = null)
 		{
 			return new MemoryStream((encoding ?? Encoding.UTF8).GetBytes(inputString ?? ""));
 		}

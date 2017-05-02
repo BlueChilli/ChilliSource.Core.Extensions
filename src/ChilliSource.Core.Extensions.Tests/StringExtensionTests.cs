@@ -233,6 +233,36 @@ namespace Tests
 
         #region Convert To and From
 
+        public class JsonTest
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public bool IsActive { get; set; }
+            public EnumExtensionsTests.TestEnum Status { get; set; }
+            public DateTime DateCreated { get; set; }
+        }
+
+        [Fact]
+        public void FromJson_ShouldReturnTypedObject_RepresentativeOfJson()
+        {
+            var test1 = "{\"id\":1,\"name\":\"Bob\",\"isActive\":false,\"status\":\"Test2\",\"dateCreated\":\"2001-10-01T00:00:00\"}";
+            var result = test1.FromJson<JsonTest>();
+
+            Assert.Equal(1, result.Id);
+            Assert.Equal("Bob", result.Name);
+            Assert.Equal(false, result.IsActive);
+            Assert.Equal(EnumExtensionsTests.TestEnum.Test2, result.Status);
+            Assert.Equal(new DateTime(2001, 10, 1), result.DateCreated);
+
+            var test2 = "{\"Id\":1,\"Name\":\"Bob\",\"IsActive\":false,\"Status\":2,\"DateCreated\":\"2001-10-01\"}";
+            result = test2.FromJson<JsonTest>();
+            Assert.Equal("Bob", result.Name);
+            Assert.Equal(false, result.IsActive);
+            Assert.Equal(EnumExtensionsTests.TestEnum.Test2, result.Status);
+            Assert.Equal(new DateTime(2001, 10, 1), result.DateCreated);
+
+        }
+
         [Fact]
 		public void DefaultTo_ShouldReturnDefault_WhenValueIsNullOrEmpty()
 		{
