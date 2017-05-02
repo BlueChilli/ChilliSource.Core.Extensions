@@ -345,7 +345,6 @@ namespace Tests
             Assert.Contains(0.0M, result2);
             Assert.Equal(4, result2.Count());
         }
-
         #endregion
 
         #region Helpers
