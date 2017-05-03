@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ChilliSource.Core.Extensions
-{ 
+{
     /// <summary>
     /// Extension methods for System.Uri.
     /// </summary>
