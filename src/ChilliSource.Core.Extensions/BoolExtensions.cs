@@ -29,7 +29,7 @@ namespace ChilliSource.Core.Extensions
 		}
 
 		/// <summary>
-		/// Negates !the specified Boolean value.
+		/// Negates the specified Boolean value.
 		/// </summary>
 		public static bool Toggle(this bool value)
 		{

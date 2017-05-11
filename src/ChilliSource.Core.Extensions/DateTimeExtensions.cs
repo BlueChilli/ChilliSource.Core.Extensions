@@ -16,59 +16,58 @@ namespace ChilliSource.Core.Extensions
 	/// Date time extensions.
 	/// </summary>
 	public static class DateTimeExtensions
-	{
-	
-	
+	{		
         #region Date manipulation
+
         /// <summary>
-        /// Returns date which set the day to the first of the month for the specified date.
+        /// Returns date with day set to the first of the month for the specified date.
         /// </summary>
-        /// <param name="dt">The specified date and time.</param>
-        /// <returns>Date which set the day to the first of the month for the specified date.</returns>
-        public static DateTime ThisMonth(this DateTime dt)
+        /// <param name="date">The original date.</param>
+        /// <returns>Date with day set to the first of the month.</returns>
+        public static DateTime ThisMonth(this DateTime date)
 		{
-			return new DateTime(dt.Year, dt.Month, 1);
-		}
-
-		/// <summary>
-		/// Returns date which set to first day of next month for the specified date.
-		/// </summary>
-		/// <param name="dt">The specified date and time.</param>
-		/// <returns>Date which set to first day of next month for the specified date.</returns>
-		public static DateTime NextMonth(this DateTime dt)
-		{
-			return new DateTime(dt.Year, dt.Month, 1).AddMonths(1);
-		}
-
-		/// <summary>
-		/// Returns the last day of the month for the specified date.
-		/// </summary>
-		/// <param name="dt">The specified date.</param>
-		/// <returns>The last day of the month for the specified date.</returns>
-		public static DateTime EndOfMonth(this DateTime dt)
-		{
-			return dt.ThisMonth().AddMonths(1).AddMilliseconds(-1);
+			return new DateTime(date.Year, date.Month, 1);
 		}
 
         /// <summary>
-        /// Return the closest future date in which the day of week matches the input.
-        /// If the current datetime day of week matches the input, the same date is returned.
+        /// Returns date with day set to the first day of the following month for the specified date.
         /// </summary>
-        /// <param name="dt">The specified date.</param>
-        /// <param name="nextDay">The day of week to set</param>
+        /// <param name="date">The original date.</param>
+        /// <returns>date with day set to the first day of the following month.</returns>
+        public static DateTime NextMonth(this DateTime date)
+		{
+			return new DateTime(date.Year, date.Month, 1).AddMonths(1);
+		}
+
+        /// <summary>
+        /// Returns date representing the last day of the month for the specified date.
+        /// </summary>
+        /// <param name="date">The original date.</param>
+        /// <returns>date representing the last day of the month.</returns>
+        public static DateTime EndOfMonth(this DateTime date)
+		{
+			return date.ThisMonth().AddMonths(1).AddMilliseconds(-1);
+		}
+
+        /// <summary>
+        /// Return the closest date matching the <paramref name="nextWeekDay"/>.
+        /// If the day of week of the specified <paramref name="date"/> matches the <paramref name="nextWeekDay"/>, the same date is returned.
+        /// </summary>
+        /// <param name="date">The specified date.</param>
+        /// <param name="nextWeekDay">The day of week to select</param>
         /// <returns>A System.DateTime object.</returns>
-        public static DateTime NextDayOfWeek(this DateTime dt, DayOfWeek nextDay = DayOfWeek.Sunday)
+        public static DateTime NextDayOfWeek(this DateTime date, DayOfWeek nextWeekDay = DayOfWeek.Sunday)
         {
-            int diff = nextDay - dt.DayOfWeek;
+            int diff = nextWeekDay - date.DayOfWeek;
             if (diff < 0)
             {
                 diff += 7;
             }
-            return dt.AddDays(diff).Date;
+            return date.AddDays(diff).Date;
         }
 
         /// <summary>
-        /// Returns a DateTime instance based on <paramref name="dateTime"/> with its DateTimeKind set to Unspecified
+        /// Returns a DateTime instance based on <paramref name="dateTime"/> with its DateTimeKind set to "Unspecified", thereby removing the time zone component
         /// </summary>
         /// <returns>Timezone independent DateTime instance</returns>
         /// <param name="dateTime">Original DateTime instance</param>
@@ -81,65 +80,67 @@ namespace ChilliSource.Core.Extensions
 
         #region Date queries
         /// <summary>
-        /// Returns the number of days in month for the specified date.
+        /// Returns the number of days in the month of the specified <paramref name="date"/>.
         /// </summary>
-        /// <param name="dt">The specified date.</param>
-        /// <returns>The number of days in month for the specified date.</returns>
-        public static int DaysInMonth(this DateTime dt)
+        /// <param name="date">The original date.</param>
+        /// <returns>The number of days in the month of the specified date.</returns>
+        public static int DaysInMonth(this DateTime date)
         {
-            return DateTime.DaysInMonth(dt.Year, dt.Month);
+            return DateTime.DaysInMonth(date.Year, date.Month);
         }
 
         /// <summary>
-        /// Checks whether the specified date is today's date.
+        /// Checks whether the specified <paramref name="comparisonDate"/> is today's date.
         /// </summary>
-        /// <param name="compare">The specified date.</param>
+        /// <param name="comparisonDate">The date to compare.</param>
         /// <returns>True when the specified date is today's date, otherwise false.</returns>
-        public static bool IsToday(this DateTime compare)
+        public static bool IsToday(this DateTime comparisonDate)
 		{
-			if (DateTime.UtcNow.DayOfYear == compare.DayOfYear && DateTime.UtcNow.Year == compare.Year)
-				return true;
+            if (DateTime.UtcNow.DayOfYear == comparisonDate.DayOfYear && DateTime.UtcNow.Year == comparisonDate.Year)
+            {
+                return true;
+            }
 			return false;
 		}
 
 		/// <summary>
-		/// Checks whether the specified date is yesterday's date.
+		/// Checks whether the specified <paramref name="comparisonDate"/> is yesterday's date.
 		/// </summary>
-		/// <param name="compare">The specified date.</param>
+		/// <param name="comparisonDate">The date to compare.</param>
 		/// <returns>True when the specified date is yesterday's date, otherwise false.</returns>
-		public static bool IsYesterday(this DateTime compare)
+		public static bool IsYesterday(this DateTime comparisonDate)
 		{
-			DateTime yesterday = compare.AddDays(1);
+			DateTime yesterday = comparisonDate.AddDays(1);
 
 			return yesterday.IsToday();
 		}
 
         /// <summary>
-        /// Checks whether the specified date is tomorrow's date.
+        /// Checks whether the specified <paramref name="comparisonDate"/> is tomorrow's date.
         /// </summary>
-        /// <param name="compare">The specified date.</param>
+        /// <param name="comparisonDate">The date to compare.</param>
         /// <returns>True when the specified date is tomorrow's date, otherwise false.</returns>
-        public static bool IsTomorrow(this DateTime compare)
+        public static bool IsTomorrow(this DateTime comparisonDate)
         {
-            DateTime tomorrow = compare.AddDays(-1);
+            DateTime tomorrow = comparisonDate.AddDays(-1);
 
             return tomorrow.IsToday();
         }
 
         /// <summary>
-        /// Checks whether the month in the specified date is current month.
+        /// Checks whether the month of the <paramref name="comparisonDate"/> is the current month.
         /// </summary>
-        /// <param name="compare">The specified date.</param>
-        /// <returns>True when the month in the specified date is current month, otherwise false.</returns>
-        public static bool IsThisMonth(this DateTime compare)
+        /// <param name="comparisonDate">The date to compare.</param>
+        /// <returns>True when the month of the specified date is the current month, otherwise false.</returns>
+        public static bool IsThisMonth(this DateTime comparisonDate)
 		{
-			return (compare.Month == DateTime.UtcNow.Month && compare.Year == DateTime.UtcNow.Year);
+			return (comparisonDate.Month == DateTime.UtcNow.Month && comparisonDate.Year == DateTime.UtcNow.Year);
 		}
 
         /// <summary>
-        /// Returns the minimum date of SQL server.
+        /// Returns the minimum date that can be stored in SQL Server.
         /// </summary>
-        /// <returns>The minimum date of SQL server (1 January 1753).</returns>
+        /// <returns>The minimum date that can be stored in SQL server (1 January 1753).</returns>
         public static DateTime MinDateForSqlServer() { return new DateTime(1753, 1, 1); }
 
         #endregion

@@ -35,7 +35,7 @@ namespace ChilliSource.Core.Extensions
         /// Return byte array of encoded string back to string
         /// </summary>
         /// <param name="bytes">Encoded string</param>
-        /// <param name="encoding">How string was encoded - by default - new UTF8Encoding()</param>
+        /// <param name="encoding">Encoding of original string. Typically UTF8</param>
         /// <returns></returns>
         public static string ToString(this byte[] bytes, Encoding encoding)
         {

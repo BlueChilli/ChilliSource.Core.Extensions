@@ -41,7 +41,8 @@ namespace ChilliSource.Core.Extensions
         #endregion
 
         /// <summary>
-        /// Adds the item to specified collection list or updates if exists by the key selector function.
+        /// Adds the <paramref name="item"/> to the list. If the item already exists it will be updated in the list using the <paramref name="keySelector"/>
+        /// function to determine the correct key for the item
         /// </summary>
         /// <typeparam name="T">The type of the elements of list.</typeparam>
         /// <typeparam name="TKey">The type of the key.</typeparam>
@@ -70,7 +71,7 @@ namespace ChilliSource.Core.Extensions
 		}
 
         /// <summary>
-        /// Reduces collection to distinct members by a key property.
+        /// Reduces collection to distinct members based on a key, which is selected using the <paramref name="keySelector"/> function.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of the generic enumerable list.</typeparam>
         /// <typeparam name="TKey">The type of the key property.</typeparam>
@@ -91,11 +92,11 @@ namespace ChilliSource.Core.Extensions
 
 
         /// <summary>
-        /// Converts a list of T to a delimited string, which each T has T.ToString() executed
+        /// Converts a list of T to a delimited string, by having each T.ToString() executed for each T
         /// </summary>
         /// <typeparam name="T">The type of the elements of the generic enumerable list.</typeparam>
         /// <param name="collection">The generic enumerable list.</param>
-        /// <param name="delimiter">Delimiter in the string returned.</param>
+        /// <param name="delimiter">The delimiter.</param>
         /// <returns>A delimited string</returns>
         public static string ToDelimitedString<T>(this IEnumerable<T> collection, string delimiter = ",", string formatSpecifier = "")
         {
@@ -131,12 +132,13 @@ namespace ChilliSource.Core.Extensions
         }
 
         /// <summary>
-        /// Returns the first element of the sequence that satisfies a condition or a new instance if no such element is found.
+        /// Returns the first element of the sequence that satisfies a condition, or a new instance if no such element is found.
         /// </summary>
         /// <typeparam name="TSource">The type of the elements of source.</typeparam>
         /// <param name="source">The System.Collections.Generic.IEnumerable&lt;T&gt; to return an element from.</param>
         /// <param name="predicate">A function to test each element for a condition.</param>
-        /// <returns>A new instance of TSource when source is empty or if no element passes the test specified by predicate; otherwise, the first element in source that passes the test specified by predicate.</returns>
+        /// <returns>A new instance of TSource when source is empty or if no element passes the test specified by predicate; 
+        /// otherwise the first element in source that passes the test specified by <paramref name="predicate"/>.</returns>
         public static TSource FirstOrNew<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             var result = source.FirstOrDefault(predicate);
@@ -144,24 +146,24 @@ namespace ChilliSource.Core.Extensions
         }
 
         /// <summary>
-        /// Returns the first element of a sequence, or the specified element if the sequence contains no elements.
+        /// Returns the first element of a sequence, or the specified <paramref name="defaultTo"/> element if the sequence contains no elements.
         /// </summary>
-        /// <typeparam name="TSource">The type of the elements of source.</typeparam>
+        /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
         /// <param name="source">The System.Collections.Generic.IEnumerable&lt;T&gt; to return the first element of.</param>
         /// <param name="defaultTo">The specified element.</param>
-        /// <returns>The specified element when source is empty; otherwise, the first element in source.</returns>
+        /// <returns>The specified  <paramref name="defaultTo"/> element when source is empty; otherwise, the first element in <paramref name="source"/>.</returns>
         public static TSource FirstOrDefaultTo<TSource>(this IEnumerable<TSource> source, TSource defaultTo)
         {
             return (source.Count() == 0) ? defaultTo : source.First();
         }
 
         /// <summary>
-        /// Returns the first element of the sequence that satisfies a condition or the specified element if no such element is found.
+        /// Returns the first element of the sequence that satisfies a condition, or the specified <paramref name="defaultTo"/> element if no such element is found.
         /// </summary>
-        /// <typeparam name="TSource">The type of the elements of source.</typeparam>
+        /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
         /// <param name="source">The System.Collections.Generic.IEnumerable&lt;T&gt; to return the first element of.</param>
         /// <param name="predicate">A function to test each element for a condition.</param>
-        /// <param name="defaultTo">The specified element when source is empty or if no element passes the test specified by predicate; otherwise, the first element in source that passes the test specified by predicate.</param>
+        /// <param name="defaultTo">The default element to be returned when the source IEnumerable is empty or no element passes the test specified by <paramref name="predicate"/></param>
         /// <returns></returns>
         public static TSource FirstOrDefaultTo<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate, TSource defaultTo)
         {
