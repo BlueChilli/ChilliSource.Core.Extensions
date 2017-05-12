@@ -20,30 +20,30 @@ namespace Tests
 		[Fact]
 		public void ToDegrees_ShouldReturnDegrees()
 		{
-			float radiants = 10.5f;
-			var degrees = radiants.ToDegrees();
+			var radians = 10.5f;
+			var degrees = radians.ToDegrees();
 
 			Assert.Equal(601, Math.Truncate(degrees));
 
-            double radiants2 = 10.5;
-            var degrees2 = radiants2.ToDegrees();
+            var radians2 = 10.5;
+            var degrees2 = radians2.ToDegrees();
 
             Assert.Equal(601, Math.Truncate(degrees2));
 
         }
 
 		[Fact]
-		public void ToRadiants_ShouldReturnRadiants()
+		public void ToRadians_ShouldReturnRadians()
 		{
-			float degrees = 600.5f;
-			var radiants = degrees.ToRadiants();
+			var degrees = 600.5f;
+			var radians = degrees.ToRadians();
 
-			Assert.Equal(10, Math.Truncate(radiants));
+			Assert.Equal(10, Math.Truncate(radians));
 
-            double degrees2 = 600.5;
-            var radiants2 = degrees2.ToRadiants();
+            var degrees2 = 600.5;
+            var radians2 = degrees2.ToRadians();
 
-            Assert.Equal(10, Math.Truncate(radiants2));
+            Assert.Equal(10, Math.Truncate(radians2));
         }
 	}
 }
