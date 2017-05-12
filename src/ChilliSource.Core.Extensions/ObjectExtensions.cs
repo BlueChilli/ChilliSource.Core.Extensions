@@ -25,14 +25,17 @@ namespace ChilliSource.Core.Extensions
 	{
 
         /// <summary>
-        /// Converts object to JSON string.
-        /// By default Json is not formatted, uses camel casing and converts enum as strings.
+        /// Converts the specified object to a JSON string.
+        /// By default Json is not formatted, uses camel casing and converts enums to strings.
         /// </summary>
         /// <param name="data">Object to convert.</param>
         /// <returns>JSON string representing the object.</returns>
         public static string ToJson(this object data, Formatting format = Formatting.None, IContractResolver resolver = null)
         {
-            if (resolver == null) resolver = new CamelCasePropertyNamesContractResolver();
+            if (resolver == null)
+            {
+                resolver = new CamelCasePropertyNamesContractResolver();
+            }
 
             var settings = new JsonSerializerSettings()
             {
@@ -46,7 +49,7 @@ namespace ChilliSource.Core.Extensions
         }
 
         /// <summary>
-        /// Converts object to JSON string.
+        /// Converts the specified object to a JSON string.
         /// </summary>
         /// <param name="data">Object to convert.</param>
         /// <param name="settings">The custom serializer settings.</param>
@@ -57,10 +60,10 @@ namespace ChilliSource.Core.Extensions
         }
 
         /// <summary>
-        /// Converts object to a dictionary of objects, keyed by property name
+        /// Converts specified object to a dictionary of objects, keyed by property name
         /// </summary>
         /// <param name="value">Object to convert.</param>
-        /// <returns>An dictionary containing each property as key, with property value as value.</returns>
+        /// <returns>A dictionary containing key-value pairs for each property and its value.</returns>
         public static Dictionary<string, object> ToDictionary(this object value)
         {
             var result = new Dictionary<string, object>();

@@ -149,44 +149,44 @@ namespace ChilliSource.Core.Extensions
         /// <summary>
         /// Converts the value of the specified date to its equivalent string representation using the ISO format with date only (yyyy-MM-dd).
         /// </summary>
-        /// <param name="dt">The specified date.</param>
+        /// <param name="date">The specified date.</param>
         /// <returns>A value of string in ISO format with date only.</returns>
-        public static string ToIsoDate(this DateTime dt)
+        public static string ToIsoDate(this DateTime date)
 		{
-			return dt.ToString("yyyy-MM-dd");
+			return date.ToString("yyyy-MM-dd");
 		}
 
 		/// <summary>
 		/// Converts the value of the specified date to its equivalent string representation using the ISO format with date and time (yyyy-MM-dd HH:mm).
 		/// </summary>
-		/// <param name="dt">The specified date.</param>
+		/// <param name="date">The specified date.</param>
 		/// <param name="outputSeconds">Output seconds after minutes</param>
 		/// <param name="isISO8601">Output T as separator between date and time</param>
 		/// <returns>A value of string in ISO format with date and time.</returns>
-		public static string ToIsoDateTime(this DateTime dt, bool outputSeconds = false, bool isISO8601 = false)
+		public static string ToIsoDateTime(this DateTime date, bool outputSeconds = false, bool isISO8601 = false)
 		{
 			if (outputSeconds)
 			{
-				return dt.ToString($"yyyy-MM-dd{(isISO8601 ? "T" : " ")}HH:mm:ss");
+				return date.ToString($"yyyy-MM-dd{(isISO8601 ? "T" : " ")}HH:mm:ss");
 			}
 			else
 			{
-				return dt.ToString($"yyyy-MM-dd{(isISO8601 ? "T" : " ")}HH:mm");
+				return date.ToString($"yyyy-MM-dd{(isISO8601 ? "T" : " ")}HH:mm");
 			}
 		}
 
 		/// <summary>
 		/// Converts the value of the specified date to its equivalent JavaScript Date object string representation.
 		/// </summary>
-		/// <param name="dt">The specified date.</param>
+		/// <param name="date">The specified date.</param>
 		/// <returns>A string that represents the value of this instance in equivalent JavaScript Date object representation.</returns>
-		public static string ToJavaScript(this DateTime dt)
+		public static string ToJavaScript(this DateTime date)
 		{
-			return $"new Date({dt.Year},{dt.Month},{dt.Day},{dt.Minute},{dt.Second},{dt.Millisecond})";
+			return $"new Date({date.Year},{date.Month},{date.Day},{date.Minute},{date.Second},{date.Millisecond})";
 		}
 
 		/// <summary>
-		/// Convert a datatime to a unix timestamp
+		/// Convert the specified date to a Unix timestamp
 		/// </summary>
 		public static TimeSpan ToUnixTime(this DateTime date)
 		{
