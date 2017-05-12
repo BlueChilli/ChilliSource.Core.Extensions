@@ -17,31 +17,31 @@ namespace ChilliSource.Core.Extensions
 	public static partial class GeometryExtensions
 	{
 		/// <summary>
-		/// Converts float radiants to degrees
+		/// Converts float radians to degrees
 		/// </summary>
 		/// <returns>The degrees.</returns>
-		/// <param name="radiants">Radiants.</param>
-		public static float ToDegrees(this float radiants) => (float)(radiants * 180 / Math.PI);
+		/// <param name="radians">Radians.</param>
+		public static float ToDegrees(this float radians) => (float)(radians * 180 / Math.PI);
 
 		/// <summary>
-		/// Converts dobule radiants to degrees
+		/// Converts dobule radians to degrees
 		/// </summary>
 		/// <returns>The degrees.</returns>
-		/// <param name="radiants">Radiants.</param>
-		public static double ToDegrees(this double radiants) => radiants * 180 / Math.PI;
+		/// <param name="radiants">Radians.</param>
+		public static double ToDegrees(this double radians) => radians * 180 / Math.PI;
 
 		/// <summary>
-		/// Converts float degrees to radiants
+		/// Converts float degrees to radians
+		/// </summary>
+		/// <returns>The radians.</returns>
+		/// <param name="degrees">Degrees.</param>
+		public static float ToRadians(this float degrees) => (float)(degrees / 180 * Math.PI);
+
+		/// <summary>
+		/// Converts double degrees to radians
 		/// </summary>
 		/// <returns>The radiants.</returns>
 		/// <param name="degrees">Degrees.</param>
-		public static float ToRadiants(this float degrees) => (float)(degrees / 180 * Math.PI);
-
-		/// <summary>
-		/// Converts double degrees to radiants
-		/// </summary>
-		/// <returns>The radiants.</returns>
-		/// <param name="degrees">Degrees.</param>
-		public static double ToRadiants(this double degrees) => degrees / 180 * Math.PI;
+		public static double ToRadians(this double degrees) => degrees / 180 * Math.PI;
 	}
 }

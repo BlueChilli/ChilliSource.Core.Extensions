@@ -19,10 +19,10 @@ namespace ChilliSource.Core.Extensions
 	public static class StreamExtensions
 	{
 		/// <summary>
-		/// Converts the stream to a byte array
+		/// Converts the specified stream to a byte array
 		/// </summary>
 		/// <returns>The byte array.</returns>
-		/// <param name="stream">Stream.</param>
+		/// <param name="stream">Stream to convert.</param>
 		public static byte[] ToByteArray(this Stream stream)
 		{
 			if (stream == null)
@@ -31,7 +31,9 @@ namespace ChilliSource.Core.Extensions
 			}
 
             if (stream is MemoryStream)
+            {
                 return ((MemoryStream)stream).ToArray();
+            }
 
             using (MemoryStream ms = new MemoryStream())
 			{

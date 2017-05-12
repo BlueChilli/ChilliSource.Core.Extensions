@@ -31,36 +31,49 @@ namespace ChilliSource.Core.Extensions
 		/// <summary>
 		/// Converts a string value to valid file path name.
 		/// </summary>
-		/// <param name="s">The specified string value.</param>
+		/// <param name="value">The specified string value.</param>
 		/// <returns>A valid file path name.</returns>
-		public static string ToFilename(this string s)
+		public static string ToFilename(this string value)
 		{
 			var invalidChars = Path.GetInvalidFileNameChars();
-			foreach (var c in invalidChars) s = s.Replace(c.ToString(), "");
+            foreach (var c in invalidChars)
+            {
+                value = value.Replace(c.ToString(), "");
+            }
 			//remove additional periods
-			var filename = Path.GetFileNameWithoutExtension(s).Replace(".", "");
-			s = filename + Path.GetExtension(s);
-			return s.Replace(' ', '_');
+			var filename = Path.GetFileNameWithoutExtension(value).Replace(".", "");
+			value = filename + Path.GetExtension(value);
+			return value.Replace(' ', '_');
 		}
 
 		/// <summary>
-		/// Converts a string value to valid css class name.
+		/// Converts a string value to valid CSS class name.
 		/// </summary>
-		/// <param name="s">The specified string value.</param>
-		/// <returns>A valid css class name.</returns>
-		public static string ToCssClass(this string s)
+		/// <param name="value">The specified string value.</param>
+		/// <returns>A valid CSS class name.</returns>
+		public static string ToCssClass(this string value)
 		{
-			s = s.Replace(' ', '-');
-			s = s.Replace('_', '-');
-			var validCharacters = new Regex("[^_a-zA-Z0-9-]");
-			s = validCharacters.Replace(s, "");
-			while (s.Length < 2) s = "_" + s;
-			if (Char.IsNumber(s[0])) s = "_" + s;
-			return s.ToLower();
+			value = value.Replace(' ', '-');
+			value = value.Replace('_', '-');
+
+            var validCharacters = new Regex("[^_a-zA-Z0-9-]");
+			value = validCharacters.Replace(value, "");
+
+            while (value.Length < 2)
+            {
+                value = "_" + value;
+            }
+
+            if (Char.IsNumber(value[0]))
+            {
+                value = "_" + value;
+            }
+
+			return value.ToLower();
 		}
 
 		/// <summary>
-		/// Transforms a string value so it is url safe as a parameter.
+		/// Transforms a string value so it is url-safe as a parameter.
 		/// </summary>
 		/// <param name="url">The original url string</param>
 		/// <param name="stripDashes">MVC 4 doesn't support dashes in the route. Set this to true if the value is to be part of the route.</param>
@@ -72,43 +85,47 @@ namespace ChilliSource.Core.Extensions
 			url = url.Replace("&", "and");
 			url = Regex.Replace(url, @"[^a-z0-9-]", "");
 			url = Regex.Replace(url, @"-+", "-");
-			if (stripDashes) url = url.Replace("-", "");
+
+            if (stripDashes)
+            {
+                url = url.Replace("-", "");
+            }
 			return url;
 		}
 
 		/// <summary>
-		/// Removes non alpha numeric characters from the specified string.
+		/// Removes non-alphanumeric characters from the specified string.
 		/// </summary>
-		/// <param name="stringValue">The specified string value.</param>
+		/// <param name="value">The specified string value.</param>
 		/// <returns>A string value with alpha numeric characters only.</returns>
-		public static string ToAlphaNumeric(this string stringValue)
+		public static string ToAlphaNumeric(this string value)
 		{
 			var validCharacters = new Regex("[^a-zA-Z0-9]");
-			var result = validCharacters.Replace(stringValue, "");
+			var result = validCharacters.Replace(value, "");
 			return result;
 		}
 
 		/// <summary>
-		/// Removes non alpha characters from the specified string.
+		/// Removes non-alpha characters from the specified string.
 		/// </summary>
-		/// <param name="stringValue">The specified string value.</param>
+		/// <param name="value">The specified string value.</param>
 		/// <returns>A string value with alpha characters only.</returns>
-		public static string ToAlpha(this string stringValue)
+		public static string ToAlpha(this string value)
 		{
 			var validCharacters = new Regex("[^a-zA-Z]");
-			var result = validCharacters.Replace(stringValue, "");
+			var result = validCharacters.Replace(value, "");
 			return result;
 		}
 
 		/// <summary>
-		/// Removes non numeric characters from the specified string.
+		/// Removes non-numeric characters from the specified string.
 		/// </summary>
-		/// <param name="stringValue">The specified string value.</param>
+		/// <param name="value">The specified string value.</param>
 		/// <returns>A string value with numeric characters only.</returns>
-		public static string ToNumeric(this string stringValue)
+		public static string ToNumeric(this string value)
 		{
 			var validCharacters = new Regex("[^0-9]");
-			var numbers = validCharacters.Replace(stringValue, "");
+			var numbers = validCharacters.Replace(value, "");
 			return numbers;
 		}
 
@@ -116,64 +133,64 @@ namespace ChilliSource.Core.Extensions
         /// Removes all the spaces in the string.
         /// </summary>
         /// <returns>A new string with the spaces removed.</returns>
-        /// <param name="stringValue">Value.</param>
-        public static string RemoveSpaces(this string stringValue)
+        /// <param name="value">Value.</param>
+        public static string RemoveSpaces(this string value)
         {
-            return !string.IsNullOrEmpty(stringValue) ? stringValue.Replace(" ", string.Empty) : string.Empty;
+            return !string.IsNullOrEmpty(value) ? value.Replace(" ", string.Empty) : string.Empty;
         }
 
         /// <summary>
         /// Removes excess (double) white space characters from the specified string.
         /// </summary>
-        /// <param name="stringValue">The specified string value.</param>
+        /// <param name="value">The specified string value.</param>
         /// <returns>A string value without excess white space character.</returns>
-        public static string RemoveExcessWhiteSpaces(this string stringValue)
+        public static string RemoveExcessWhiteSpaces(this string value)
         {
 
-            if (String.IsNullOrWhiteSpace(stringValue))
+            if (String.IsNullOrWhiteSpace(value))
             {
-                return stringValue;
+                return value;
             }
 
-            return Regex.Replace(stringValue, @"\s+", " ").Trim();
+            return Regex.Replace(value, @"\s+", " ").Trim();
         }
         /// <summary>
-        /// Returns a new string in which all occurrences of a specified string in the current instance are replaced with another specified string.
+        /// Returns a new string in which all occurrences of <paramref name="oldValue"/> in the current instance are replaced with <paramref name="newValue"/>.
         /// </summary>
-        /// <param name="str">The specified string value.</param>
+        /// <param name="value">The specified string value.</param>
         /// <param name="oldValue">The string to be replaced.</param>
         /// <param name="newValue">The string to replace all occurrences of oldValue.</param>
-        /// <param name="comparison">Specifies the culture, case, and sort rules to be used by string matching.</param>
-        /// <returns>A string that is equivalent to the current string except that all instances of oldValue are replaced with newValue. If oldValue is not found in the current instance, the method returns the current instance unchanged.</returns>
-        public static string Replace(this string str, string oldValue, string newValue, StringComparison comparison)
+        /// <param name="comparisonSettings">Specifies the culture, case, and sort rules to be used by string matching.</param>
+        /// <returns>A string that had all occurences of <paramref name="oldValue"/> replaced with <paramref name="newValue"/>.</returns>
+        public static string Replace(this string value, string oldValue, string newValue, StringComparison comparisonSettings)
         {
             StringBuilder sb = new StringBuilder();
 
             int previousIndex = 0;
-            int index = str.IndexOf(oldValue, comparison);
+            int index = value.IndexOf(oldValue, comparisonSettings);
             while (index != -1)
             {
-                sb.Append(str.Substring(previousIndex, index - previousIndex));
+                sb.Append(value.Substring(previousIndex, index - previousIndex));
                 sb.Append(newValue);
                 index += oldValue.Length;
 
                 previousIndex = index;
-                index = str.IndexOf(oldValue, index, comparison);
+                index = value.IndexOf(oldValue, index, comparisonSettings);
             }
-            sb.Append(str.Substring(previousIndex));
+            sb.Append(value.Substring(previousIndex));
 
             return sb.ToString();
         }
 
         /// <summary>
-        /// Returns a new string in which all occurrences of specified characters in the current instance are each replaced with another specified string.
+        /// Returns a new string in which the occurence of every character in <paramref name="characters"/> is replaced by <paramref name="replacement"/>.
         /// </summary>
-        /// <param name="s">The specified string value.</param>
-        /// <param name="charString">List of characters to replace</param>
-        /// <param name="replace">Replace each character found with this string. Defaults as empty string to remove each character found</param>
-        public static string ReplaceAny(this string s, string charString, string replace = "")
+        /// <param name="value">The specified string value.</param>
+        /// <param name="characters">List of characters to replace</param>
+        /// <param name="replacement">Replacement string. Defaults to empty string to remove each character found</param>
+        public static string ReplaceAny(this string value, string characters, string replacement = "")
         {
-            return Regex.Replace(s, $"[{charString}]", replace);
+            return Regex.Replace(value, $"[{characters}]", replacement);
         }
 
         #endregion
@@ -181,59 +198,62 @@ namespace ChilliSource.Core.Extensions
         #region Trim 
 
         /// <summary>
-        /// Removes leading string from the specified string.
+        /// Removes all occurences of <paramref name="trimValue"/> from the start of the specified <paramref name="value"/>
         /// </summary>
-        /// <param name="target">The specified string value.</param>
-        /// <param name="trimString">Leading string to remove.</param>
-        /// <returns>The string that remains after leading string removed from the specified string.</returns>
-        public static string TrimStart(this string target, string trimString)
+        /// <param name="value">The specified string value.</param>
+        /// <param name="trimValue">Leading string to remove.</param>
+        /// <returns>The string that remains after leading string occurences have been removed from the specified string.</returns>
+        public static string TrimStart(this string value, string trimValue)
 		{
-			string result = target;
-			while (!String.IsNullOrEmpty(trimString) && result.StartsWith(trimString))
+			string result = value;
+			while (!String.IsNullOrEmpty(trimValue) && result.StartsWith(trimValue))
 			{
-				result = result.Substring(trimString.Length);
+				result = result.Substring(trimValue.Length);
 			}
 
 			return result;
 		}
 
 		/// <summary>
-		/// Removes trailing string from the specified string.
+		/// Removes all occurences of <paramref name="trimValue"/> from the end of the specified <paramref name="value"/>
 		/// </summary>
-		/// <param name="target">The specified string value.</param>
-		/// <param name="trimString">Trailing string to remove.</param>
-		/// <returns>The string that remains after trailing string removed from the specified string.</returns>
-		public static string TrimEnd(this string target, string trimString)
+		/// <param name="value">The specified string value.</param>
+		/// <param name="trimValue">Trailing string to remove.</param>
+		/// <returns>The string that remains after trailing string occurences have been removed from the specified string.</returns>
+		public static string TrimEnd(this string value, string trimValue)
 		{
-			string result = target;
-			while (!String.IsNullOrEmpty(trimString) && result.EndsWith(trimString))
+			string result = value;
+			while (!String.IsNullOrEmpty(trimValue) && result.EndsWith(trimValue))
 			{
-				result = result.Substring(0, result.Length - trimString.Length);
+				result = result.Substring(0, result.Length - trimValue.Length);
 			}
 
 			return result;
 		}
 
 		/// <summary>
-		/// Removes characters between the first start character and the first end character from the specified string.
+		/// Removes characters between the first occurence of the <paramref name="start"/> character and the first occurence of the <paramref name="end"/> character from the specified string.
 		/// </summary>
-		/// <param name="s">The specified string value.</param>
-		/// <param name="start">The first start character</param>
-		/// <param name="end">The first end character</param>
-		/// <returns>The string that remains after characters between the first start character and the first end character removed from the specified string.</returns>
-		public static string TrimBetween(this string s, char start, char end)
+		/// <param name="value">The specified string value.</param>
+		/// <param name="start">The start character</param>
+		/// <param name="end">The end character</param>
+		/// <returns>The string that remains after the character removal.</returns>
+		public static string TrimBetween(this string value, char start, char end)
 		{
-			var result = s;
+			var result = value;
 			while (true)
 			{
 				var startPos = result.IndexOf(start);
-				var endPos = result.IndexOf(end, startPos > 0 && startPos + 2 < s.Length ? startPos + 1 : 0);
-				if (startPos > -1 && endPos > -1 && endPos > startPos)
+				var endPos = result.IndexOf(end, startPos > 0 && startPos + 2 < value.Length ? startPos + 1 : 0);
+
+                if (startPos > -1 && endPos > -1 && endPos > startPos)
 				{
 					result = result.Remove(startPos, 1 + endPos - startPos);
 				}
 				else
-				{ break; }
+				{
+                    break;
+                }
 			}
 			return result;
 		}
@@ -242,39 +262,49 @@ namespace ChilliSource.Core.Extensions
 
         #region Format / Transform
         /// <summary>
-        /// Replaces one or more format items in a specified string with the string representation of a specified object.
+        /// Replaces the format placeholders in <paramref name="format"/> with the string representation of the <paramref name="object"/> object.
         /// </summary>
         /// <typeparam name="T">The type of the object.</typeparam>
         /// <param name="format">The format string.</param>
-        /// <param name="source">The object to format.</param>
-        /// <returns>A copy of format in which any format items are replaced by the string representation of arg0 when source object is not null, otherwise empty string.</returns>
-        public static string FormatIfNotNull<T>(this string format, T? source) where T : struct
+        /// <param name="object">The object to format.</param>
+        /// <returns>The formatted string when <paramref name="object"/> is not null, otherwise empty string.</returns>
+        public static string FormatIfNotNull<T>(this string format, T? @object) where T : struct
 		{
-			if (source.HasValue) return String.Format(format, source.Value);
+            if (@object.HasValue)
+            {
+                return String.Format(format, @object.Value);
+            }
 			return "";
 		}
 
         /// <summary>
-        /// Replaces one or more format items in a specified string with the string representation of a specified object.
+        ///  Replaces the format placeholders in <paramref name="format"/> with <paramref name="value"/>
         /// </summary>
         /// <param name="format">The format string.</param>
-        /// <param name="source">The string to format.</param>
-        /// <returns>A copy of format in which any format items are replaced by the string representation of arg0 when source object is not null, otherwise empty string.</returns>
-        public static string FormatIfNotNull(this string format, string source)
+        /// <param name="value">The string replacement value.</param>
+        /// <returnsThe formatted string when <paramref name="object"/> is not null or empty, otherwise empty string.</returns>
+        public static string FormatIfNotNull(this string format, string value)
         {
-            if (!String.IsNullOrEmpty(source)) return String.Format(format, source);
+            if (!String.IsNullOrEmpty(value))
+            {
+                return String.Format(format, value);
+            }
             return "";
         }
 
         /// <summary>
-        /// Formats the string with a custom mask format string, where one * may be used as a wildcard
+        /// Formats the specified <paramref name="value"/> with a custom <paramref name="mask"/> format string, where one * may be used as a wildcard
         /// </summary>
-        /// <param name="s"></param>
+        /// <param name="value">The original string value</param>
         /// <param name="mask">eg XXXX* or *XXXX or XXX*XXX or XXXX or X</param>
-        /// <returns></returns>
-        public static string FormatWithMask(this string s, string mask)
+        /// <returns>The formatted string</returns>
+        public static string FormatWithMask(this string value, string mask)
         {
-            if (String.IsNullOrEmpty(mask)) return "";
+            if (String.IsNullOrEmpty(mask))
+            {
+                return "";
+            }
+
             var wildcard = mask.IndexOf('*');
             if (wildcard >= 0)
             {
@@ -282,74 +312,89 @@ namespace ChilliSource.Core.Extensions
                 return String.Concat
                     (
                         @static[0],
-                        String.Concat(s.Skip(@static[0].Length).Take(s.Length - @static[0].Length - @static[1].Length)),
+                        String.Concat(value.Skip(@static[0].Length).Take(value.Length - @static[0].Length - @static[1].Length)),
                         @static[1]
                     );
             }
             else
             {
-                return mask.Length > 1 ? mask : mask.Repeat(s.Length);
+                return mask.Length > 1 ? mask : mask.Repeat(value.Length);
             }
         }
 
 		/// <summary>
-		/// Replaces {Placeholder} text in string with values from dictionary by matching place holder text to keys in dictionary.
+		/// Replaces {Placeholder} text in <paramref name="value"/> with values from <paramref name="dictionary"/> by matching the placeholder text to keys in the dictionary.
 		/// </summary>
-		/// <param name="s">The specified string value.</param>
-		/// <param name="dictionary">A System.Collections.Generic.Dictionary to replace.</param>
-		/// <param name="removeUnused">True to remove unmatched keys from the specified string, otherwise not.</param>
-		/// <returns>A string value with matched keys from dictionary replaced by values.</returns>
-		public static string TransformWith(this string s, Dictionary<string, object> dictionary, bool removeUnused = false)
+		/// <param name="value">The specified string value.</param>
+		/// <param name="dictionary">A System.Collections.Generic.Dictionary with replacement values.</param>
+		/// <param name="removeUnused">Determines whether to remove unmatched {Placeholder} tags from the specified string.</param>
+		/// <returns>The string with replaced values.</returns>
+		public static string TransformWith(this string value, Dictionary<string, object> dictionary, bool removeUnused = false)
 		{
 			foreach (var key in dictionary.Keys)
 			{
-				s = s.Replace("{" + key + "}", dictionary[key] == null ? "" : dictionary[key].ToString());
+				value = value.Replace("{" + key + "}", dictionary[key] == null ? "" : dictionary[key].ToString());
 			}
-			if (removeUnused) { s = s.TrimBetween('{', '}'); }
-			return s;
+
+            if (removeUnused)
+            {
+                value = value.TrimBetween('{', '}');
+            }
+			return value;
+		}
+
+        /// <summary>
+        /// Replaces {Placeholder} text in in <paramref name="value"/> with the property values of the <paramref name="transformWith"/> object.
+        /// </summary>
+        /// <param name="value">The specified string value.</param>
+        /// <param name="transformWith">Object whose property values will be used as replacements for the placeholders matching the property names.</param>
+        /// <param name="removeUnused">Determines whether to remove unmatched {Placeholder} tags from the specified string.</param>
+        /// <returns>The string with replaced values.</returns>
+        public static string TransformWith(this string value, object transformWith, bool removeUnused = false)
+		{
+            return TransformWith(value, transformWith.ToDictionary(), removeUnused);
 		}
 
 		/// <summary>
-		/// Replaces {Placeholder} text in string with property values from object.
+		/// Repeats the <paramref name="value"/> string <paramref name="count"/> times
 		/// </summary>
-		/// <param name="s">The specified string value.</param>
-		/// <param name="transformWith">Properties in this object will be used to replace placeholders.</param>
-		/// <returns>A string value replaced by property values from object.</returns>
-		public static string TransformWith(this string s, object transformWith, bool removeUnused = false)
+		/// <param name="value">String value to be repeated</param>
+		/// <param name="count">Number of times to repeat the string. A zero value results in an empty string being returned.</param>
+		/// <returns>The repeated string</returns>
+		public static string Repeat(this string value, int count)
 		{
-            return TransformWith(s, transformWith.ToDictionary(), removeUnused);
-		}
+            if (count <= 0)
+            {
+                return String.Empty;
+            }
 
-		/// <summary>
-		/// Repeat a string n times
-		/// </summary>
-		/// <param name="s"></param>
-		/// <param name="count">Number of times to repeat the string. 0 or this returns empty string.</param>
-		/// <returns></returns>
-		public static string Repeat(this string s, int count)
-		{
-			if (count <= 0) return String.Empty;
-			var dest = new char[s.Length * count];
-			for (int i = 0; i < dest.Length; i += 1)
+			var result = new char[value.Length * count];
+
+            for (int i = 0; i < result.Length; i += 1)
 			{
-				dest[i] = s[i % s.Length];
+				result[i] = value[i % value.Length];
 			}
-			return new string(dest);
+
+            return new string(result);
 		}
         #endregion
 
         #region Convert To and From
 
         /// <summary>
-        /// Converts JSON string to object.
-        /// By default Json is not formatted, uses camel casing and converts enum as strings.
+        /// Converts the <paramref name="jsonValue"/> string to an object of type <typeparamref name="T"/>.
+        /// By default Json is not formatted, uses camel casing and converts enums to strings.
         /// </summary>
-        /// <typeparam name="T">The type of the object to convert.</typeparam>
-        /// <param name="s">The JSON string.</param>
-        /// <returns>A reference to the newly created object representing JSON string.</returns>
-        public static T FromJson<T>(this string source, Formatting format = Formatting.None, IContractResolver resolver = null)
+        /// <typeparam name="T">The type of the resulting object.</typeparam>
+        /// <param name="jsonValue">The JSON string.</param>
+        /// <param name="resolver">The JSON serialization contract resolver to use</param>
+        /// <returns>A new object of type <typeparamref name="T"/> representing the JSON string.</returns>        
+        public static T FromJson<T>(this string jsonValue, Formatting format = Formatting.None, IContractResolver resolver = null)
         {
-            if (resolver == null) resolver = new CamelCasePropertyNamesContractResolver();
+            if (resolver == null)
+            {
+                resolver = new CamelCasePropertyNamesContractResolver();
+            }
 
             var settings = new JsonSerializerSettings()
             {
@@ -358,43 +403,50 @@ namespace ChilliSource.Core.Extensions
             };
             settings.Converters.Add(new StringEnumConverter());
 
-            return FromJson<T>(source, settings);
+            return FromJson<T>(jsonValue, settings);
         }
 
         /// <summary>
-        /// Converts JSON string to object using custom settings.
+        /// Converts the <paramref name="jsonValue"/> string to an object of type <typeparamref name="T"/> using custom deserialization settings.
         /// </summary>
         /// <typeparam name="T">The type of the object to convert.</typeparam>
-        /// <param name="source">The JSON string.</param>
+        /// <param name="jsonValue">The JSON string.</param>
         /// <param name="settings">The custom serializer settings.</param>
-        /// <returns>A reference to the newly created object representing JSON string.</returns>
-        public static T FromJson<T>(this string source, JsonSerializerSettings settings)
+        /// <returns>A new object of type <typeparamref name="T"/> representing JSON string.</returns>
+        public static T FromJson<T>(this string jsonValue, JsonSerializerSettings settings)
         {
-            if (source == null) return default(T);
+            if (jsonValue == null)
+            {
+                return default(T);
+            }
 
-            return JsonConvert.DeserializeObject<T>(source, settings);
+            return JsonConvert.DeserializeObject<T>(jsonValue, settings);
         }
 
         /// <summary>
-        /// Returns a MemoryStream with the bytes representing the <paramref name="inputString"/> encoded as <paramref name="encoding"/>
+        /// Returns a MemoryStream with the bytes representing the <paramref name="value"/> encoded as <paramref name="encoding"/>
         /// </summary>
         /// <returns>The stream.</returns>
-        /// <param name="inputString">Input string.</param>
+        /// <param name="value">Input string.</param>
         /// <param name="encoding">Encoding. Default is UTF8</param>
-        public static Stream ToStream(this string inputString, Encoding encoding = null)
+        public static Stream ToStream(this string value, Encoding encoding = null)
 		{
-			return new MemoryStream((encoding ?? Encoding.UTF8).GetBytes(inputString ?? ""));
+			return new MemoryStream((encoding ?? Encoding.UTF8).GetBytes(value ?? ""));
 		}
 
 		/// <summary>
-		/// Gets machine and framework version independent HashCode.
+		/// Returns a machine and framework version independent hash code for the specified string <paramref name="value"/>.
 		/// </summary>
 		/// <param name="value">The specified string value.</param>
-		/// <returns>A hash code.</returns>
+		/// <returns>The hash code representing the specified <paramref name="value"/>.</returns>
 		public static int? GetIndependentHashCode(this string value)
 		{
-			if (value == null) return null;
-			unchecked
+            if (value == null)
+            {
+                return null;
+            }
+
+            unchecked
 			{
 				int hash = 23;
 				foreach (char c in value)
@@ -405,69 +457,77 @@ namespace ChilliSource.Core.Extensions
 			}
 		}
 
-		/// <summary>
-		/// Gets first not null value from parameter list.
-		/// </summary>
-		/// <param name="source">The specified string value.</param>
-		/// <param name="nullDefaults">The specified string when it is not null, otherwise the first not null value from parameter list.</param>
-		/// <returns></returns>
-		public static string DefaultTo(this string source, params string[] nullDefaults)
+        /// <summary>
+        /// Returns either the <paramref name="value"/> or the first non-null default value from <paramref name="nullDefaults"/>
+        /// </summary>
+        /// <param name="value">The specified string value.</param>
+        /// <param name="nullDefaults">The list of null default values.</param>
+        /// <returns>Either the <paramref name="value"/> or the first non-null default value from <paramref name="nullDefaults"</returns>
+        public static string DefaultTo(this string value, params string[] nullDefaults)
 		{
-			if (!String.IsNullOrEmpty(source)) return source;
+            if (!String.IsNullOrEmpty(value))
+            {
+                return value;
+            }
 
 			foreach (string nullDefault in nullDefaults)
 			{
-				if (!String.IsNullOrEmpty(nullDefault)) return nullDefault;
+                if (!String.IsNullOrEmpty(nullDefault))
+                {
+                    return nullDefault;
+                }
 			}
 
-			return source; //Don't change if "" or null passed in as source
+			return value; //Don't change if "" or null passed in as source
 		}
 
 		/// <summary>
-		/// Converts specified string to byte array using UTF8 encoding.
+		/// Converts specified <paramref name="value"/> string to byte array using the specified <paramref name="encoding"/>.
 		/// </summary>
-		/// <param name="s">The specified string value.</param>
+		/// <param name="value">The specified string value.</param>
 		/// <returns>A byte array.</returns>
-		public static byte[] ToByteArray(this string s, Encoding encoding = null)
+		public static byte[] ToByteArray(this string value, Encoding encoding = null)
 		{
 			encoding = encoding ?? new UTF8Encoding();
-			return encoding.GetBytes(s);
+			return encoding.GetBytes(value);
 		}
 
-		/// <summary>
-		/// Converts the provided string to a byte array
-		/// </summary>
-		/// <returns>The byte array.</returns>
-		/// <param name="hexString">Hex string.</param>
-		public static byte[] ToByteArrayFromHex(this string hexString)
+        /// <summary>
+        /// Converts the specified <paramref name="hexValue"/> string to a byte array
+        /// </summary>
+        /// <param name="hexValue">Hex string to convert.</param>
+        /// <returns>The byte array.</returns>
+        public static byte[] ToByteArrayFromHex(this string hexValue)
 		{
-			if (string.IsNullOrEmpty(hexString))
+			if (string.IsNullOrEmpty(hexValue))
 			{
 				return null;
 			}
 
-			int NumberChars = hexString.Length;
+			int NumberChars = hexValue.Length;
 			byte[] bytes = new byte[NumberChars / 2];
 			for (int i = 0; i < NumberChars; i += 2)
 			{
-				bytes[i / 2] = Convert.ToByte(hexString.Substring(i, 2), 16);
+				bytes[i / 2] = Convert.ToByte(hexValue.Substring(i, 2), 16);
 			}
 			return bytes;
 		}
 
         /// <summary>
-        /// Converts a string to System.Collections.Generic.IEnumerable&lt;T&gt by the specified delimiter, with each string in the list applying the defined converter function.
+        /// Splits the specified <paramref name="value"/> using the specified <paramref name="delimiter"/> and returns a System.Collections.Generic.IEnumerable&lt;T&gt by changing the type of each element from string to <typeparamref name="T"/>.
         /// </summary>
         /// <typeparam name="T">The type of the elements of the generic enumerable list.</typeparam>
-        /// <param name="source">A string value to convert.</param>
-        /// <param name="delimiter">The delimiter to use.</param>
+        /// <param name="value">The string value to convert.</param>
+        /// <param name="delimiter">The delimiter that separates the individual items in the original string.</param>
         /// <returns>A System.Collections.Generic.IEnumerable&lt;T&gt.</returns>
-        public static IEnumerable<T> ToEnumerable<T>(this string source, string delimiter = ",") where T : IConvertible
+        public static IEnumerable<T> ToEnumerable<T>(this string value, string delimiter = ",") where T : IConvertible
         {
-            if (String.IsNullOrWhiteSpace(source))
+            if (String.IsNullOrWhiteSpace(value))
+            {
                 return new List<T>();
+            }
 
-            var list = source.Split(new[] { delimiter }, StringSplitOptions.None);
+            var list = value.Split(new[] { delimiter }, StringSplitOptions.None);
             return list.Select(x => String.IsNullOrEmpty(x) ? default(T) : (T)Convert.ChangeType(x, typeof(T)));
         }
 
@@ -476,16 +536,20 @@ namespace ChilliSource.Core.Extensions
         #region Helpers
 
         /// <summary>
-        /// Returns a value indicating whether the specified System.String object occurs within this string.
+        /// Returns a value indicating whether <paramref name="searchValue"/> occurs within <paramref name="value"/>.
         /// </summary>
-        /// <param name="source">The specified string value.</param>
-        /// <param name="value">The string to seek.</param>
-        /// <param name="comp">One of the enumeration values that specifies the rules for the search.</param>
-        /// <returns>True if the value parameter occurs within this string, or if value is the empty string (""); otherwise, false.</returns>
-        public static bool Contains(this string source, string value, StringComparison comp)
+        /// <param name="value">The specified string value.</param>
+        /// <param name="searchValue">The string to search for.</param>
+        /// <param name="comparison">Specifies how the string comparison should be performed.</param>
+        /// <returns>True if <paramref name="value"/> is either an empty string or contains <paramref name="searchValue"/>; false otherwise.</returns>
+        public static bool Contains(this string value, string searchValue, StringComparison comparison)
         {
-            if (source == null) return false;
-            return source.IndexOf(value, comp) >= 0;
+            if (value == null)
+            {
+                return false;
+            }
+
+            return value.IndexOf(searchValue, comparison) >= 0;
         }
 
         #endregion
