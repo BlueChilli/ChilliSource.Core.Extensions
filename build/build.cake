@@ -183,12 +183,12 @@ Action<string> build = (solution) =>
     			.WithProperty("NoWarn", "1591") // ignore missing XML doc warnings
 				.WithProperty("TreatWarningsAsErrors", treatWarningsAsErrors.ToString())
 			    .WithProperty("Version", nugetVersion.ToString())
-			    .WithProperty("Authors",  "\"" + string.Join(",", authors) + "\"")
+			    .WithProperty("Authors",  "\"" + string.Join(" ", authors) + "\"")
 			    .WithProperty("Copyright",  "\"" + copyright + "\"")
 			    .WithProperty("PackageProjectUrl",  "\"" + githubUrl + "\"")
 			    .WithProperty("PackageIconUrl",  "\"" + iconUrl + "\"")
 			    .WithProperty("PackageLicenseUrl",  "\"" + licenceUrl + "\"")
-			    .WithProperty("PackageTags",  "\"" + string.Join(",", tags) + "\"")
+			    .WithProperty("PackageTags",  "\"" + string.Join(" ", tags) + "\"")
 			    .WithProperty("PackageReleaseNotes",  "\"" +  string.Format("{0}/releases", githubUrl) + "\"")
 			  	.SetVerbosity(Verbosity.Minimal)
 				.SetNodeReuse(false);
