@@ -1,13 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.6;net461;net462</TargetFrameworks>
+    <TargetFrameworks>netstandard1.6;net461;net462;</TargetFrameworks>
     <DebugType>pdbonly</DebugType>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
-    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
-    <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
-    <GenerateAssemblyCopyRightAttribute>false</GenerateAssemblyCopyRightAttribute>
     <AssemblyName>ChilliSource.Core.Extensions</AssemblyName>
     <RootNamespace>ChilliSource.Core.Extensions</RootNamespace>
     <Description>Core Extensions library for ChilliSource</Description>
@@ -15,12 +10,13 @@
     <SourceLinkUrl>https://github.com/BlueChilli/ChilliSource.Core.Extensions/</SourceLinkUrl>
     <RepositoryUrl>https://github.com/BlueChilli/ChilliSource.Core.Extensions</RepositoryUrl>
     <PackageLicenseUrl>https://github.com/BlueChilli/ChilliSource.Core.Extensions/blob/master/LICENSE</PackageLicenseUrl>
-    <Authors>Blue Chilli Technology</Authors>
-	<EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <Authors>Blue Chilli Technology Pty Ltd</Authors>
+	  <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+	  <Copyright>Copyright Blue Chilli Technology Pty Ltd 2017</Copyright>
+	  <PackageTags>ChilliSource, ChilliSource Core Extensions</PackageTags>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Include="..\CommonAssemblyInfo.cs" Link="Properties\CommonAssemblyInfo.cs" />	
+  <ItemGroup>	
 	<Compile Include="Attributes\*.cs" />
     <Compile Include="*.cs" />
   </ItemGroup>
@@ -35,8 +31,12 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net462|AnyCPU'">
     <DocumentationFile>bin\Release\net462\ChilliSource.Core.Extensions.xml</DocumentationFile>
-  </PropertyGroup>  
+  </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net45|AnyCPU'">
+    <DocumentationFile>bin\Release\net462\ChilliSource.Core.Extensions.xml</DocumentationFile>
+  </PropertyGroup>
+  
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
   </ItemGroup>
