@@ -10,7 +10,7 @@ ChilliSource.Core.Extensions is a collection of .NET Standard libraries containi
 
 ### Installation ###
 
-All ChilliSource.Core.Extensions libraries are available via NuGet.
+The library is available via NuGet [here](https://www.nuget.org/packages/ChilliSource.Core.Extensions).
 
 ### Releases ###
 

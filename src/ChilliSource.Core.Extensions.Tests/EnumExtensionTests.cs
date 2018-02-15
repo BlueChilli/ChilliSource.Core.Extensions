@@ -16,15 +16,15 @@ using System.Collections.Generic;
 
 namespace Tests
 {
-	public class EnumExtensionsTests
-	{
-		public enum TestEnum
-		{
-			[System.ComponentModel.Description("Test1 Description")]
+    public class EnumExtensionsTests
+    {
+        public enum TestEnum
+        {
+            [System.ComponentModel.Description("Test1 Description")]
             [Data("Number", 1)]
             [Data("String", "ABC")]
             Test1 = 1,
-			[System.ComponentModel.Description("Test2 Description")]
+            [System.ComponentModel.Description("Test2 Description")]
             [Data("Number", 2)]
             [Data("String", "XYZ")]
             Test2,
@@ -54,13 +54,13 @@ namespace Tests
         [Fact]
         public void Parse_ReturnsEnumIfFound()
         {
-            var result = TestEnum.Test1.Parse<TestEnum>("Test1");
+            var result = TestEnum.Test1.ParseEnum<TestEnum>("Test1");
             Assert.Equal(TestEnum.Test1, result);
 
-            var result2 = TestEnum.Test1.Parse<TestEnum>("Rabbit");
+            var result2 = TestEnum.Test1.ParseEnum<TestEnum>("Rabbit");
             Assert.NotEqual(TestEnum.Test1, result2);
 
-            var result3 = TestEnum.Test1.Parse<TestEnum>("1");
+            var result3 = TestEnum.Test1.ParseEnum<TestEnum>("1");
             Assert.Equal(TestEnum.Test1, result3);
         }
 
@@ -103,13 +103,13 @@ namespace Tests
 
         #region Attributes
         [Fact]
-		public void GetAttribute_ShouldReturnAttribute_IfTypeExists()
-		{
-			var result = TestEnum.Test1.GetAttribute<System.ComponentModel.DescriptionAttribute>();
+        public void GetAttribute_ShouldReturnAttribute_IfTypeExists()
+        {
+            var result = TestEnum.Test1.GetAttribute<System.ComponentModel.DescriptionAttribute>();
 
-			Assert.NotNull(result);
-			Assert.Equal(typeof(System.ComponentModel.DescriptionAttribute), result.GetType());
-			Assert.Equal("Test1 Description", result.Description);
+            Assert.NotNull(result);
+            Assert.Equal(typeof(System.ComponentModel.DescriptionAttribute), result.GetType());
+            Assert.Equal("Test1 Description", result.Description);
 
             var result2 = TestEnum.Test1.GetAttribute<System.ComponentModel.DisplayNameAttribute>();
             Assert.Null(result2);

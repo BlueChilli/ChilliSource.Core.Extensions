@@ -238,8 +238,22 @@ namespace Tests
             public int Id { get; set; }
             public string Name { get; set; }
             public bool IsActive { get; set; }
-            public EnumExtensionsTests.TestEnum Status { get; set; }
+            public StringExtensionTests.TestEnum Status { get; set; }
             public DateTime DateCreated { get; set; }
+        }
+
+        public enum TestEnum
+        {
+            [System.ComponentModel.Description("Test1 Description")]
+            [Data("Number", 1)]
+            [Data("String", "ABC")]
+            Test1 = 1,
+            [System.ComponentModel.Description("Test2 Description")]
+            [Data("Number", 2)]
+            [Data("String", "XYZ")]
+            Test2,
+            [Obsolete]
+            Test3
         }
 
         [Fact]
@@ -251,14 +265,14 @@ namespace Tests
             Assert.Equal(1, result.Id);
             Assert.Equal("Bob", result.Name);
             Assert.Equal(false, result.IsActive);
-            Assert.Equal(EnumExtensionsTests.TestEnum.Test2, result.Status);
+            Assert.Equal(StringExtensionTests.TestEnum.Test2, result.Status);
             Assert.Equal(new DateTime(2001, 10, 1), result.DateCreated);
 
             var test2 = "{\"Id\":1,\"Name\":\"Bob\",\"IsActive\":false,\"Status\":2,\"DateCreated\":\"2001-10-01\"}";
             result = test2.FromJson<JsonTest>();
             Assert.Equal("Bob", result.Name);
             Assert.Equal(false, result.IsActive);
-            Assert.Equal(EnumExtensionsTests.TestEnum.Test2, result.Status);
+            Assert.Equal(StringExtensionTests.TestEnum.Test2, result.Status);
             Assert.Equal(new DateTime(2001, 10, 1), result.DateCreated);
 
         }
