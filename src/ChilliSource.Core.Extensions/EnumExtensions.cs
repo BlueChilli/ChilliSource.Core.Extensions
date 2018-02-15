@@ -55,7 +55,7 @@ namespace ChilliSource.Core.Extensions
         /// <param name="enum">The specified enumeration value.</param>
         /// <param name="value">A string containing the name or value to convert.</param>
         /// <returns>An object of type enumType whose value is represented by value.</returns>
-        public static T Parse<T>(this Enum @enum, string value) where T : struct
+        public static T ParseEnum<T>(this Enum @enum, string value) where T : struct
         {
             T result;
             if (Enum.TryParse<T>(value, out result))
