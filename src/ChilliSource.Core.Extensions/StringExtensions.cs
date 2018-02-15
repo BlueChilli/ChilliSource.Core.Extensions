@@ -529,6 +529,66 @@ namespace ChilliSource.Core.Extensions
             return list.Select(x => String.IsNullOrEmpty(x) ? default(T) : (T)Convert.ChangeType(x, typeof(T)));
         }
 
+
+        /// <summary>
+        /// Converts the specified string to the type of object.
+        /// </summary>
+        /// <typeparam name="T">The type of object.</typeparam>
+        /// <param name="s">The specified string value.</param>
+        /// <returns>The strongly typed object representing the converted text.</returns>
+        public static T To<T>(this string s)
+        {
+            var type = typeof(T);
+            if (String.IsNullOrEmpty(s))
+            {
+                return default(T);
+            }
+
+            Type valueType;
+            if (IsNullableType(type, out valueType))
+            {
+                return (T)ToNullableValueType(valueType, s);
+            }
+
+            return (T)Convert.ChangeType(s, type);
+        }
+
+        private static bool IsNullableType(Type theType, out Type valueType)
+        {
+            valueType = null;
+            if (theType.IsGenericType &&
+            theType.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
+            {
+                var args = theType.GetGenericArguments();
+                if (args.Length > 0)
+                    valueType = args[0];
+            }
+
+            return valueType != null;
+        }
+
+        //(e.g ValueType = int)
+        // returns Nullable<int>
+        private static object ToNullableValueType(Type valueType, string s)
+        {
+            if (!String.IsNullOrEmpty(s))
+            {
+                return TypeDescriptor.GetConverter(valueType).ConvertFrom(s);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Converts the specified string to the type of System.Nullable&lt;T&gt; generic type.
+        /// </summary>
+        /// <typeparam name="T">The type of object.</typeparam>
+        /// <param name="s">The specified string value.</param>
+        /// <returns>The System.Nullable&lt;T&gt; representing the converted text.</returns>
+        public static Nullable<T> ToNullable<T>(this string s) where T : struct
+        {
+            return (Nullable<T>)ToNullableValueType(typeof(T), s);
+        }
+
         #endregion
 
         #region Helpers
@@ -550,7 +610,6 @@ namespace ChilliSource.Core.Extensions
             return value.IndexOf(searchValue, comparison) >= 0;
         }
 
-        #endregion
-
+        #endregion   
     }
 }

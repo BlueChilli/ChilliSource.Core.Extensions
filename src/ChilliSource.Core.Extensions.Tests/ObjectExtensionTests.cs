@@ -21,7 +21,7 @@ namespace Tests
 		[Fact]
 		public void ToJson_ShouldReturnJsonRepresentationOfObject()
 		{
-            var test = new { Id = 1, Name = "Bob", IsActive = false, Status = EnumExtensionsTests.TestEnum.Test1, DateCreated = new DateTime(2001, 10, 1) };
+            var test = new { Id = 1, Name = "Bob", IsActive = false, Status = StringExtensionTests.TestEnum.Test1, DateCreated = new DateTime(2001, 10, 1) };
 
             var result = test.ToJson();
             Assert.Equal("{\"id\":1,\"name\":\"Bob\",\"isActive\":false,\"status\":\"Test1\",\"dateCreated\":\"2001-10-01T00:00:00\"}", result);
