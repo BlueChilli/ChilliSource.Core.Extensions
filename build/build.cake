@@ -118,10 +118,10 @@ Action SetGitVersionData = () => {
 		buildVersion = gitVersion.FullBuildMetaData;
 	}
 	else {
-		majorMinorPatch = "1.0.0";
+		majorMinorPatch = "2.0.0";
 		semVersion = "0";
-		informationalVersion ="1.0.0";
-		nugetVersion = "1.0.0";
+		informationalVersion ="2.0.0";
+		nugetVersion = "2.0.0";
 		buildVersion = "alpha";
 	}
 };
