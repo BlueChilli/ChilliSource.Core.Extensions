@@ -54,13 +54,13 @@ namespace Tests
         [Fact]
         public void Parse_ReturnsEnumIfFound()
         {
-            var result = TestEnum.Test1.ParseEnum<TestEnum>("Test1");
+            var result = EnumExtensions.Parse<TestEnum>("Test1");
             Assert.Equal(TestEnum.Test1, result);
 
-            var result2 = TestEnum.Test1.ParseEnum<TestEnum>("Rabbit");
+            var result2 = EnumExtensions.Parse<TestEnum>("Rabbit");
             Assert.NotEqual(TestEnum.Test1, result2);
 
-            var result3 = TestEnum.Test1.ParseEnum<TestEnum>("1");
+            var result3 = EnumExtensions.Parse<TestEnum>("1");
             Assert.Equal(TestEnum.Test1, result3);
         }
 
