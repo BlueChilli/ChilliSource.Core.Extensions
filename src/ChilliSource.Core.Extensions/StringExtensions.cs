@@ -27,6 +27,58 @@ namespace ChilliSource.Core.Extensions
     /// </summary>
     public static class StringExtensions
     {
+        #region Sentence formating
+        /// <summary>
+        /// Adds space before upper case character in the specified string.
+        /// </summary>
+        /// <param name="s">The specified string to process.</param>
+        /// <returns>A string value with space before upper case character.</returns>
+        public static string SplitByUppercase(this string s)
+        {
+            MatchCollection mc = Regex.Matches(s, @"(\p{Nd}+)|(\P{Lu}+)|(\p{Lu}+\p{Ll}*)");
+            string result = "";
+            foreach (Match m in mc)
+            {
+                result += m.ToString() + " ";
+            }
+            return result.TrimEnd(' ');
+        }
+
+        /// <summary>
+        /// Formats the specified string to sentence case.
+        /// </summary>
+        /// <param name="s">The specified string to format.</param>
+        /// <param name="splitByUppercase">True to add space before upper case character, otherwise not.</param>
+        /// <returns>A string value formatted to sentence case.</returns>
+        public static string ToSentenceCase(this string s, bool splitByUppercase = false)
+        {
+            string input = splitByUppercase ? s.SplitByUppercase() : s;
+
+            if (input.Length == 0)
+                return input;
+
+            return input.Substring(0, 1) + input.Substring(1).ToLower();
+        }
+
+        /// <summary>
+        /// Capitalises the specified string. 
+        /// </summary>
+        /// <param name="s">The specified string.</param>
+        /// <param name="allWords">True to capitalise all word in the string, false to capitalise the first word only.</param>
+        /// <returns>A capitalised string value.</returns>
+        public static string Capitalise(this string s, bool allWords = false)
+        {
+            if (String.IsNullOrEmpty(s)) return s;
+
+            if (allWords)
+            {
+                return String.Join(" ", s.Split(' ').Select(x => x.Substring(0, 1).ToUpper() + x.Substring(1)));
+            }
+            return s.Substring(0, 1).ToUpper() + s.Substring(1);
+        }
+
+        #endregion
+
         #region Sanitise / Remove / Replace
         /// <summary>
         /// Converts a string value to valid file path name.
@@ -556,10 +608,10 @@ namespace ChilliSource.Core.Extensions
         private static bool IsNullableType(Type theType, out Type valueType)
         {
             valueType = null;
-            if (theType.IsGenericType &&
+            if (theType.GetTypeInfo().IsGenericType &&
             theType.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
             {
-                var args = theType.GetGenericArguments();
+                var args = theType.GetTypeInfo().GetGenericArguments();
                 if (args.Length > 0)
                     valueType = args[0];
             }

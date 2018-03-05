@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 #addin "Cake.FileHelpers"
 #addin "Cake.Incubator"
-#addin "Cake.Watch"
+//#addin "Cake.Watch"
 #addin nuget:?package=Newtonsoft.Json
 //////////////////////////////////////////////////////////////////////
 // TOOLS
@@ -118,10 +118,10 @@ Action SetGitVersionData = () => {
 		buildVersion = gitVersion.FullBuildMetaData;
 	}
 	else {
-		majorMinorPatch = "1.0.0";
+		majorMinorPatch = "2.0.0";
 		semVersion = "0";
-		informationalVersion ="1.0.0";
-		nugetVersion = "1.0.0";
+		informationalVersion ="2.0.0";
+		nugetVersion = "2.0.0";
 		buildVersion = "alpha";
 	}
 };
@@ -477,17 +477,17 @@ Task("Default")
 
 });
 
-Task("WatchFiles")
-    .Does(() =>
-{
-	var settings = new WatchSettings { Recursive = true, Path = "../src", Pattern = "*.cs" };
-	Watch(settings , (changes) => {
-	    var list = changes.ToList();
-	    if(list.Count() > 0) {
-	    	RunTarget("RunUnitTests");
-	    }
-	});
-});
+//Task("WatchFiles")
+//    .Does(() =>
+//{
+//	var settings = new WatchSettings { Recursive = true, Path = "../src", Pattern = "*.cs" };
+//	Watch(settings , (changes) => {
+//	    var list = changes.ToList();
+//	    if(list.Count() > 0) {
+//	    	RunTarget("RunUnitTests");
+//	    }
+//	});
+//});
 
 // Used to test Setup / Teardown
 Task("None")
