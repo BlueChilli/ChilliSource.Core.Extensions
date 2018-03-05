@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net461;net462;</TargetFrameworks>
+    <TargetFrameworks>netstandard1.6;netstandard2.0;net461;net462;</TargetFrameworks>
     <DebugType>pdbonly</DebugType>
     <AssemblyName>ChilliSource.Core.Extensions</AssemblyName>
     <RootNamespace>ChilliSource.Core.Extensions</RootNamespace>
@@ -14,29 +14,21 @@
 	  <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
 	  <Copyright>Copyright Blue Chilli Technology Pty Ltd 2017</Copyright>
 	  <PackageTags>ChilliSource, ChilliSource Core Extensions</PackageTags>
+    <GenerateDocumentationFile Condition=" '$(Configuration)' == 'Release' ">true</GenerateDocumentationFile>
+    <Product>$(AssemblyName) ($(TargetFramework))</Product>
+    <LangVersion>default</LangVersion>
+    <DefineConstants>$(DefineConstants);</DefineConstants>
+    <IsTestProject>$(MSBuildProjectName.Contains('Tests'))</IsTestProject>
   </PropertyGroup>
 
+    
+  
+  
   <ItemGroup>	
-	<Compile Include="Attributes\*.cs" />
+	  <Compile Include="Attributes\*.cs" />
     <Compile Include="*.cs" />
   </ItemGroup>
-  
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard1.6|AnyCPU'">
-    <DocumentationFile>bin\Release\netstandard1.6\ChilliSource.Core.Extensions.xml</DocumentationFile>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net461|AnyCPU'">
-    <DocumentationFile>bin\Release\net461\ChilliSource.Core.Extensions.xml</DocumentationFile>
-  </PropertyGroup>  
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net462|AnyCPU'">
-    <DocumentationFile>bin\Release\net462\ChilliSource.Core.Extensions.xml</DocumentationFile>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net45|AnyCPU'">
-    <DocumentationFile>bin\Release\net462\ChilliSource.Core.Extensions.xml</DocumentationFile>
-  </PropertyGroup>
-  
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
   </ItemGroup>

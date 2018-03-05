@@ -608,10 +608,10 @@ namespace ChilliSource.Core.Extensions
         private static bool IsNullableType(Type theType, out Type valueType)
         {
             valueType = null;
-            if (theType.IsGenericType &&
+            if (theType.GetTypeInfo().IsGenericType &&
             theType.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
             {
-                var args = theType.GetGenericArguments();
+                var args = theType.GetTypeInfo().GetGenericArguments();
                 if (args.Length > 0)
                     valueType = args[0];
             }

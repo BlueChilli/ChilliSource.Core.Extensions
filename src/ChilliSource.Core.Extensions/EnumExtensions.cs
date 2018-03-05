@@ -166,7 +166,7 @@ namespace ChilliSource.Core.Extensions
             CheckTIsEnum<T>();
 
             Type t = e.GetType();
-            bool isFlags = t.GetCustomAttributes<FlagsAttribute>().Any();
+            bool isFlags = t.GetTypeInfo().GetCustomAttributes<FlagsAttribute>().Any();
 
             foreach (T item in list)
             {
@@ -416,13 +416,13 @@ namespace ChilliSource.Core.Extensions
             if (value == null) return "";
 
             var type = value.GetType();
-            var camelCase = type.GetCustomAttributes<CamelCaseAttribute>().Any();
+            var camelCase = type.GetTypeInfo().GetCustomAttributes<CamelCaseAttribute>().Any();
 
             var result = new List<string>();
             var values = value.ToString().Split(',').Select(x => x.Trim());   //Flags
             foreach (var v in values)
             {
-                var fi = value.GetType().GetField(v);
+                var fi = value.GetType().GetTypeInfo().GetField(v);
                 DescriptionAttribute[] attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
                 result.Add(attributes.Length > 0 ? attributes[0].Description : camelCase ? v.SplitByUppercase() : v.ToSentenceCase(true));
             }
