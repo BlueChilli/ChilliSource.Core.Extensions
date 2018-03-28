@@ -52,6 +52,15 @@ namespace Tests
         }
 
         [Fact]
+        public void ToList_ShouldReturnListOfValuesForEnumType()
+        {
+            var result = TestEnum.Test1.ToList<TestEnum>();
+            Assert.NotNull(result);
+            Assert.True(result.Count() == 2);
+            Assert.Equal(TestEnum.Test2, result.Last());
+        }
+
+        [Fact]
         public void Parse_ReturnsEnumIfFound()
         {
             var result = EnumExtensions.Parse<TestEnum>("Test1");

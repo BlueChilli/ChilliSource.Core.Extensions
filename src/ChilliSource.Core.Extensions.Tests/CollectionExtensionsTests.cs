@@ -37,7 +37,7 @@ namespace Tests
         }
 
         [Fact]
-        public void DistincyBy_ShouldReturnUniqueItems()
+        public void DistinctBy_ShouldReturnUniqueItems()
         {
             var list = new List<KeyValuePair<int, int>> { new KeyValuePair<int, int>(1, 1), new KeyValuePair<int, int>(1, 2), new KeyValuePair<int, int>(2, 3) };
             var result = list.DistinctBy(x => x.Key).ToList();

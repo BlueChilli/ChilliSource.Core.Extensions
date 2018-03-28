@@ -131,6 +131,17 @@ namespace ChilliSource.Core.Extensions
         }
 
         /// <summary>
+        /// Converts enumeration type to System.Collections.Generic.List&lt;T&gt;. 
+        /// </summary>
+        /// <typeparam name="T">Type of the object converted.</typeparam>
+        /// <param name="e">The specified enumeration type.</param>
+        /// <returns>A System.Collections.Generic.List&lt;T&gt;.</returns>
+        public static List<T> ToList<T>(this Enum e, bool excludeObsolete = true) where T : struct, IConvertible, IFormattable
+        {
+            return GetValues<T>(excludeObsolete).ToList();
+        }
+
+        /// <summary>
         /// Return the next enum in sequence
         /// </summary>
         public static T Next<T>(this T @enum) where T : struct, IConvertible, IFormattable
