@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.6;netstandard2.0;net461;net462;</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net461;net462;net472;</TargetFrameworks>
     <DebugType>pdbonly</DebugType>
     <AssemblyName>ChilliSource.Core.Extensions</AssemblyName>
     <RootNamespace>ChilliSource.Core.Extensions</RootNamespace>
@@ -11,25 +11,21 @@
     <RepositoryUrl>https://github.com/BlueChilli/ChilliSource.Core.Extensions</RepositoryUrl>
     <PackageLicenseUrl>https://github.com/BlueChilli/ChilliSource.Core.Extensions/blob/master/LICENSE</PackageLicenseUrl>
     <Authors>Blue Chilli Technology Pty Ltd</Authors>
-	  <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-	  <Copyright>Copyright Blue Chilli Technology Pty Ltd 2017</Copyright>
-	  <PackageTags>ChilliSource, ChilliSource Core Extensions</PackageTags>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <Copyright>Copyright Blue Chilli Technology Pty Ltd 2017</Copyright>
+    <PackageTags>ChilliSource, ChilliSource Core Extensions</PackageTags>
     <GenerateDocumentationFile Condition=" '$(Configuration)' == 'Release' ">true</GenerateDocumentationFile>
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
     <LangVersion>default</LangVersion>
-    <DefineConstants>$(DefineConstants);</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NETSTANDARD2_0</DefineConstants>
     <IsTestProject>$(MSBuildProjectName.Contains('Tests'))</IsTestProject>
   </PropertyGroup>
-
-    
-  
-  
   <ItemGroup>	
 	  <Compile Include="Attributes\*.cs" />
     <Compile Include="*.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
   </ItemGroup>
 </Project>
