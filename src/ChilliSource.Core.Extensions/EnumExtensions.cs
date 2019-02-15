@@ -272,7 +272,6 @@ namespace ChilliSource.Core.Extensions
             return obj1;
         }
 
-
         #endregion
 
         #region Attributes helpers
