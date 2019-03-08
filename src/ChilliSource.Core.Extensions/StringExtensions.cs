@@ -377,10 +377,10 @@ namespace ChilliSource.Core.Extensions
         /// Replaces {Placeholder} text in <paramref name="value"/> with values from <paramref name="dictionary"/> by matching the placeholder text to keys in the dictionary.
         /// </summary>
         /// <param name="value">The specified string value.</param>
-        /// <param name="dictionary">A System.Collections.Generic.Dictionary with replacement values.</param>
+        /// <param name="dictionary">A System.Collections.Generic.IDictionary with replacement values.</param>
         /// <param name="removeUnused">Determines whether to remove unmatched {Placeholder} tags from the specified string.</param>
         /// <returns>The string with replaced values.</returns>
-        public static string TransformWith(this string value, Dictionary<string, object> dictionary, bool removeUnused = false)
+        public static string TransformWith(this string value, IDictionary<string, object> dictionary, bool removeUnused = false)
         {
             foreach (var key in dictionary.Keys)
             {
