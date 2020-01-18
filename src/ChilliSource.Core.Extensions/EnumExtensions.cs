@@ -433,6 +433,7 @@ namespace ChilliSource.Core.Extensions
             foreach (var v in values)
             {
                 var fi = value.GetType().GetTypeInfo().GetField(v);
+                if (fi == null) continue;
                 DescriptionAttribute[] attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
                 result.Add(attributes.Length > 0 ? attributes[0].Description : camelCase ? v.SplitByUppercase() : v.ToSentenceCase(true));
             }

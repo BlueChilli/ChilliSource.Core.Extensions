@@ -112,6 +112,24 @@ namespace Tests
 
         #region Attributes
         [Fact]
+        public void GetDescription_ShouldReturnDescriptionAttributeValue_IfExists()
+        {
+            var result = TestEnum.Test1.GetDescription();
+            Assert.NotNull(result);
+            Assert.Equal("Test1 Description", result);
+
+            var result2 = TestEnum.Test2.GetDescription();
+            Assert.NotNull(result2);
+            Assert.Equal("Test2 Description", result2);
+
+            var result3 = TestEnum.Test3.GetDescription();
+            Assert.Equal("Test 3", result3);
+
+            var result4 = ((TestEnum)0).GetDescription();
+            Assert.Equal("", result4);
+        }
+
+        [Fact]
         public void GetAttribute_ShouldReturnAttribute_IfTypeExists()
         {
             var result = TestEnum.Test1.GetAttribute<System.ComponentModel.DescriptionAttribute>();

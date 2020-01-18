@@ -34,11 +34,11 @@ namespace Tests
 		{
             bool input = true;
             var result = input.Toggle();
-            Assert.Equal(false, result);
+            Assert.False(result);
 
             input = false;
             result = input.Toggle();
-            Assert.Equal(true, result);
+            Assert.True(result);
         }
 	}
 }
