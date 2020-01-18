@@ -49,7 +49,7 @@ namespace ChilliSource.Core.Extensions
         /// <param name="source">The System.Collections.Generic.List&lt;T&gt;.</param>
         /// <param name="item">The item to add or update.</param>
         /// <param name="keySelector">A function to select the key.</param>
-        public static void AddOrUpdate<T, TKey>(this List<T> source, T item, Func<T, TKey> keySelector)
+        public static void AddOrUpdate<T, TKey>(this IList<T> source, T item, Func<T, TKey> keySelector)
         {
             if (item == null)
             {
