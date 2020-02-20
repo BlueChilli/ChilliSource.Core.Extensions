@@ -86,7 +86,7 @@ namespace ChilliSource.Core.Extensions
             CheckTIsEnum<T>();
 
             T result;
-            if (Enum.TryParse<T>(value, out result))
+            if (Enum.TryParse<T>(value, true, out result))
             {
                 return result;
             }
