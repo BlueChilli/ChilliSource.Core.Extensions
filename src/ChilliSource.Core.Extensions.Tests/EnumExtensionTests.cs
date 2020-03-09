@@ -32,6 +32,15 @@ namespace Tests
             Test3
         }
 
+        public enum TestEnumOrder
+        {
+            Test3,
+            [Order(2)]
+            Test2,
+            [Order(1)]
+            Test1
+        }
+
         [Fact]
         public void ToValueString_ReturnsEnumValueAsString()
         {
@@ -49,6 +58,15 @@ namespace Tests
             Assert.NotNull(result);
             Assert.True(result.Count() == 2);
             Assert.Equal(TestEnum.Test1, result.First());
+        }
+
+        public void GetValues_ShouldReturnListOfValuesForEnumTypeWithObsolete()
+        {
+            var result = EnumExtensions.GetValues<TestEnum>(excludeObsolete: false);
+            Assert.NotNull(result);
+            Assert.True(result.Count() == 3);
+#pragma warning disable CS0612 // Type or member is obsolete
+            Assert.Contains(TestEnum.Test3, result);
         }
 
         [Fact]
@@ -97,6 +115,9 @@ namespace Tests
 
             result = result.Next();
             Assert.Equal(TestEnum.Test1, result);
+
+            Assert.Equal(TestEnumOrder.Test2, TestEnumOrder.Test1.Next());
+            Assert.Equal(TestEnumOrder.Test3, TestEnumOrder.Test1.Next().Next());
         }
 
         [Fact]
@@ -108,6 +129,8 @@ namespace Tests
 
             result = result.Previous();
             Assert.Equal(TestEnum.Test2, result);
+
+            Assert.Equal(TestEnumOrder.Test3, TestEnumOrder.Test1.Previous());
         }
 
         #region Attributes

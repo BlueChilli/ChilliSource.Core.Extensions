@@ -38,6 +38,13 @@ namespace ChilliSource.Core.Extensions
             {
                 values = values.Where(v => v.GetAttribute<ObsoleteAttribute>() == null);
             }
+            if (values.Any(x => x.GetAttribute<OrderAttribute>() != null))
+            {
+                var orderedValues = values.Where(x => x.GetAttribute<OrderAttribute>() != null).OrderBy(x => x.GetAttribute<OrderAttribute>().Order).ToList();
+                var unorderedValues = values.Where(x => x.GetAttribute<OrderAttribute>() == null);
+                orderedValues.AddRange(unorderedValues);
+                values = orderedValues;
+            }
             return values;
         }
 
