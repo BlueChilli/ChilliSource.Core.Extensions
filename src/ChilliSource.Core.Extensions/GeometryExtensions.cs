@@ -27,7 +27,7 @@ namespace ChilliSource.Core.Extensions
         /// Converts dobule radians to degrees
         /// </summary>
         /// <returns>The degrees.</returns>
-        /// <param name="radiants">Radians.</param>
+        /// <param name="radians">Radians.</param>
         public static double ToDegrees(this double radians) => radians * 180 / Math.PI;
 
         /// <summary>

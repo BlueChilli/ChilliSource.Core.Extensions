@@ -333,7 +333,7 @@ namespace ChilliSource.Core.Extensions
         /// </summary>
         /// <param name="format">The format string.</param>
         /// <param name="value">The string replacement value.</param>
-        /// <returnsThe formatted string when <paramref name="object"/> is not null or empty, otherwise empty string.</returns>
+        /// <returns>The formatted string when <paramref name="value"/> is not null or empty, otherwise empty string.</returns>
         public static string FormatIfNotNull(this string format, string value)
         {
             if (!String.IsNullOrEmpty(value))
@@ -512,7 +512,7 @@ namespace ChilliSource.Core.Extensions
         /// </summary>
         /// <param name="value">The specified string value.</param>
         /// <param name="nullDefaults">The list of null default values.</param>
-        /// <returns>Either the <paramref name="value"/> or the first non-null default value from <paramref name="nullDefaults"</returns>
+        /// <returns>Either the <paramref name="value"/> or the first non-null default value from <paramref name="nullDefaults"/></returns>
         public static string DefaultTo(this string value, params string[] nullDefaults)
         {
             if (!String.IsNullOrEmpty(value))
@@ -564,12 +564,12 @@ namespace ChilliSource.Core.Extensions
         }
 
         /// <summary>
-        /// Splits the specified <paramref name="value"/> using the specified <paramref name="delimiter"/> and returns a System.Collections.Generic.IEnumerable&lt;T&gt by changing the type of each element from string to <typeparamref name="T"/>.
+        /// Splits the specified <paramref name="value"/> using the specified <paramref name="delimiter"/> and returns a System.Collections.Generic.IEnumerable&lt;T&gt; by changing the type of each element from string to <typeparamref name="T"/>.
         /// </summary>
         /// <typeparam name="T">The type of the elements of the generic enumerable list.</typeparam>
         /// <param name="value">The string value to convert.</param>
         /// <param name="delimiter">The delimiter that separates the individual items in the original string.</param>
-        /// <returns>A System.Collections.Generic.IEnumerable&lt;T&gt.</returns>
+        /// <returns>A System.Collections.Generic.IEnumerable&lt;T&gt;.</returns>
         public static IEnumerable<T> ToEnumerable<T>(this string value, string delimiter = ",") where T : IConvertible
         {
             if (String.IsNullOrWhiteSpace(value))
