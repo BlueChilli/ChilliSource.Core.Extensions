@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <DebugType>pdbonly</DebugType>
     <AssemblyName>ChilliSource.Core.Extensions</AssemblyName>
     <RootNamespace>ChilliSource.Core.Extensions</RootNamespace>
