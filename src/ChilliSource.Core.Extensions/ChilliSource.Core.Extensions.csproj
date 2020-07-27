@@ -20,6 +20,7 @@
     <DefineConstants>$(DefineConstants);</DefineConstants>
     <IsTestProject>$(MSBuildProjectName.Contains('Tests'))</IsTestProject>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+    <Version>2.0.4-alpha001</Version>
   </PropertyGroup>
   
   <ItemGroup>

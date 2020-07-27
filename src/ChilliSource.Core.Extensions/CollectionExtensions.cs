@@ -99,6 +99,19 @@ namespace ChilliSource.Core.Extensions
         /// <returns>A delimited string</returns>
         public static string ToDelimitedString<T>(this IEnumerable<T> collection, string delimiter = ",", string formatSpecifier = "")
         {
+            return collection.ToDelimitedString(null, delimiter, formatSpecifier);
+        }
+
+        /// <summary>
+        /// Converts a list of T to a quoted delimited string, by having each T.ToString() executed for each T and surrounded by a quote
+        /// </summary>
+        /// <typeparam name="T">The type of the elements of the generic enumerable list.</typeparam>
+        /// <param name="collection">The generic enumerable list.</param>
+        /// <param name="quote">Quote character to be used to surround T eg 'T'</param>
+        /// <param name="delimiter">The delimiter.</param>
+        /// <returns>A delimited string</returns>
+        public static string ToDelimitedString<T>(this IEnumerable<T> collection, char? quote, string delimiter = ",", string formatSpecifier = "")
+        {
             if (collection == null)
             {
                 return String.Empty;
@@ -107,11 +120,11 @@ namespace ChilliSource.Core.Extensions
             Func<T, string> formatter;
             if (String.IsNullOrEmpty(formatSpecifier))
             {
-                formatter = (T e) => e.ToString();
+                formatter = (T e) => quote.HasValue ? $"{quote}{e}{quote}" : e.ToString();
             }
             else
             {
-                formatter = (T e) => String.Format($"{{0:{formatSpecifier}}}", e);
+                formatter = (T e) => quote.HasValue ? String.Format($"{quote}{{0:{formatSpecifier}}}{quote}", e) : String.Format($"{{0:{formatSpecifier}}}", e);
             }
 
             return String.Join(delimiter, collection.Select(formatter));

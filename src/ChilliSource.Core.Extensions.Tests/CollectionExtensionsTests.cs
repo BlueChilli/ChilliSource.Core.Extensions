@@ -86,15 +86,16 @@ namespace Tests
 
             var collection2 = new List<string> { "Bob", "Jane", "Harry", "Smith" };
             Assert.Equal("Bob - Jane - Harry - Smith", collection2.ToDelimitedString(" - "));
+            Assert.Equal("'Bob','Jane','Harry','Smith'", collection2.ToDelimitedString('\'', ","));
+
+            var collection3 = new DateTime[] { new DateTime(2001, 1, 1), new DateTime(2011, 1, 1), new DateTime(2021, 1, 1) };
+            Assert.Equal("2001-01-01 - 2011-01-01 - 2021-01-01", collection3.ToDelimitedString(" - ", "yyyy-MM-dd"));
 
             var collection4 = new decimal[] { 10.5M };
             Assert.Equal("10.5", collection4.ToDelimitedString(" - "));
 
             var collection5 = new object[] { };
             Assert.Equal("", collection5.ToDelimitedString(" - "));
-
-            var collection3 = new DateTime[] { new DateTime(2001, 1, 1), new DateTime(2011, 1, 1), new DateTime(2021, 1, 1) };
-            Assert.Equal("2001-01-01 - 2011-01-01 - 2021-01-01", collection3.ToDelimitedString(" - ", "yyyy-MM-dd"));
         }
 
     }
