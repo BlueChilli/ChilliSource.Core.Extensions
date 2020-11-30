@@ -80,6 +80,18 @@ namespace ChilliSource.Core.Extensions
         #endregion
 
         #region Sanitise / Remove / Replace
+
+        /// <summary>
+        /// Truncate a string to a maximum length. If you want to including a truncating string use Truncate function from Humanzier.
+        /// </summary>
+        /// <param name="s">The specified string value.</param>
+        /// <param name="maxLength">Maxlength of string to be returned</param>
+        /// <returns>A string truncated to maxlength if applicable</returns>
+        public static string TruncateHard(this string s, int maxLength)
+        {
+            return s.Substring(0, Math.Min(s.Length, maxLength));
+        }
+
         /// <summary>
         /// Converts a string value to valid file path name.
         /// </summary>
@@ -641,6 +653,20 @@ namespace ChilliSource.Core.Extensions
             return (Nullable<T>)ToNullableValueType(typeof(T), s);
         }
 
+        /// <summary>
+        /// Convert (if needed) unvalidated urls to form that will pass System.ComponentModel.DataAnnotationsUrlAttribute
+        /// </summary>
+        /// <param name="url">>The specified url value (can be null)</param>
+        /// <returns>url</returns>
+        public static string ToUrl(this string url)
+        {
+            if (String.IsNullOrEmpty(url)) return url;
+            if (url.StartsWith("//")) return $"https:{url}";
+            var validProtocols = new List<string> { "http://", "https://", "file://", "ftp://" };
+            if (validProtocols.Any(x => url.StartsWith(x))) return url;
+            return $"https://{url}";
+        }
+
         #endregion
 
         #region Helpers
@@ -661,6 +687,16 @@ namespace ChilliSource.Core.Extensions
 
             return value.IndexOf(searchValue, comparison) >= 0;
         }
+
+        /// <summary>
+        /// Determine if a string is comprised from the set of numeric characters or not
+        /// </summary>
+        /// <param name="s">The specified string value.</param>
+        /// <returns>True if <paramref name="s"/> is comprised from the set of numeric characters; false otherwise.</returns>
+        public static bool IsNumeric(this string s)
+        {
+            return long.TryParse(s, out _);
+        }         
 
         #endregion   
     }

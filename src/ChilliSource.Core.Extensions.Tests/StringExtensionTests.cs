@@ -15,6 +15,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using NuGet.Frameworks;
 
 namespace Tests
 {
@@ -22,6 +23,23 @@ namespace Tests
     { 
 
         #region Sanitise / Remove / Replace
+
+        [Fact]
+        public void TruncateHard_Works()
+        {
+            var result = "1234567890".TruncateHard(5);
+            Assert.Equal("12345", result);
+
+            result = "1234567890".TruncateHard(10);
+            Assert.Equal("1234567890", result);
+
+            result = "1234567890".TruncateHard(20);
+            Assert.Equal("1234567890", result);
+
+            result = "1234567890".TruncateHard(0);
+            Assert.Equal("", result);
+        }
+
         [Fact]
         public void ToFilename_ShouldReturnValidFilename()
         {
@@ -264,14 +282,14 @@ namespace Tests
 
             Assert.Equal(1, result.Id);
             Assert.Equal("Bob", result.Name);
-            Assert.Equal(false, result.IsActive);
+            Assert.False(result.IsActive);
             Assert.Equal(StringExtensionTests.TestEnum.Test2, result.Status);
             Assert.Equal(new DateTime(2001, 10, 1), result.DateCreated);
 
             var test2 = "{\"Id\":1,\"Name\":\"Bob\",\"IsActive\":false,\"Status\":2,\"DateCreated\":\"2001-10-01\"}";
             result = test2.FromJson<JsonTest>();
             Assert.Equal("Bob", result.Name);
-            Assert.Equal(false, result.IsActive);
+            Assert.False(result.IsActive);
             Assert.Equal(StringExtensionTests.TestEnum.Test2, result.Status);
             Assert.Equal(new DateTime(2001, 10, 1), result.DateCreated);
 
@@ -359,6 +377,31 @@ namespace Tests
             Assert.Contains(0.0M, result2);
             Assert.Equal(4, result2.Count());
         }
+
+        [Fact]
+        public void ToUrl_ShouldReturnValidatedUrl()
+        {
+            string nullString = null;
+            Assert.Null(nullString.ToUrl());
+
+            Assert.Equal(String.Empty, String.Empty.ToUrl());
+
+            var https = "https://www.example.com";
+            var http = "https://www.example.com";
+            var ftp = "ftp://www.example.com";
+            var file = "file://www.example.com";
+            var relativeprotocoltest = "//www.example.com".ToUrl();
+            Assert.Equal(https, relativeprotocoltest);
+
+            var noprotocoltest = "www.example.com".ToUrl();
+            Assert.Equal(https, noprotocoltest);
+
+            Assert.Equal(http, http.ToUrl());
+            Assert.Equal(https, https.ToUrl());
+            Assert.Equal(ftp, ftp.ToUrl());
+            Assert.Equal(file, file.ToUrl());
+
+        }
         #endregion
 
         #region Helpers
@@ -372,6 +415,17 @@ namespace Tests
             Assert.True(value.Contains("JIM", StringComparison.Ordinal));
             Assert.True(value.Contains("jim", StringComparison.OrdinalIgnoreCase));
         }
+
+        [Fact]
+        public void IsNumeric_ReturnsTrueWhenNumeric()
+        {
+            Assert.True("1234567890".IsNumeric());
+            Assert.False("Qwerty".IsNumeric());
+            Assert.False("123ABC".IsNumeric());
+            Assert.False("999.99".IsNumeric());
+            Assert.False("$100".IsNumeric());
+        }
+
 
         #endregion
     }
