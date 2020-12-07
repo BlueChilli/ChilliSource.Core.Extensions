@@ -250,6 +250,8 @@ Setup((context) =>
         }
         else
         {
+			 Information(@"IsLocal: {0}
+				IsRepository: {1}", local, isRepository);
              Information("Not running on TeamCity");
         }		
 
