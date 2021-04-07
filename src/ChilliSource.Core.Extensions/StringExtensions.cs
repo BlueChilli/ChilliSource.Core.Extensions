@@ -696,7 +696,23 @@ namespace ChilliSource.Core.Extensions
         public static bool IsNumeric(this string s)
         {
             return long.TryParse(s, out _);
-        }         
+        }
+
+        /// <summary>
+        /// Determine if a string is comprised from the set of alphanumeric characters or not
+        /// </summary>
+        /// <param name="s">The specified string value.</param>
+        /// <returns>True if <paramref name="s"/> is comprised from the set of alphanumeric characters; false otherwise.</returns>
+        public static bool IsAlphaNumeric(this string s)
+        {
+            if (String.IsNullOrEmpty(s)) return false;
+
+            string pattern = @"^[a-zA-Z0-9]*$";
+            Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
+
+            return regex.IsMatch(s);
+        }
+
 
         #endregion   
     }

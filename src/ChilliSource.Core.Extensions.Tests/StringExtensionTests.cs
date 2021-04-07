@@ -426,6 +426,17 @@ namespace Tests
             Assert.False("$100".IsNumeric());
         }
 
+        [Fact]
+        public void IsAlphaNumeric_ReturnsTrueWhenAlphaNumeric()
+        {
+            Assert.True("1234567890".IsAlphaNumeric());
+            Assert.True("123Abc".IsAlphaNumeric());
+            Assert.True("Qwerty".IsAlphaNumeric());
+            Assert.False("999.99".IsAlphaNumeric());
+            Assert.False("$100".IsAlphaNumeric());
+            Assert.False("café".IsAlphaNumeric());
+        }
+
 
         #endregion
     }
