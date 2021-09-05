@@ -267,7 +267,7 @@ namespace ChilliSource.Core.Extensions
         /// <typeparam name="T">Type of the flag value.</typeparam>
         /// <param name="flagsList">The flag list to be convereted.</param>
         /// <returns>A flag value of type T</returns>
-        public static T ToFlags<T>(this IList<T> flagsList) where T : struct, IConvertible, IFormattable
+        public static T ToFlags<T>(this IEnumerable<T> flagsList) where T : struct, IConvertible, IFormattable
         {
             CheckTIsEnum<T>();
 
