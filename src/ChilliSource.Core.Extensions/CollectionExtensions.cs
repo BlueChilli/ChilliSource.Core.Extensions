@@ -91,6 +91,19 @@ namespace ChilliSource.Core.Extensions
         }
 
         /// <summary>
+        /// Returns the index of the element that satisfies a condition from the specified System.Collections.Generic.IEnumerable&lt;T&gt.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements of the generic enumerable list.</typeparam>
+        /// <param name="list">The generic enumerable list.</param>
+        /// <param name="condition">Delegate method that defines a set of criteria and determines whether the specified object meets those criteria.</param>
+        /// <returns>The index of the element that satisfies a condition from the specified System.Collections.Generic.IEnumerable&lt;T&gt, otherwise -1.</returns>
+        public static int IndexOf<T>(this IEnumerable<T> list, Predicate<T> condition)
+        {
+            int index = -1;
+            return list.Any(item => { index++; return condition(item); }) ? index : -1;
+        }
+
+        /// <summary>
         /// Converts a list of T to a delimited string, by having each T.ToString() executed for each T
         /// </summary>
         /// <typeparam name="T">The type of the elements of the generic enumerable list.</typeparam>
@@ -130,7 +143,7 @@ namespace ChilliSource.Core.Extensions
             return String.Join(delimiter, collection.Select(formatter));
         }
 
-        #region FirstOr New/DefaultTo
+        #region FirstOrNew/DefaultTo
         /// <summary>
         /// Returns the first element of a sequence, or a new instance if the sequence contains no elements.
         /// </summary>
