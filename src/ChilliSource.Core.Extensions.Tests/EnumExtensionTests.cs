@@ -54,7 +54,7 @@ namespace Tests
         [Fact]
         public void GetValues_ShouldReturnListOfValuesForEnumType()
         {
-            var result = EnumExtensions.GetValues<TestEnum>();
+            var result = EnumHelper.GetValues<TestEnum>();
             Assert.NotNull(result);
             Assert.True(result.Count() == 2);
             Assert.Equal(TestEnum.Test1, result.First());
@@ -62,7 +62,7 @@ namespace Tests
 
         public void GetValues_ShouldReturnListOfValuesForEnumTypeWithObsolete()
         {
-            var result = EnumExtensions.GetValues<TestEnum>(excludeObsolete: false);
+            var result = EnumHelper.GetValues<TestEnum>(excludeObsolete: false);
             Assert.NotNull(result);
             Assert.True(result.Count() == 3);
 #pragma warning disable CS0612 // Type or member is obsolete
@@ -72,7 +72,7 @@ namespace Tests
         [Fact]
         public void ToList_ShouldReturnListOfValuesForEnumType()
         {
-            var result = TestEnum.Test1.ToList<TestEnum>();
+            var result = EnumHelper.ToList<TestEnum>();
             Assert.NotNull(result);
             Assert.True(result.Count() == 2);
             Assert.Equal(TestEnum.Test2, result.Last());
@@ -81,13 +81,13 @@ namespace Tests
         [Fact]
         public void Parse_ReturnsEnumIfFound()
         {
-            var result = EnumExtensions.Parse<TestEnum>("Test1");
+            var result = EnumHelper.Parse<TestEnum>("Test1");
             Assert.Equal(TestEnum.Test1, result);
 
-            var result2 = EnumExtensions.Parse<TestEnum>("Rabbit");
+            var result2 = EnumHelper.Parse<TestEnum>("Rabbit");
             Assert.NotEqual(TestEnum.Test1, result2);
 
-            var result3 = EnumExtensions.Parse<TestEnum>("1");
+            var result3 = EnumHelper.Parse<TestEnum>("1");
             Assert.Equal(TestEnum.Test1, result3);
         }
 

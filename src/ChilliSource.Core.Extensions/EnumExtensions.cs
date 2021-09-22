@@ -25,41 +25,6 @@ namespace ChilliSource.Core.Extensions
     {
 
         /// <summary>
-        /// Retrieves an array list of the values of the constants in a specified enumeration.
-        /// </summary>
-        /// <param name="enumType">The specified enumeration value.</param>
-        /// <returns>An array list that contains the values of the constants in enumType.</returns>
-        public static IEnumerable GetValues(Type enumType, bool excludeObsolete = true)
-        {
-            CheckTIsEnum(enumType);
-
-            var values = Enum.GetValues(enumType).Cast<Enum>();
-            if (excludeObsolete)
-            {
-                values = values.Where(v => v.GetAttribute<ObsoleteAttribute>() == null);
-            }
-            if (values.Any(x => x.GetAttribute<OrderAttribute>() != null))
-            {
-                var orderedValues = values.Where(x => x.GetAttribute<OrderAttribute>() != null).OrderBy(x => x.GetAttribute<OrderAttribute>().Order).ToList();
-                var unorderedValues = values.Where(x => x.GetAttribute<OrderAttribute>() == null);
-                orderedValues.AddRange(unorderedValues);
-                values = orderedValues;
-            }
-            return values;
-        }
-
-        /// <summary>
-        /// Loops through all values of an enum and returns them as an IEnumerable
-        /// Usage: var values = GetValues&lt;MyEnumType&gt;();
-        /// </summary>
-        /// <returns>The values.</returns>
-        /// <typeparam name="T">The enum type.</typeparam>
-        public static IEnumerable<T> GetValues<T>(bool excludeObsolete = true) where T : struct, IConvertible, IFormattable
-        {
-            return GetValues(typeof(T), excludeObsolete).Cast<T>();
-        }
-
-        /// <summary>
         /// Converts the value of the specified enumeration to a 32-bit signed integral string.
         /// </summary>
         /// <param name="enum">The specified enumeration value.</param>
@@ -67,37 +32,6 @@ namespace ChilliSource.Core.Extensions
         public static string ToValueString(this Enum @enum)
         {
             return Convert.ToInt32(@enum).ToString();
-        }
-
-        /// <summary>
-        /// Converts the string representation of the name or numeric value of one or more enumerated constants to an equivalent enumerated object.
-        /// </summary>
-        /// <typeparam name="T">Type of the object converted.</typeparam>
-        /// <param name="enum">The specified enumeration value.</param>
-        /// <param name="value">A string containing the name or value to convert.</param>
-        /// <returns>An object of type enumType whose value is represented by value.</returns>
-        [Obsolete("Use EnumExtensions.Parse<T> instead.")]
-        public static T ParseEnum<T>(this Enum @enum, string value) where T : struct, IConvertible, IFormattable
-        {
-            return EnumExtensions.Parse<T>(value);
-        }
-
-        /// <summary>
-        /// Converts the string representation of the name or numeric value of one or more enumerated constants to an equivalent enumerated object.
-        /// </summary>
-        /// <typeparam name="T">Type of the object converted.</typeparam>
-        /// <param name="value">A string containing the name or value to convert.</param>
-        /// <returns>An object of type enumType whose value is represented by value.</returns>
-        public static T Parse<T>(string value) where T : struct, IConvertible, IFormattable
-        {
-            CheckTIsEnum<T>();
-
-            T result;
-            if (Enum.TryParse<T>(value, true, out result))
-            {
-                return result;
-            }
-            return default(T);
         }
 
         /// <summary>
@@ -109,7 +43,7 @@ namespace ChilliSource.Core.Extensions
         /// <returns>True when the specified enumeration value is in the enumeration parameter list, otherwise false.</returns>
         public static bool Contains<T>(this T @enum, params T[] list) where T : struct, IConvertible, IFormattable
         {
-            CheckTIsEnum<T>();
+            EnumHelper.CheckTIsEnum<T>();
 
             return Contains<T>(@enum, list ?? Enumerable.Empty<T>());
         }
@@ -123,7 +57,7 @@ namespace ChilliSource.Core.Extensions
         /// <returns>True when the specified enumeration value is in the System.Collections.Generic.IEnumerable%lt;T&gt; list, otherwise false.</returns>
         public static bool Contains<T>(this T @enum, IEnumerable<T> list) where T : struct, IConvertible, IFormattable
         {
-            CheckTIsEnum<T>();
+            EnumHelper.CheckTIsEnum<T>();
 
             Type type = @enum.GetType();
             var enumValue = @enum as Enum;
@@ -138,24 +72,13 @@ namespace ChilliSource.Core.Extensions
         }
 
         /// <summary>
-        /// Converts enumeration type to System.Collections.Generic.List&lt;T&gt;. 
-        /// </summary>
-        /// <typeparam name="T">Type of the object converted.</typeparam>
-        /// <param name="e">The specified enumeration type.</param>
-        /// <returns>A System.Collections.Generic.List&lt;T&gt;.</returns>
-        public static List<T> ToList<T>(this Enum e, bool excludeObsolete = true) where T : struct, IConvertible, IFormattable
-        {
-            return GetValues<T>(excludeObsolete).ToList();
-        }
-
-        /// <summary>
         /// Return the next enum in sequence
         /// </summary>
         public static T Next<T>(this T @enum) where T : struct, IConvertible, IFormattable
         {
-            CheckTIsEnum<T>();
+            EnumHelper.CheckTIsEnum<T>();
 
-            var values = GetValues<T>().ToList();
+            var values = EnumHelper.GetValues<T>().ToList();
             int j = values.IndexOf(@enum) + 1;
             return (values.Count == j) ? values[0] : values[j];
         }
@@ -165,9 +88,9 @@ namespace ChilliSource.Core.Extensions
         /// </summary>
         public static T Previous<T>(this T @enum) where T : struct, IConvertible, IFormattable
         {
-            CheckTIsEnum<T>();
+            EnumHelper.CheckTIsEnum<T>();
 
-            var values = GetValues<T>().ToList();
+            var values = EnumHelper.GetValues<T>().ToList();
             int j = values.IndexOf(@enum) - 1;
             return (j < 0) ? values.Last() : values[j];
         }
@@ -181,7 +104,7 @@ namespace ChilliSource.Core.Extensions
         /// <returns>True when the specified enumeration value is in the System.Collections.Generic.IEnumerable%lt;T&gt; list, otherwise false.</returns>
         public static bool IsIn<T>(this T e, IEnumerable<T> list) where T : struct, IConvertible, IFormattable
         {
-            CheckTIsEnum<T>();
+            EnumHelper.CheckTIsEnum<T>();
 
             Type t = e.GetType();
             bool isFlags = t.GetTypeInfo().GetCustomAttributes<FlagsAttribute>().Any();
@@ -214,7 +137,7 @@ namespace ChilliSource.Core.Extensions
         /// <returns>The object with flag value appended.</returns>
         public static T AddFlag<T>(this T enumValue, T enumFlag) where T : struct, IConvertible, IFormattable
         {
-            CheckTIsEnum<T>();
+            EnumHelper.CheckTIsEnum<T>();
 
             try
             {
@@ -235,7 +158,7 @@ namespace ChilliSource.Core.Extensions
         /// <returns>The object with flag value removed.</returns>
         public static T RemoveFlag<T>(this T enumValue, T enumFlag) where T : struct, IConvertible, IFormattable
         {
-            CheckTIsEnum<T>();
+            EnumHelper.CheckTIsEnum<T>();
 
             try
             {
@@ -255,10 +178,10 @@ namespace ChilliSource.Core.Extensions
         /// <returns>A System.Collections.Generic.List&lt;T&gt;.</returns>
         public static List<T> ToFlagsList<T>(this T enumType) where T : struct, IConvertible, IFormattable //The compiler doesnt allow [where T: System.Enum]
         {
-            CheckTIsEnum<T>();
+            EnumHelper.CheckTIsEnum<T>();
 
             var enumValue = enumType as Enum;
-            return GetValues<T>().Where(flag => enumValue.HasFlag(flag as Enum)).ToList();
+            return EnumHelper.GetValues<T>().Where(flag => enumValue.HasFlag(flag as Enum)).ToList();
         }
 
         /// <summary>
@@ -269,7 +192,7 @@ namespace ChilliSource.Core.Extensions
         /// <returns>A flag value of type T</returns>
         public static T ToFlags<T>(this IEnumerable<T> flagsList) where T : struct, IConvertible, IFormattable
         {
-            CheckTIsEnum<T>();
+            EnumHelper.CheckTIsEnum<T>();
 
             T obj1 = default(T);
             foreach (T obj2 in flagsList)
@@ -466,7 +389,77 @@ namespace ChilliSource.Core.Extensions
         }
         #endregion
 
-        private static void CheckTIsEnum(Type type)
+    }
+
+
+    public static class EnumHelper
+    {
+        /// <summary>
+        /// Converts the string representation of the name or numeric value of one or more enumerated constants to an equivalent enumerated object.
+        /// </summary>
+        /// <typeparam name="T">Type of the object converted.</typeparam>
+        /// <param name="value">A string containing the name or value to convert.</param>
+        /// <returns>An object of type enumType whose value is represented by value.</returns>
+        public static T Parse<T>(string value) where T : struct, IConvertible, IFormattable
+        {
+            CheckTIsEnum<T>();
+
+            T result;
+            if (Enum.TryParse<T>(value, true, out result))
+            {
+                return result;
+            }
+            return default(T);
+        }
+
+
+        /// <summary>
+        /// Loops through all values of an enum and returns them as an IList 
+        /// </summary>
+        /// <typeparam name="T">Type of the object converted.</typeparam>
+        /// <param name="e">The specified enumeration type.</param>
+        /// <returns>A System.Collections.Generic.List&lt;T&gt;.</returns>
+        public static List<T> ToList<T>(bool excludeObsolete = true) where T : struct, IConvertible, IFormattable
+        {
+            return GetValues<T>(excludeObsolete).ToList();
+        }
+
+        /// <summary>
+        /// Loops through all values of an enum and returns them as an IEnumerable
+        /// Usage: var values = GetValues&lt;MyEnumType&gt;();
+        /// </summary>
+        /// <returns>The values.</returns>
+        /// <typeparam name="T">The enum type.</typeparam>
+        public static IEnumerable<T> GetValues<T>(bool excludeObsolete = true) where T : struct, IConvertible, IFormattable
+        {
+            return GetValues(typeof(T), excludeObsolete).Cast<T>();
+        }
+
+        /// <summary>
+        /// Retrieves an array list of the values of the constants in a specified enumeration.
+        /// </summary>
+        /// <param name="enumType">The specified enumeration value.</param>
+        /// <returns>An array list that contains the values of the constants in enumType.</returns>
+        public static IEnumerable GetValues(Type enumType, bool excludeObsolete = true)
+        {
+            CheckTIsEnum(enumType);
+
+            var values = Enum.GetValues(enumType).Cast<Enum>();
+            if (excludeObsolete)
+            {
+                values = values.Where(v => v.GetAttribute<ObsoleteAttribute>() == null);
+            }
+            if (values.Any(x => x.GetAttribute<OrderAttribute>() != null))
+            {
+                var orderedValues = values.Where(x => x.GetAttribute<OrderAttribute>() != null).OrderBy(x => x.GetAttribute<OrderAttribute>().Order).ToList();
+                var unorderedValues = values.Where(x => x.GetAttribute<OrderAttribute>() == null);
+                orderedValues.AddRange(unorderedValues);
+                values = orderedValues;
+            }
+            return values;
+        }
+
+        internal static void CheckTIsEnum(Type type)
         {
             if (!type.GetTypeInfo().IsEnum)
             {
@@ -474,10 +467,10 @@ namespace ChilliSource.Core.Extensions
             }
         }
 
-        private static void CheckTIsEnum<T>()
+        internal static void CheckTIsEnum<T>()
         {
             CheckTIsEnum(typeof(T));
         }
-    }
 
+    }
 }
