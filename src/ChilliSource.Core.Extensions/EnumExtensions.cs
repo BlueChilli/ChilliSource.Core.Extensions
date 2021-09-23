@@ -264,129 +264,15 @@ namespace ChilliSource.Core.Extensions
         }
 
         /// <summary>
-        /// Sorts list elements using a custom order attribute in Enum property
-        /// e.g : set Order on Enum values like: 
-        /// public enum ResponseToEvent
-        /// {
-        /// [Order(1)]
-        ///  Going,
-        /// [Order(3)]
-        ///  NotGoing,
-        /// [Order(2)]
-        /// Maybe
-        /// }
-        /// then order list by Enum property list.OrderBy(c => ModelEnumExtensions.GetOrder(c.ResponseToEvent))
-        /// </summary>
-        /// <typeparam name="TEnum">Enum type</typeparam>
-        /// <param name="enumValue">Enum value</param>
-        /// <returns></returns>
-        public static int GetOrder<TEnum>(TEnum enumValue) where TEnum : struct, IConvertible, IFormattable
-        {
-            return GetWithOrder<TEnum>.GetOrder(enumValue);
-        }
-
-        private static class GetWithOrder<TEnum> where TEnum : struct, IConvertible, IFormattable
-        {
-            private static readonly Dictionary<TEnum, int> Values;
-
-            static GetWithOrder()
-            {
-                var values = new Dictionary<TEnum, int>();
-
-                var fields = typeof(TEnum).GetTypeInfo().GetFields(BindingFlags.Static | BindingFlags.Public);
-
-                int unordered = int.MaxValue - 1;
-
-                for (int i = fields.Length - 1; i >= 0; i--)
-                {
-                    FieldInfo field = fields[i];
-
-                    var order = (OrderAttribute)field.GetCustomAttributes(typeof(OrderAttribute), false).FirstOrDefault();
-
-                    int order2;
-
-                    if (order != null)
-                    {
-                        order2 = order.Order;
-                    }
-                    else
-                    {
-                        order2 = unordered;
-                        unordered--;
-                    }
-
-                    values[(TEnum)field.GetValue(null)] = order2;
-                }
-
-                Values = values;
-            }
-
-            internal static int GetOrder(TEnum enumValue)
-            {
-                int order;
-
-                if (!Values.TryGetValue(enumValue, out order))
-                {
-                    order = int.MaxValue;
-                }
-
-                return order;
-            }
-        }
-
-
-        /// <summary>
         /// Gets the description attribute of the enumeration value.
         /// </summary>
         /// <param name="e">The specified enumeration value.</param>
         /// <returns>The description attribute of the enumeration value.</returns>
         public static string GetDescription(this Enum e)
         {
-            return GetEnumDescription(e);
+            return EnumHelper.GetDescription(e);
         }
 
-        /// <summary>
-        /// Gets the description attribute of the enumeration type.
-        /// </summary>
-        /// <typeparam name="TEnum">The type of enumeration.</typeparam>
-        /// <param name="value">The specified enumeration value.</param>
-        /// <returns>he description attribute of the enumeration value.</returns>
-        public static string GetEnumDescription<TEnum>(TEnum value)
-        {
-            if (value == null) return "";
-
-            var type = value.GetType();
-            var camelCase = type.GetTypeInfo().GetCustomAttributes<CamelCaseAttribute>().Any();
-
-            var result = new List<string>();
-            var values = value.ToString().Split(',').Select(x => x.Trim());   //Flags
-            foreach (var v in values)
-            {
-                var fi = value.GetType().GetTypeInfo().GetField(v);
-                if (fi == null) continue;
-                DescriptionAttribute[] attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
-                result.Add(attributes.Length > 0 ? attributes[0].Description : camelCase ? v.SplitByUppercase() : v.ToSentenceCase(true));
-            }
-
-            return result.ToDelimitedString(", ");
-        }
-
-        /// <summary>
-        /// Retrieves an array of description attributes for the specified enumeration type. 
-        /// </summary>
-        /// <param name="enumType">The specified enumeration type.</param>
-        /// <returns>An array of description attributes for the specified enumeration type.</returns>
-        public static string[] GetDescriptions(Type enumType)
-        {
-            Array enumValArray = Enum.GetValues(enumType);
-
-            var result = new string[enumValArray.Length];
-            for (var i = 0; i < enumValArray.Length; i++)
-            {
-                result[i] = GetEnumDescription(enumValArray.GetValue(i));
-            }
-            return result;
-        }
         #endregion
 
     }
@@ -458,6 +344,121 @@ namespace ChilliSource.Core.Extensions
             }
             return values;
         }
+
+        /// <summary>
+        /// Gets the description attribute of the enumeration type.
+        /// </summary>
+        /// <typeparam name="TEnum">The type of enumeration.</typeparam>
+        /// <param name="value">The specified enumeration value.</param>
+        /// <returns>he description attribute of the enumeration value.</returns>
+        public static string GetDescription<TEnum>(TEnum value)
+        {
+            if (value == null) return "";
+
+            var type = value.GetType();
+            var camelCase = type.GetTypeInfo().GetCustomAttributes<CamelCaseAttribute>().Any();
+
+            var result = new List<string>();
+            var values = value.ToString().Split(',').Select(x => x.Trim());   //Flags
+            foreach (var v in values)
+            {
+                var fi = value.GetType().GetTypeInfo().GetField(v);
+                if (fi == null) continue;
+                DescriptionAttribute[] attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
+                result.Add(attributes.Length > 0 ? attributes[0].Description : camelCase ? v.SplitByUppercase() : v.ToSentenceCase(true));
+            }
+
+            return result.ToDelimitedString(", ");
+        }
+
+        /// <summary>
+        /// Retrieves an array of description attributes for the specified enumeration type. 
+        /// </summary>
+        /// <param name="enumType">The specified enumeration type.</param>
+        /// <returns>An array of description attributes for the specified enumeration type.</returns>
+        public static string[] GetDescriptions(Type enumType)
+        {
+            Array enumValArray = Enum.GetValues(enumType);
+
+            var result = new string[enumValArray.Length];
+            for (var i = 0; i < enumValArray.Length; i++)
+            {
+                result[i] = GetDescription(enumValArray.GetValue(i));
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Sorts list elements using a custom order attribute in Enum property
+        /// e.g : set Order on Enum values like: 
+        /// public enum ResponseToEvent
+        /// {
+        /// [Order(1)]
+        ///  Going,
+        /// [Order(3)]
+        ///  NotGoing,
+        /// [Order(2)]
+        /// Maybe
+        /// }
+        /// then order list by Enum property list.OrderBy(c => ModelEnumExtensions.GetOrder(c.ResponseToEvent))
+        /// </summary>
+        /// <typeparam name="TEnum">Enum type</typeparam>
+        /// <param name="enumValue">Enum value</param>
+        /// <returns></returns>
+        public static int GetOrder<TEnum>(TEnum enumValue) where TEnum : struct, IConvertible, IFormattable
+        {
+            return GetWithOrder<TEnum>.GetOrder(enumValue);
+        }
+
+        private static class GetWithOrder<TEnum> where TEnum : struct, IConvertible, IFormattable
+        {
+            private static readonly Dictionary<TEnum, int> Values;
+
+            static GetWithOrder()
+            {
+                var values = new Dictionary<TEnum, int>();
+
+                var fields = typeof(TEnum).GetTypeInfo().GetFields(BindingFlags.Static | BindingFlags.Public);
+
+                int unordered = int.MaxValue - 1;
+
+                for (int i = fields.Length - 1; i >= 0; i--)
+                {
+                    FieldInfo field = fields[i];
+
+                    var order = (OrderAttribute)field.GetCustomAttributes(typeof(OrderAttribute), false).FirstOrDefault();
+
+                    int order2;
+
+                    if (order != null)
+                    {
+                        order2 = order.Order;
+                    }
+                    else
+                    {
+                        order2 = unordered;
+                        unordered--;
+                    }
+
+                    values[(TEnum)field.GetValue(null)] = order2;
+                }
+
+                Values = values;
+            }
+
+            internal static int GetOrder(TEnum enumValue)
+            {
+                int order;
+
+                if (!Values.TryGetValue(enumValue, out order))
+                {
+                    order = int.MaxValue;
+                }
+
+                return order;
+            }
+        }
+
 
         internal static void CheckTIsEnum(Type type)
         {
