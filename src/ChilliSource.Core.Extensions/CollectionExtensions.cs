@@ -91,12 +91,12 @@ namespace ChilliSource.Core.Extensions
         }
 
         /// <summary>
-        /// Returns the index of the element that satisfies a condition from the specified System.Collections.Generic.IEnumerable&lt;T&gt.
+        /// Returns the index of the element that satisfies a condition from the specified System.Collections.Generic.IEnumerable&lt;T&gt;.
         /// </summary>
         /// <typeparam name="T">The type of the elements of the generic enumerable list.</typeparam>
         /// <param name="list">The generic enumerable list.</param>
         /// <param name="condition">Delegate method that defines a set of criteria and determines whether the specified object meets those criteria.</param>
-        /// <returns>The index of the element that satisfies a condition from the specified System.Collections.Generic.IEnumerable&lt;T&gt, otherwise -1.</returns>
+        /// <returns>The index of the element that satisfies a condition from the specified System.Collections.Generic.IEnumerable&lt;T&gt;, otherwise -1.</returns>
         public static int IndexOf<T>(this IEnumerable<T> list, Predicate<T> condition)
         {
             int index = -1;

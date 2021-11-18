@@ -22,16 +22,21 @@ namespace Tests
 		[Fact]
 		public void HasValueWorks()
 		{
-            var test = new Dictionary<int, string> { { 1, "Jim" }, { 2, "Jane" }, { 3, "Fred" } };
+            var test = new Dictionary<int, string> { { 1, "Jim" }, { 2, "Jane" }, { 3, "Fred" }, { 4, null } };
 
             Assert.True(test.HasValue(1, "Jim"));
             Assert.True(test.HasValue(2, "Jane"));
             Assert.True(test.HasValue(3, "Fred"));
+            Assert.True(test.HasValue(4, null));
+            Assert.True(test.HasValue(4, ""));
 
             Assert.False(test.HasValue(2, "Jim"));
             Assert.False(test.HasValue(1, "Jane"));
             Assert.False(test.HasValue(int.MinValue, null));
             Assert.False(test.HasValue(1, null));
+            Assert.False(test.HasValue(4, "Sam"));
+
+
         }
 
     }
