@@ -5,8 +5,8 @@ using System.Text.RegularExpressions;
 // ADDINS
 //////////////////////////////////////////////////////////////////////
 
-#addin "Cake.FileHelpers"
-#addin nuget:?package=Cake.Incubator&version=2.0.0
+#addin nuget:?package=Cake.FileHelpers&version=4.0.1
+#addin nuget:?package=Cake.Incubator&version=6.0.0
 //#addin "Cake.Watch"
 #addin nuget:?package=Newtonsoft.Json
 //////////////////////////////////////////////////////////////////////
@@ -14,7 +14,7 @@ using System.Text.RegularExpressions;
 //////////////////////////////////////////////////////////////////////
 
 #tool "GitReleaseManager"
-#tool "nuget:?package=GitVersion.CommandLine&version=4.0.0"
+#tool "nuget:?package=GitVersion.CommandLine&version=5.8.1"
 #tool "GitLink"
 using Cake.Common.Build.TeamCity;
 using Cake.Core.IO;
@@ -84,7 +84,7 @@ var teamCity = BuildSystem.TeamCity;
 var branch = EnvironmentVariable("Git_Branch");
 var isPullRequest = !String.IsNullOrEmpty(branch) && branch.ToLower().Contains("refs/pull"); //teamCity.Environment.PullRequest.IsPullRequest;
 var projectName =  EnvironmentVariable("TEAMCITY_PROJECT_NAME"); //  teamCity.Environment.Project.Name;
-var isRepository = StringComparer.OrdinalIgnoreCase.Equals(project, projectName);
+var isRepository = StringComparer.OrdinalIgnoreCase.Equals(productName, projectName);
 var isTagged = !String.IsNullOrEmpty(branch) && branch.ToLower().Contains("refs/tags");
 var buildConfName = EnvironmentVariable("TEAMCITY_BUILDCONF_NAME"); //teamCity.Environment.Build.BuildConfName
 var buildNumber = GetEnvironmentInteger("BUILD_NUMBER");
@@ -213,6 +213,8 @@ Action<string> build = (solution) =>
 			    .WithProperty("PackageReleaseNotes",  "\"" +  string.Format("{0}/releases", githubUrl) + "\"")
 			  	.SetVerbosity(Verbosity.Minimal)
 				.SetNodeReuse(false);
+				
+				settings.ToolVersion = MSBuildToolVersion.VS2022;
 
 				var msBuildLogger = GetMSBuildLoggerArguments();
 			
@@ -250,7 +252,7 @@ Setup((context) =>
         }
         else
         {
-			 Information(@"IsLocal: {0}, IsRepository: {1}, projectName: {2}, project: {3}", local, isRepository, projectName, project);
+			 Information(@"IsLocal: {0}, IsRepository: {1}, projectName: {2}, productName: {3}", local, isRepository, projectName, productName);
              Information("Not running on TeamCity");
         }		
 
@@ -411,7 +413,7 @@ Task("CreateRelease")
 			throw new Exception("The GITHUB_TOKEN environment variable is not defined.");
 		}
 
-		GitReleaseManagerCreate(username, token, githubOwner, githubRepository, new GitReleaseManagerCreateSettings {
+		GitReleaseManagerCreate(token, githubOwner, githubRepository, new GitReleaseManagerCreateSettings {
 			Milestone         = majorMinorPatch,
 			Name              = majorMinorPatch,
 			Prerelease        = true,
@@ -455,10 +457,10 @@ Task("PublishRelease")
 			// only push the package which was created during this build run.
 			var packagePath = artifactDirectory + File(string.Concat(package, ".", nugetVersion, ".nupkg"));
 
-			GitReleaseManagerAddAssets(username, token, githubOwner, githubRepository, majorMinorPatch, packagePath);
+			GitReleaseManagerAddAssets(token, githubOwner, githubRepository, majorMinorPatch, packagePath);
 		}
 
-		GitReleaseManagerClose(username, token, githubOwner, githubRepository, majorMinorPatch);
+		GitReleaseManagerClose(token, githubOwner, githubRepository, majorMinorPatch);
 	}; 
 })
 .OnError(exception => {
