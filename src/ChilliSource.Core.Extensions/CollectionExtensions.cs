@@ -70,6 +70,7 @@ namespace ChilliSource.Core.Extensions
             source.Add(item);
         }
 
+        #if NETSTANDARD2_0
         /// <summary>
         /// Reduces collection to distinct members based on a key, which is selected using the <paramref name="keySelector"/> function.
         /// </summary>
@@ -89,6 +90,7 @@ namespace ChilliSource.Core.Extensions
                 }
             }
         }
+        #endif
 
         /// <summary>
         /// Returns the index of the element that satisfies a condition from the specified System.Collections.Generic.IEnumerable&lt;T&gt;.
@@ -143,7 +145,7 @@ namespace ChilliSource.Core.Extensions
             return String.Join(delimiter, collection.Select(formatter));
         }
 
-        #region FirstOrNew/DefaultTo
+#region FirstOrNew/DefaultTo
         /// <summary>
         /// Returns the first element of a sequence, or a new instance if the sequence contains no elements.
         /// </summary>
@@ -215,6 +217,6 @@ namespace ChilliSource.Core.Extensions
             var enumerable = source?.Where(predicate);
             return enumerable.FirstOrDefaultTo(defaultTo);
         }
-        #endregion
+#endregion
     }
 }
