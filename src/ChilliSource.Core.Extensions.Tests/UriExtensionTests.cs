@@ -44,6 +44,16 @@ namespace Tests
             Assert.Equal("https://www.mysite.com/something/1", result);
         }
 
+        [Fact]
+        public void Append_ShouldReturnPathsAppemded()
+        {
+            var uri1 = new Uri("https://www.mysite.com/something/");
+            var result1 = uri1.Append("1", "2", "/3/");
+            Assert.Equal("https://www.mysite.com/something/1/2/3/", result1.ToString());
 
+            var uri2 = new Uri("https://www.mysite.com/something/1?else=true");
+            var result2 = uri2.Append("2", "/3/");
+            Assert.Equal("https://www.mysite.com/something/1/2/3/?else=true", result2.ToString());
+        }
     }
 }

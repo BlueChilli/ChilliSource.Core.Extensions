@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace ChilliSource.Core.Extensions
 {
@@ -35,6 +36,19 @@ namespace ChilliSource.Core.Extensions
         public static string Base(this Uri uri)
         {
             return uri.GetComponents(UriComponents.Scheme | UriComponents.Host | UriComponents.Port | UriComponents.Path, UriFormat.UriEscaped);
+        }
+
+        //https://stackoverflow.com/questions/372865/path-combine-for-urls
+        /// <summary>
+        /// Append paths to a url without having to worry about slashes
+        /// </summary>
+        /// <param name="uri">A System.Uri.</param>
+        /// <param name="paths">Paths to append</param>
+        /// <returns>A new uri with paths appended</returns>
+        public static Uri Append(this Uri uri, params string[] paths)
+        {
+            var newPath = paths.Aggregate(uri.Base(), (current, path) => string.Format("{0}/{1}", current.TrimEnd('/'), path.TrimStart('/')));
+            return new Uri(newPath + uri.Query);
         }
     }
 }
