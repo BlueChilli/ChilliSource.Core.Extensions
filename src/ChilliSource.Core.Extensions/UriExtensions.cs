@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 
 namespace ChilliSource.Core.Extensions
@@ -49,6 +50,20 @@ namespace ChilliSource.Core.Extensions
         {
             var newPath = paths.Aggregate(uri.Base(), (current, path) => string.Format("{0}/{1}", current.TrimEnd('/'), path.TrimStart('/')));
             return new Uri(newPath + uri.Query);
+        }
+
+        /// <summary>
+        /// Append a trailing slash to the path if needed
+        /// </summary>
+        /// <param name="uri">A System.Uri.</param>
+        /// <returns>A uri with a trailing slash</returns>
+        public static Uri WithTrailingSlash(this Uri uri)
+        {
+            if (!uri.Base().EndsWith('/'))
+            {
+                return new Uri(uri.Base() + "/" + uri.Query);
+            }
+            return uri;
         }
     }
 }

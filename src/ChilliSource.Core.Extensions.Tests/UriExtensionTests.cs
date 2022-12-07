@@ -45,7 +45,7 @@ namespace Tests
         }
 
         [Fact]
-        public void Append_ShouldReturnPathsAppemded()
+        public void Append_ShouldReturnPathsAppended()
         {
             var uri1 = new Uri("https://www.mysite.com/something/");
             var result1 = uri1.Append("1", "2", "/3/");
@@ -54,6 +54,22 @@ namespace Tests
             var uri2 = new Uri("https://www.mysite.com/something/1?else=true");
             var result2 = uri2.Append("2", "/3/");
             Assert.Equal("https://www.mysite.com/something/1/2/3/?else=true", result2.ToString());
+        }
+
+        [Fact]
+        public void WithTrailingSlash_ShouldReturnWithTrailingSlash()
+        {
+            var uri = new Uri("https://www.mysite.com/something/");
+            var result = uri.WithTrailingSlash().ToString();
+            Assert.Equal("https://www.mysite.com/something/", result);
+
+            uri = new Uri("https://www.mysite.com/something");
+            result = uri.WithTrailingSlash().ToString();
+            Assert.Equal("https://www.mysite.com/something/", result);
+
+            uri = new Uri("https://www.mysite.com/something/1?else=true");
+            result = uri.WithTrailingSlash().ToString();
+            Assert.Equal("https://www.mysite.com/something/1/?else=true", result);
         }
     }
 }
