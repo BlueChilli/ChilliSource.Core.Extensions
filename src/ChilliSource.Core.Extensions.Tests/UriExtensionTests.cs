@@ -45,6 +45,20 @@ namespace Tests
         }
 
         [Fact]
+        public void Domain_ShouldReturnDomainOfUri()
+        {
+            var uri = new Uri("https://www.mysite.com/something/1?else=true");
+
+            var result = uri.Domain();
+            Assert.Equal("mysite.com", result);
+
+            uri = new Uri("https://mysite.com/something/1?else=true");
+
+            result = uri.Domain();
+            Assert.Equal("mysite.com", result);
+        }
+
+        [Fact]
         public void Append_ShouldReturnPathsAppended()
         {
             var uri1 = new Uri("https://www.mysite.com/something/");

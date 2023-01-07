@@ -67,6 +67,23 @@ namespace ChilliSource.Core.Extensions
         }
 
         /// <summary>
+        /// Return the closest previous date matching the <paramref name="previousWeekDay"/>.
+        /// If the day of week of the specified <paramref name="date"/> matches the <paramref name="previousWeekDay"/>, the same date is returned.
+        /// </summary>
+        /// <param name="date">The specified date.</param>
+        /// <param name="previousWeekDay">The day of week to select</param>
+        /// <returns>A System.DateTime object.</returns>
+        public static DateTime PreviousDayOfWeek(this DateTime date, DayOfWeek previousWeekDay = DayOfWeek.Sunday)
+        {
+            int diff = date.DayOfWeek - previousWeekDay;
+            if (diff < 0)
+            {
+                diff += 7;
+            }
+            return date.AddDays(-diff).Date;
+        }
+
+        /// <summary>
         /// Returns a DateTime instance based on <paramref name="dateTime"/> with its DateTimeKind set to "Unspecified", thereby removing the time zone component
         /// </summary>
         /// <returns>Timezone independent DateTime instance</returns>

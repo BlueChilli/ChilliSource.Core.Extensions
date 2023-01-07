@@ -63,6 +63,23 @@ namespace Tests
         }
 
         [Fact]
+        public void PreviousDayOfWeek_ShouldReturnThePreviousDayOfTheWeek()
+        {
+            //Wednesday
+            var result = new DateTime(2001, 2, 28, 12, 33, 44).PreviousDayOfWeek(DayOfWeek.Wednesday);
+            Assert.Equal(new DateTime(2001, 2, 28), result);
+
+            result = new DateTime(2001, 2, 28, 12, 33, 44).PreviousDayOfWeek(DayOfWeek.Friday);
+            Assert.Equal(new DateTime(2001, 2, 23), result);
+
+            result = new DateTime(2001, 2, 28, 12, 33, 44).PreviousDayOfWeek(DayOfWeek.Sunday);
+            Assert.Equal(new DateTime(2001, 2, 25), result);
+
+            result = new DateTime(2001, 2, 28, 12, 33, 44).PreviousDayOfWeek(DayOfWeek.Tuesday);
+            Assert.Equal(new DateTime(2001, 2, 27), result);
+        }
+
+        [Fact]
         public void DaysInMonth_Feburary_ShouldReturn28()
         {
             var result = new DateTime(1900, 2, 1).DaysInMonth();

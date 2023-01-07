@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Diagnostics.Metrics;
 using System.Linq;
 
 namespace ChilliSource.Core.Extensions
@@ -37,6 +38,17 @@ namespace ChilliSource.Core.Extensions
         public static string Base(this Uri uri)
         {
             return uri.GetComponents(UriComponents.Scheme | UriComponents.Host | UriComponents.Port | UriComponents.Path, UriFormat.UriEscaped);
+        }
+
+        /// <summary>
+        /// Gets the domain of the specified System.Uri, i.e. https://www.mysite.com returns mysite.com
+        /// </summary>
+        /// <param name="uri">A System.Uri.</param>
+        /// <returns>The base component of the URI.</returns>
+        public static string Domain(this Uri uri)
+        {
+            var host = uri.DnsSafeHost;
+            return host.StartsWith("www.") ? host.Substring(4) : host;
         }
 
         //https://stackoverflow.com/questions/372865/path-combine-for-urls
