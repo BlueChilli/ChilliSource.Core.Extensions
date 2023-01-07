@@ -713,6 +713,16 @@ namespace ChilliSource.Core.Extensions
             return regex.IsMatch(s);
         }
 
+        /// <summary>
+        /// Checks two strings are the same ignoring case
+        /// </summary>
+        /// <param name="s">String A</param>
+        /// <param name="other">String B</param>
+        /// <returns>True if boths string are the same ignoring case</returns>
+        public static bool Same(this string s, string other)
+        {
+            return s.Equals(other, StringComparison.OrdinalIgnoreCase);
+        }
 
         #endregion   
     }

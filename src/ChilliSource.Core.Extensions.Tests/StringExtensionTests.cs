@@ -437,7 +437,15 @@ namespace Tests
             Assert.False("café".IsAlphaNumeric());
         }
 
-
+        [Fact]
+        public void Same_ReturnsTrueWhenSame()
+        {
+            Assert.True("1234567890".Same("1234567890"));
+            Assert.True("123Abc".Same("123ABC"));
+            Assert.True("Qwerty".Same("QwertY"));
+            Assert.False("999.99".Same("999.98"));
+            Assert.False("café".Same("cafe"));
+        }
         #endregion
     }
 }
