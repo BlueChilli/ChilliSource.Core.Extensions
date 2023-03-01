@@ -445,6 +445,12 @@ namespace Tests
             Assert.True("Qwerty".Same("QwertY"));
             Assert.False("999.99".Same("999.98"));
             Assert.False("café".Same("cafe"));
+
+            string null1 = null;
+            string null2 = null;
+            Assert.True(null1.Same(null2));
+            Assert.False(null1.Same("null"));
+            Assert.False("null".Same(null2));
         }
         #endregion
     }

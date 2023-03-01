@@ -721,6 +721,8 @@ namespace ChilliSource.Core.Extensions
         /// <returns>True if boths string are the same ignoring case</returns>
         public static bool Same(this string s, string other)
         {
+            if (s == null && other == null) return true;
+            if (s == null || other == null) return false;
             return s.Equals(other, StringComparison.OrdinalIgnoreCase);
         }
 
