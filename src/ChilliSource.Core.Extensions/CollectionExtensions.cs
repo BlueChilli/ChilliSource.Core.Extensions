@@ -70,28 +70,6 @@ namespace ChilliSource.Core.Extensions
             source.Add(item);
         }
 
-        #if NETSTANDARD2_0
-        /// <summary>
-        /// Reduces collection to distinct members based on a key, which is selected using the <paramref name="keySelector"/> function.
-        /// </summary>
-        /// <typeparam name="TSource">The type of the elements of the generic enumerable list.</typeparam>
-        /// <typeparam name="TKey">The type of the key property.</typeparam>
-        /// <param name="source">The System.Collections.Generic.IEnumerable&lt;T&gt;.</param>
-        /// <param name="keySelector">A function to determine uniqueness for the distinct operation.</param>
-        /// <returns></returns>
-        public static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
-        {
-            HashSet<TKey> seenKeys = new HashSet<TKey>();
-            foreach (TSource element in source)
-            {
-                if (seenKeys.Add(keySelector(element)))
-                {
-                    yield return element;
-                }
-            }
-        }
-        #endif
-
         /// <summary>
         /// Returns the index of the element that satisfies a condition from the specified System.Collections.Generic.IEnumerable&lt;T&gt;.
         /// </summary>
@@ -142,7 +120,7 @@ namespace ChilliSource.Core.Extensions
                 formatter = (T e) => quote.HasValue ? String.Format($"{quote}{{0:{formatSpecifier}}}{quote}", e) : String.Format($"{{0:{formatSpecifier}}}", e);
             }
 
-            return String.Join(delimiter, collection.Select(formatter));
+            return String.Join(delimiter, collection.Where(x => x != null).Select(formatter));
         }
 
 #region FirstOrNew/DefaultTo

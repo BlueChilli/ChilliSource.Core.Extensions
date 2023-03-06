@@ -37,17 +37,6 @@ namespace Tests
         }
 
         [Fact]
-        public void DistinctBy_ShouldReturnUniqueItems()
-        {
-            var list = new List<KeyValuePair<int, int>> { new KeyValuePair<int, int>(1, 1), new KeyValuePair<int, int>(1, 2), new KeyValuePair<int, int>(2, 3) };
-            var result = list.DistinctBy(x => x.Key).ToList();
-
-            Assert.True(result.Count == 2);
-            Assert.Contains<KeyValuePair<int, int>>(list, x => x.Key == 1 && x.Value == 1);
-            Assert.Contains<KeyValuePair<int, int>>(list, x => x.Key == 2 && x.Value == 3);
-        }
-
-        [Fact]
         public void FirstOrNew_ShouldReturnNewWhenNotFound()
         {
             List<KeyValuePair<int, int>> emptyList = new List<KeyValuePair<int, int>>();
@@ -96,6 +85,9 @@ namespace Tests
 
             var collection5 = new object[] { };
             Assert.Equal("", collection5.ToDelimitedString(" - "));
+
+            var collection6 = new int?[] { 1, 2, 3, null, 5, null, 7, 8, 9 };
+            Assert.Equal("'1','2','3','5','7','8','9'", collection6.ToDelimitedString('\'', " - "));
         }
 
     }
