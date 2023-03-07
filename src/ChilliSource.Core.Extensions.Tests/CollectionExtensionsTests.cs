@@ -87,7 +87,7 @@ namespace Tests
             Assert.Equal("", collection5.ToDelimitedString(" - "));
 
             var collection6 = new int?[] { 1, 2, 3, null, 5, null, 7, 8, 9 };
-            Assert.Equal("'1','2','3','5','7','8','9'", collection6.ToDelimitedString('\'', " - "));
+            Assert.Equal("'1','2','3','5','7','8','9'", collection6.ToDelimitedString('\'', ","));
         }
 
     }
