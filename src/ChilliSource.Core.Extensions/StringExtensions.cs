@@ -256,6 +256,17 @@ namespace ChilliSource.Core.Extensions
             return Regex.Replace(value, $"[{characters}]", replacement);
         }
 
+        /// <summary>
+        /// Returns null if string is whitespace. Otherwise return input trimmed
+        /// </summary>
+        /// <param name="value">The specified string value.</param>
+        public static string NullIfBlank(this string value)
+        {
+            if (value == null) return value;
+            if (String.IsNullOrWhiteSpace(value)) return null;
+            return value.Trim();
+        }
+
         #endregion
 
         #region Trim 

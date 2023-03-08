@@ -148,6 +148,19 @@ namespace Tests
             Assert.Equal("test1 test2 test3", result2);
         }
 
+        [Fact]
+        public void NullIfBlank_ReturnsNull_WhenGivenStringIsBlank()
+        {
+            Assert.Null("".NullIfBlank());
+            Assert.Null("    ".NullIfBlank());
+
+            string sNull = null;
+            Assert.Null(sNull.NullIfBlank());
+
+            Assert.Equal("test1 test2 test3", "test1 test2 test3".NullIfBlank());
+            Assert.Equal("test1 test2 test3", " test1 test2 test3 ".NullIfBlank());
+        }
+
         #endregion
 
         #region Trim
