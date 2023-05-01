@@ -89,6 +89,7 @@ namespace ChilliSource.Core.Extensions
         /// <returns>A string truncated to maxlength if applicable</returns>
         public static string TruncateHard(this string s, int maxLength)
         {
+            if (s == null) return null;
             return s.Substring(0, Math.Min(s.Length, maxLength));
         }
 
