@@ -184,5 +184,40 @@ namespace Tests
             Assert.Equal(983363624, result.TotalSeconds);
         }
 
+        [Fact]
+        public void TestAddWorkingDays()
+        {
+            var testDate1 = new DateTime(2016, 8, 1);
+
+            var date1 = testDate1.AddWorkingDays(3);
+            Assert.True(date1 == new DateTime(2016, 8, 4));
+
+            var date2 = testDate1.AddWorkingDays(0);
+            Assert.True(date2 == new DateTime(2016, 8, 1));
+
+            var date3 = testDate1.AddWorkingDays(-3);
+            Assert.True(date3 == new DateTime(2016, 7, 27));
+
+
+            var testDate2 = new DateTime(2016, 8, 13);
+
+            date1 = testDate2.AddWorkingDays(5);
+            Assert.True(date1 == new DateTime(2016, 8, 19));
+
+            date2 = testDate2.AddWorkingDays(0);
+            Assert.True(date2 == new DateTime(2016, 8, 15));
+
+            date3 = testDate2.AddWorkingDays(-5);
+            Assert.True(date3 == new DateTime(2016, 8, 8));
+
+            var testDate3 = new DateTime(2016, 8, 15);
+
+            date1 = testDate3.AddWorkingDays(5);
+            Assert.True(date1 == new DateTime(2016, 8, 22));
+
+            date1 = new DateTime(2016, 8, 19).AddWorkingDays(5);
+            Assert.True(date1 == new DateTime(2016, 8, 26));
+        }
+
     }
 }

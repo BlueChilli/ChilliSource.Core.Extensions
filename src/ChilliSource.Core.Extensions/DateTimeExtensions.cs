@@ -93,6 +93,30 @@ namespace ChilliSource.Core.Extensions
             return DateTime.SpecifyKind(dateTime, DateTimeKind.Unspecified);
         }
 
+        /// <summary>
+        /// Gets a System.DateTime object by adding number of working days to the specified date. (Working days exclude Saturday, Sunday, but include all holidays).
+        /// </summary>
+        /// <param name="date">The specified date.</param>
+        /// <param name="workingDays">Number of working days.</param>
+        /// <returns>A System.DateTime object.</returns>
+        public static DateTime AddWorkingDays(this DateTime date, int workingDays)
+        {
+            int direction = workingDays < 0 ? -1 : 1;
+            DateTime newDate = date;
+            while (workingDays != 0 || !IsWorkingDay(newDate))
+            {
+                newDate = newDate.AddDays(direction);
+                while (!IsWorkingDay(newDate))
+                {
+                    newDate = newDate.AddDays(direction);
+                };
+                if (workingDays != 0)
+                {
+                    workingDays -= direction;
+                }
+            }
+            return newDate;
+        }
         #endregion
 
         #region Date queries
@@ -155,6 +179,17 @@ namespace ChilliSource.Core.Extensions
             var now = DateTime.UtcNow;
             return (comparisonDate.Month == now.Month && comparisonDate.Year == now.Year);
 		}
+
+        /// <summary>
+        /// Returns true if date is a working day (Working days exclude Saturday, Sunday but include all holidays).
+        /// </summary>
+        /// <param name="date">The specified date.</param>
+        /// <returns></returns>
+        public static bool IsWorkingDay(this DateTime date)
+        {
+            return date.DayOfWeek != DayOfWeek.Saturday && date.DayOfWeek != DayOfWeek.Sunday;
+
+        }
 
         /// <summary>
         /// Returns the minimum date that can be stored in SQL Server.
