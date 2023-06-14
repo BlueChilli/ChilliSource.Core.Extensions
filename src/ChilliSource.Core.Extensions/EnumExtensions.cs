@@ -41,7 +41,7 @@ namespace ChilliSource.Core.Extensions
         /// <param name="enum">The specified enumeration.</param>
         /// <param name="list">The enumeration parameter list</param>
         /// <returns>True when the specified enumeration value is in the enumeration parameter list, otherwise false.</returns>
-        public static bool Contains<T>(this T @enum, params T[] list) where T : struct, IConvertible, IFormattable
+        public static bool Contains<T>(this T @enum, params T[] list) where T : Enum
         {
             EnumHelper.CheckTIsEnum<T>();
 
@@ -55,7 +55,7 @@ namespace ChilliSource.Core.Extensions
         /// <param name="enum">The specified enumeration.</param>
         /// <param name="list">System.Collections.Generic.IEnumerable%lt;T&gt; list.</param>
         /// <returns>True when the specified enumeration value is in the System.Collections.Generic.IEnumerable%lt;T&gt; list, otherwise false.</returns>
-        public static bool Contains<T>(this T @enum, IEnumerable<T> list) where T : struct, IConvertible, IFormattable
+        public static bool Contains<T>(this T @enum, IEnumerable<T> list) where T : Enum
         {
             EnumHelper.CheckTIsEnum<T>();
 
@@ -74,7 +74,7 @@ namespace ChilliSource.Core.Extensions
         /// <summary>
         /// Return the next enum in sequence
         /// </summary>
-        public static T Next<T>(this T @enum) where T : struct, IConvertible, IFormattable
+        public static T Next<T>(this T @enum) where T : Enum
         {
             EnumHelper.CheckTIsEnum<T>();
 
@@ -86,7 +86,7 @@ namespace ChilliSource.Core.Extensions
         /// <summary>
         /// Return the previous enum in sequence
         /// </summary>
-        public static T Previous<T>(this T @enum) where T : struct, IConvertible, IFormattable
+        public static T Previous<T>(this T @enum) where T : Enum
         {
             EnumHelper.CheckTIsEnum<T>();
 
@@ -102,7 +102,7 @@ namespace ChilliSource.Core.Extensions
         /// <param name="e">The specified enumeration.</param>
         /// <param name="list">System.Collections.Generic.IEnumerable%lt;T&gt; list.</param>
         /// <returns>True when the specified enumeration value is in the System.Collections.Generic.IEnumerable%lt;T&gt; list, otherwise false.</returns>
-        public static bool IsIn<T>(this T e, IEnumerable<T> list) where T : struct, IConvertible, IFormattable
+        public static bool IsIn<T>(this T e, IEnumerable<T> list) where T : Enum
         {
             EnumHelper.CheckTIsEnum<T>();
 
@@ -111,7 +111,7 @@ namespace ChilliSource.Core.Extensions
 
             foreach (T item in list)
             {
-                if (e.Equals(item) || (isFlags && (e as Enum).HasFlag(item as Enum))) return true;
+                if (e.Equals(item) || (isFlags && e.HasFlag(item))) return true;
             }
             return false;
         }
@@ -122,9 +122,9 @@ namespace ChilliSource.Core.Extensions
         /// <param name="e">The specified enumeration.</param>
         /// <param name="list">The enumeration parameter list</param>
         /// <returns>True when the specified enumeration value is in the enumeration parameter list, otherwise false.</returns>
-        public static bool IsIn<T>(this T e, params T[] list) where T : struct, IConvertible, IFormattable
+        public static bool IsIn<T>(this T e, params T[] list) where T : Enum
         {
-            return IsIn(e, (list as IEnumerable<T>));
+            return IsIn(e, list as IEnumerable<T>);
         }
 
         #region Flag helpers
@@ -135,7 +135,7 @@ namespace ChilliSource.Core.Extensions
         /// <param name="enumValue">The specified enumeration value.</param>
         /// <param name="enumFlag">Enumeration flag to append.</param>
         /// <returns>The object with flag value appended.</returns>
-        public static T AddFlag<T>(this T enumValue, T enumFlag) where T : struct, IConvertible, IFormattable
+        public static T AddFlag<T>(this T enumValue, T enumFlag) where T : Enum
         {
             EnumHelper.CheckTIsEnum<T>();
 
@@ -156,7 +156,7 @@ namespace ChilliSource.Core.Extensions
         /// <param name="enumValue">The specified enumeration value.</param>
         /// <param name="enumFlag">Enumeration flag to remove.</param>
         /// <returns>The object with flag value removed.</returns>
-        public static T RemoveFlag<T>(this T enumValue, T enumFlag) where T : struct, IConvertible, IFormattable
+        public static T RemoveFlag<T>(this T enumValue, T enumFlag) where T : Enum
         {
             EnumHelper.CheckTIsEnum<T>();
 
@@ -176,7 +176,7 @@ namespace ChilliSource.Core.Extensions
         /// <typeparam name="T">Type of the object converted.</typeparam>
         /// <param name="enumType">>The specified enumeration type.</param>
         /// <returns>A System.Collections.Generic.List&lt;T&gt;.</returns>
-        public static List<T> ToFlagsList<T>(this T enumType) where T : struct, IConvertible, IFormattable //The compiler doesnt allow [where T: System.Enum]
+        public static List<T> ToFlagsList<T>(this T enumType) where T : Enum //The compiler doesnt allow [where T: System.Enum]
         {
             EnumHelper.CheckTIsEnum<T>();
 
@@ -190,7 +190,7 @@ namespace ChilliSource.Core.Extensions
         /// <typeparam name="T">Type of the flag value.</typeparam>
         /// <param name="flagsList">The flag list to be convereted.</param>
         /// <returns>A flag value of type T</returns>
-        public static T ToFlags<T>(this IEnumerable<T> flagsList) where T : struct, IConvertible, IFormattable
+        public static T ToFlags<T>(this IEnumerable<T> flagsList) where T : Enum
         {
             EnumHelper.CheckTIsEnum<T>();
 
@@ -305,7 +305,7 @@ namespace ChilliSource.Core.Extensions
         /// <typeparam name="T">Type of the object converted.</typeparam>
         /// <param name="e">The specified enumeration type.</param>
         /// <returns>A System.Collections.Generic.List&lt;T&gt;.</returns>
-        public static List<T> ToList<T>(bool excludeObsolete = true) where T : struct, IConvertible, IFormattable
+        public static List<T> ToList<T>(bool excludeObsolete = true) where T : Enum
         {
             return GetValues<T>(excludeObsolete).ToList();
         }
@@ -316,7 +316,7 @@ namespace ChilliSource.Core.Extensions
         /// </summary>
         /// <returns>The values.</returns>
         /// <typeparam name="T">The enum type.</typeparam>
-        public static IEnumerable<T> GetValues<T>(bool excludeObsolete = true) where T : struct, IConvertible, IFormattable
+        public static IEnumerable<T> GetValues<T>(bool excludeObsolete = true) where T : Enum
         {
             return GetValues(typeof(T), excludeObsolete).Cast<T>();
         }

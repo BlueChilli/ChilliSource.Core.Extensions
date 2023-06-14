@@ -13,6 +13,7 @@ using ChilliSource.Core.Extensions;
 using System.Linq;
 using Xunit;
 using System.Collections.Generic;
+using NuGet.Frameworks;
 
 namespace Tests
 {
@@ -131,6 +132,18 @@ namespace Tests
             Assert.Equal(TestEnum.Test2, result);
 
             Assert.Equal(TestEnumOrder.Test3, TestEnumOrder.Test1.Previous());
+        }
+
+        [Fact]
+        public void IsIn_Works()
+        {
+            var enums = new List<TestEnum> { TestEnum.Test1, TestEnum.Test2 };
+
+            Assert.True(TestEnum.Test1.IsIn(enums));
+
+            Assert.True(TestEnum.Test2.IsIn(enums));
+
+            Assert.False(TestEnum.Test3.IsIn(enums));
         }
 
         #region Attributes

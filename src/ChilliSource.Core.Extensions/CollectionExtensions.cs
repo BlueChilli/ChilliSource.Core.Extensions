@@ -123,7 +123,18 @@ namespace ChilliSource.Core.Extensions
             return String.Join(delimiter, collection.Where(x => x != null).Select(formatter));
         }
 
-#region FirstOrNew/DefaultTo
+        /// <summary>
+        /// Checks whether the specified value is in the parameter list.
+        /// </summary>
+        /// <param name="value">The specified value.</param>
+        /// <param name="list">The parameter list</param>
+        /// <returns>True when the specified value is in the parameter list, otherwise false.</returns>
+        public static bool IsIn<T>(this T value, params T[] list)
+        {
+            return list.Contains(value);
+        }
+
+        #region FirstOrNew/DefaultTo
         /// <summary>
         /// Returns the first element of a sequence, or a new instance if the sequence contains no elements.
         /// </summary>

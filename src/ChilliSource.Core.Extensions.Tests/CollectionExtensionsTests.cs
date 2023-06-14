@@ -90,5 +90,15 @@ namespace Tests
             Assert.Equal("'1','2','3','5','7','8','9'", collection6.ToDelimitedString('\'', ","));
         }
 
+        [Fact]
+        public void IsIn_Works()
+        {
+            Assert.True(1.IsIn(1, 2, 3));
+
+            Assert.True(2.IsIn(1, 2, 3));
+
+            Assert.False(5.IsIn(1, 2, 3));
+        }
+
     }
 }
