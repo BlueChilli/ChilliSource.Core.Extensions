@@ -277,7 +277,6 @@ namespace ChilliSource.Core.Extensions
 
     }
 
-
     public static class EnumHelper
     {
         /// <summary>

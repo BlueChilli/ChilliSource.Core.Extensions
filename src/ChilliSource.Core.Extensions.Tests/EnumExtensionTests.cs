@@ -144,6 +144,12 @@ namespace Tests
             Assert.True(TestEnum.Test2.IsIn(enums));
 
             Assert.False(TestEnum.Test3.IsIn(enums));
+
+            Assert.True(TestEnum.Test1.IsIn(TestEnum.Test1, TestEnum.Test3));
+
+            Assert.True(TestEnum.Test3.IsIn(TestEnum.Test1, TestEnum.Test3));
+
+            Assert.False(TestEnum.Test2.IsIn(TestEnum.Test1, TestEnum.Test3));
         }
 
         #region Attributes

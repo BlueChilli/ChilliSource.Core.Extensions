@@ -129,7 +129,7 @@ namespace ChilliSource.Core.Extensions
         /// <param name="value">The specified value.</param>
         /// <param name="list">The parameter list</param>
         /// <returns>True when the specified value is in the parameter list, otherwise false.</returns>
-        public static bool IsIn<T>(this T value, params T[] list)
+        public static bool IsIn<T>(this T value, params T[] list) where T : IEquatable<T>
         {
             return list.Contains(value);
         }
