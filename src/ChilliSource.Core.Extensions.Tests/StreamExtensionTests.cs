@@ -22,7 +22,7 @@ namespace Tests
 		public void ToArray_ShouldReturnByteArray_WhenStreamIsNotNull()
 		{
 			Stream input = "test string".ToStream();
-			var resultBytes = input.ToArray();
+			var resultBytes = input.ReadToByteArray();
 
 			var resultStream = new MemoryStream(resultBytes);
 			var reader = new StreamReader(resultStream);
@@ -34,7 +34,7 @@ namespace Tests
 		public void ToByteArray_ShouldReturnNull_WhenStreamIsNull()
 		{
 			Stream input = null;
-			Assert.Null(input.ToArray());
+			Assert.Null(input.ReadToByteArray());
 		}
 
 	}

@@ -10,6 +10,7 @@ See the LICENSE file in the project root for more information.
 
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace ChilliSource.Core.Extensions
 {
@@ -23,23 +24,47 @@ namespace ChilliSource.Core.Extensions
 		/// </summary>
 		/// <returns>The byte array.</returns>
 		/// <param name="stream">Stream to convert.</param>
-		public static byte[] ToArray(this Stream stream)
+		public static byte[] ReadToByteArray(this Stream stream)
 		{
 			if (stream == null)
 			{
 				return null;
 			}
 
-            if (stream is MemoryStream)
+            if (stream is MemoryStream ms)
             {
-                return ((MemoryStream)stream).ToArray();
+                return ms.ToArray();
             }
 
-            using (MemoryStream ms = new MemoryStream())
+            using (MemoryStream ms2 = new MemoryStream())
 			{
-				stream.CopyTo(ms);
-				return ms.ToArray();
+				stream.CopyTo(ms2);
+				return ms2.ToArray();
 			}
 		}
-	}
+
+        /// <summary>
+        /// Converts the specified stream to a byte array
+        /// </summary>
+        /// <returns>The byte array.</returns>
+        /// <param name="stream">Stream to convert.</param>
+        public async static Task<byte[]> ReadToByteArrayAsync(this Stream stream)
+        {
+            if (stream == null)
+            {
+                return null;
+            }
+
+            if (stream is MemoryStream ms)
+            {
+                return ms.ToArray();
+            }
+
+            using (MemoryStream ms2 = new MemoryStream())
+            {
+                await stream.CopyToAsync(ms2);
+                return ms2.ToArray();
+            }
+        }
+    }
 }
