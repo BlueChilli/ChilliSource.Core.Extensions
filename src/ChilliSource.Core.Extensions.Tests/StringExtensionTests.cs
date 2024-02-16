@@ -98,6 +98,13 @@ namespace Tests
 
             var result2 = "DARK & stormy 1*2(3".ToNumeric();
             Assert.Equal("123", result2);
+
+            var result3 = "".ToNumeric();
+            Assert.Equal("", result3);
+
+            string test = null;
+            var result4 = test.ToNumeric();
+            Assert.Null(result4);
         }
 
         [Fact]

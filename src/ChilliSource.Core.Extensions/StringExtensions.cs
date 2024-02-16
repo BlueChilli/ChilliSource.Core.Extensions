@@ -189,6 +189,7 @@ namespace ChilliSource.Core.Extensions
         /// <returns>A string value with numeric characters only.</returns>
         public static string ToNumeric(this string value)
         {
+            if (String.IsNullOrEmpty(value)) return value;
             var invalidCharacters = new Regex("[^0-9]");
             var numbers = invalidCharacters.Replace(value, "");
             return numbers;
