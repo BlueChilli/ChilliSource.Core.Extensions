@@ -102,7 +102,7 @@ namespace ChilliSource.Core.Extensions
         /// <param name="e">The specified enumeration.</param>
         /// <param name="list">System.Collections.Generic.IEnumerable%lt;T&gt; list.</param>
         /// <returns>True when the specified enumeration value is in the System.Collections.Generic.IEnumerable%lt;T&gt; list, otherwise false.</returns>
-        public static bool IsIn<T>(this T e, IEnumerable<T> list) where T : Enum
+        public static bool IsIn<T>(this T e, IEnumerable<T> list) where T : struct, Enum
         {
             EnumHelper.CheckTIsEnum<T>();
 
@@ -122,9 +122,21 @@ namespace ChilliSource.Core.Extensions
         /// <param name="e">The specified enumeration.</param>
         /// <param name="list">The enumeration parameter list</param>
         /// <returns>True when the specified enumeration value is in the enumeration parameter list, otherwise false.</returns>
-        public static bool IsIn<T>(this T e, params T[] list) where T : Enum
+        public static bool IsIn<T>(this T e, params T[] list) where T : struct, Enum
         {
             return IsIn(e, list as IEnumerable<T>);
+        }
+
+        /// <summary>
+        /// Checks whether the specified nullable enumeration value is in the enumeration parameter list. If null false is returned.
+        /// </summary>
+        /// <param name="e">The specified enumeration.</param>
+        /// <param name="list">The enumeration parameter list</param>
+        /// <returns>True when the specified enumeration value is in the enumeration parameter list, otherwise false.</returns>
+        public static bool IsIn<T>(this T? e, params T[] list) where T : struct, Enum
+        {
+            if (e == null) return false;
+            return IsIn(e.Value, list as IEnumerable<T>);
         }
 
         #region Flag helpers

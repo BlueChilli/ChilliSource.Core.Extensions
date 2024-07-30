@@ -150,6 +150,11 @@ namespace Tests
             Assert.True(TestEnum.Test3.IsIn(TestEnum.Test1, TestEnum.Test3));
 
             Assert.False(TestEnum.Test2.IsIn(TestEnum.Test1, TestEnum.Test3));
+
+            TestEnum? testEnum = null;
+            TestEnum? testEnum2 = TestEnum.Test2;
+            Assert.False(testEnum.IsIn(TestEnum.Test1, TestEnum.Test2));
+            Assert.True(testEnum2.IsIn(TestEnum.Test1, TestEnum.Test2));
         }
 
         #region Attributes
