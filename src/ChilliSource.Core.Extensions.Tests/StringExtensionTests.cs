@@ -8,18 +8,17 @@ See the LICENSE file in the project root for more information.
 
 #endregion
 
-using System;
-using Xunit;
 using ChilliSource.Core.Extensions;
-using System.IO;
+using System;
 using System.Collections.Generic;
-using System.Text;
+using System.IO;
 using System.Linq;
-using NuGet.Frameworks;
+using System.Text;
+using Xunit;
 
 namespace Tests
 {
-	public class StringExtensionTests
+    public class StringExtensionTests
     { 
 
         #region Sanitise / Remove / Replace

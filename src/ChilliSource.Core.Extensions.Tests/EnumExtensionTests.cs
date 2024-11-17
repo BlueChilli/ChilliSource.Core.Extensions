@@ -8,12 +8,11 @@ See the LICENSE file in the project root for more information.
 
 #endregion
 
-using System;
 using ChilliSource.Core.Extensions;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
-using System.Collections.Generic;
-using NuGet.Frameworks;
 
 namespace Tests
 {
