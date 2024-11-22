@@ -190,9 +190,12 @@ namespace ChilliSource.Core.Extensions
         public static string ToNumeric(this string value)
         {
             if (String.IsNullOrEmpty(value)) return value;
-            var invalidCharacters = new Regex("[^0-9]");
-            var numbers = invalidCharacters.Replace(value, "");
-            return numbers;
+
+            var sb = new StringBuilder();
+            foreach (char c in value.ToCharArray())
+                if (char.IsDigit(c)) sb.Append(c);
+
+            return sb.ToString();
         }
 
         /// <summary>
