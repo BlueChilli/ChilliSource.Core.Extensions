@@ -101,19 +101,12 @@ namespace ChilliSource.Core.Extensions
         /// <typeparam name="T">The type of object to check.</typeparam>
         /// <param name="e">The specified enumeration.</param>
         /// <param name="list">System.Collections.Generic.IEnumerable%lt;T&gt; list.</param>
+        /// <param name="isFlags">Pass in true if the Enum has a Flags attribute</param>
         /// <returns>True when the specified enumeration value is in the System.Collections.Generic.IEnumerable%lt;T&gt; list, otherwise false.</returns>
-        public static bool IsIn<T>(this T e, IEnumerable<T> list) where T : struct, Enum
+        public static bool IsIn<T>(this T e, IEnumerable<T> list, bool isFlags = false) where T : Enum
         {
-            EnumHelper.CheckTIsEnum<T>();
-
-            Type t = e.GetType();
-            bool isFlags = t.GetTypeInfo().GetCustomAttributes<FlagsAttribute>().Any();
-
-            foreach (T item in list)
-            {
-                if (e.Equals(item) || (isFlags && e.HasFlag(item))) return true;
-            }
-            return false;
+            if (isFlags) { return list.Any(item => e.HasFlag(item) || e.Equals(item)); }
+            return list.Contains(e);
         }
 
         /// <summary>
@@ -122,7 +115,7 @@ namespace ChilliSource.Core.Extensions
         /// <param name="e">The specified enumeration.</param>
         /// <param name="list">The enumeration parameter list</param>
         /// <returns>True when the specified enumeration value is in the enumeration parameter list, otherwise false.</returns>
-        public static bool IsIn<T>(this T e, params T[] list) where T : struct, Enum
+        public static bool IsIn<T>(this T e, params T[] list) where T : Enum
         {
             return IsIn(e, list as IEnumerable<T>);
         }
