@@ -18,7 +18,7 @@ using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Serialization.Formatters.Binary;
+using MessagePack;
 using System.Text;
 
 namespace ChilliSource.Core.Extensions
@@ -127,12 +127,7 @@ namespace ChilliSource.Core.Extensions
             if (value is String) return ((string)value).ToByteArray(new UTF8Encoding());
             if (value is Guid) return ((Guid)value).ToByteArray();
 
-            var bf = new BinaryFormatter();
-            using (var ms = new MemoryStream())
-            {
-                bf.Serialize(ms, value);
-                return ms.ToArray();
-            }
+            return MessagePackSerializer.Serialize(value.GetType(), value, MessagePack.Resolvers.TypelessContractlessStandardResolver.Options);
         }
 
         /// <summary>
@@ -152,14 +147,32 @@ namespace ChilliSource.Core.Extensions
 
             if (typeof(T) == typeof(Guid?)) return (T)(object)new Guid(value);
 
-            var bf = new BinaryFormatter();
-            using (var ms = new MemoryStream())
+            return (T)MessagePackSerializer.Deserialize(typeof(T), value, MessagePack.Resolvers.TypelessContractlessStandardResolver.Options);
+        }
+
+        /// <summary>
+        /// Converts a byte array that was previously serialized with BinaryFormatter into the
+        /// new MessagePack format. Pass the legacy bytes in and store the returned bytes in their
+        /// place (file, database column, cache entry, etc.).
+        /// </summary>
+        /// <typeparam name="T">The concrete type that was originally serialized.</typeparam>
+        /// <param name="legacyBytes">Byte array produced by the old BinaryFormatter-based ToByteArray.</param>
+        /// <returns>A byte array in MessagePack format that round-trips through To&lt;T&gt;.</returns>
+        public static byte[] MigrateToMessagePack<T>(this byte[] legacyBytes)
+        {
+            if (legacyBytes == null || legacyBytes.Length == 0)
+                return legacyBytes;
+
+#pragma warning disable SYSLIB0011 // BinaryFormatter: used only to read legacy stored data during migration
+            object obj;
+            using (var ms = new MemoryStream(legacyBytes))
             {
-                ms.Write(value, 0, value.Length);
-                ms.Seek(0, SeekOrigin.Begin);
-                var obj = bf.Deserialize(ms);
-                return (T)obj;
+                var bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                obj = bf.Deserialize(ms);
             }
+#pragma warning restore SYSLIB0011
+
+            return ((T)obj).ToByteArray();
         }
 
         /// <summary>
