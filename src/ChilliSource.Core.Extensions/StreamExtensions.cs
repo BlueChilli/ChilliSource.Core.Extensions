@@ -10,8 +10,7 @@ See the LICENSE file in the project root for more information.
 
 using System;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Runtime.Serialization;
+using MessagePack;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -88,9 +87,7 @@ namespace ChilliSource.Core.Extensions
                     }
                 }
 
-                var formatter = options.FormatterFactory();
-                var obj = formatter.Deserialize(stream);
-                return (T)obj;
+                return MessagePackSerializer.Deserialize<T>(stream, MessagePack.Resolvers.TypelessContractlessStandardResolver.Options);
             }
             finally
             {
@@ -106,19 +103,11 @@ namespace ChilliSource.Core.Extensions
             public StreamSerializationOptions()
             {
                 this.LeaveOpen = false;
-                this.FormatterFactory = DefaultFormatter;
-            }
-
-            private static IFormatter DefaultFormatter()
-            {
-                return new BinaryFormatter();
             }
 
             public bool LeaveOpen { get; set; }
 
             public bool SkipFormatterForStrings { get; set; }
-
-            public Func<IFormatter> FormatterFactory { get; set; }
         }
     }
 }
