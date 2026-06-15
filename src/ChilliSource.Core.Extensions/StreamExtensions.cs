@@ -87,7 +87,7 @@ namespace ChilliSource.Core.Extensions
                     }
                 }
 
-                return MessagePackSerializer.Deserialize<T>(stream, MessagePack.Resolvers.TypelessContractlessStandardResolver.Options);
+                return MessagePackSerializer.Deserialize<T>(stream, MessagePack.Resolvers.ContractlessStandardResolverAllowPrivate.Options);
             }
             finally
             {

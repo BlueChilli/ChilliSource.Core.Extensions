@@ -127,7 +127,7 @@ namespace ChilliSource.Core.Extensions
             if (value is String) return ((string)value).ToByteArray(new UTF8Encoding());
             if (value is Guid) return ((Guid)value).ToByteArray();
 
-            return MessagePackSerializer.Serialize(value.GetType(), value, MessagePack.Resolvers.TypelessContractlessStandardResolver.Options);
+            return MessagePackSerializer.Serialize(value.GetType(), value, MessagePack.Resolvers.ContractlessStandardResolverAllowPrivate.Options);
         }
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace ChilliSource.Core.Extensions
 
             if (typeof(T) == typeof(Guid?)) return (T)(object)new Guid(value);
 
-            return (T)MessagePackSerializer.Deserialize(typeof(T), value, MessagePack.Resolvers.TypelessContractlessStandardResolver.Options);
+            return (T)MessagePackSerializer.Deserialize(typeof(T), value, MessagePack.Resolvers.ContractlessStandardResolverAllowPrivate.Options);
         }
 
         /// <summary>
