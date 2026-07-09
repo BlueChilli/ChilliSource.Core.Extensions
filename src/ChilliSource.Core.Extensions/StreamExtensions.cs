@@ -10,9 +10,10 @@ See the LICENSE file in the project root for more information.
 
 using System;
 using System.IO;
-using MessagePack;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.Json;
+using System.IO.Compression;
 
 namespace ChilliSource.Core.Extensions
 {
@@ -87,7 +88,7 @@ namespace ChilliSource.Core.Extensions
                     }
                 }
 
-                return MessagePackSerializer.Deserialize<T>(stream, MessagePack.Resolvers.ContractlessStandardResolverAllowPrivate.Options);
+                return JsonDecompressToObject<T>(stream);
             }
             finally
             {
@@ -109,5 +110,48 @@ namespace ChilliSource.Core.Extensions
 
             public bool SkipFormatterForStrings { get; set; }
         }
+
+        /// <summary>
+        /// Compresses an object to a GZip stream after serializing it to JSON.
+        /// </summary>
+        /// <param name="obj">The object to compress.</param>
+        /// <returns>A memory stream containing the compressed JSON data.</returns>
+        public static MemoryStream JsonCompressToStream(object obj)
+        {
+            var jsonString = JsonSerializer.Serialize(obj);
+
+            var compressedStream = new MemoryStream();
+
+            using (var zipStream = new GZipStream(compressedStream, CompressionLevel.Fastest, leaveOpen: true))
+            using (var writer = new StreamWriter(zipStream, Encoding.UTF8))
+            {
+                writer.Write(jsonString);
+            }
+
+            compressedStream.Position = 0;
+
+            return compressedStream;
+        }
+
+        /// <summary>
+        /// Decompresses a GZip stream and deserializes the JSON data to an object of type T.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="compressedStream">The stream containing the compressed JSON data.</param>
+        /// <returns>An object of type T deserialized from the JSON data.</returns>
+        public static T JsonDecompressToObject<T>(this Stream compressedStream)
+        {
+            if (compressedStream.CanSeek)
+            {
+                compressedStream.Position = 0;
+            }
+
+            using var zipStream = new GZipStream(compressedStream, CompressionMode.Decompress);
+            using var reader = new StreamReader(zipStream, Encoding.UTF8);
+            var jsonString = reader.ReadToEnd();
+            return JsonSerializer.Deserialize<T>(jsonString);
+        }
     }
+
 }
+

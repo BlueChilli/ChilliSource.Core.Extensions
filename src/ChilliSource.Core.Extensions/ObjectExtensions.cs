@@ -18,7 +18,6 @@ using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using MessagePack;
 using System.Text;
 
 namespace ChilliSource.Core.Extensions
@@ -127,7 +126,7 @@ namespace ChilliSource.Core.Extensions
             if (value is String) return ((string)value).ToByteArray(new UTF8Encoding());
             if (value is Guid) return ((Guid)value).ToByteArray();
 
-            return MessagePackSerializer.Serialize(value.GetType(), value, MessagePack.Resolvers.ContractlessStandardResolverAllowPrivate.Options);
+            return StreamExtensions.JsonCompressToStream(value).ReadToByteArray();
         }
 
         /// <summary>
@@ -147,18 +146,18 @@ namespace ChilliSource.Core.Extensions
 
             if (typeof(T) == typeof(Guid?)) return (T)(object)new Guid(value);
 
-            return (T)MessagePackSerializer.Deserialize(typeof(T), value, MessagePack.Resolvers.ContractlessStandardResolverAllowPrivate.Options);
+            return StreamExtensions.JsonDecompressToObject<T>(new MemoryStream(value));
         }
 
         /// <summary>
         /// Converts a byte array that was previously serialized with BinaryFormatter into the
-        /// new MessagePack format. Pass the legacy bytes in and store the returned bytes in their
+        /// new json format. Pass the legacy bytes in and store the returned bytes in their
         /// place (file, database column, cache entry, etc.).
         /// </summary>
         /// <typeparam name="T">The concrete type that was originally serialized.</typeparam>
         /// <param name="legacyBytes">Byte array produced by the old BinaryFormatter-based ToByteArray.</param>
-        /// <returns>A byte array in MessagePack format that round-trips through To&lt;T&gt;.</returns>
-        public static byte[] MigrateToMessagePack<T>(this byte[] legacyBytes)
+        /// <returns>A byte array in json format that round-trips through To&lt;T&gt;.</returns>
+        public static byte[] MigrateFromBinaryFormatter<T>(this byte[] legacyBytes)
         {
             if (legacyBytes == null || legacyBytes.Length == 0)
                 return legacyBytes;
